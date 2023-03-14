@@ -1,6 +1,7 @@
 package org.bcit.com2522.project;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 
@@ -18,6 +19,8 @@ public class Window extends PApplet {
   int minSize = 10;
   int maxSize = 20;
 
+  PImage backgroundImage; //Background Image for the Window
+
   /**
    * Provides the size of the window
    */
@@ -31,6 +34,8 @@ public class Window extends PApplet {
    */
   public void setup(){
     this.initializeObjects();
+    backgroundImage = loadImage("images/Sleepy.png");
+    frameRate(144);
   }
 
 
@@ -54,7 +59,7 @@ public class Window extends PApplet {
         new PVector(this.width/2,this.height/2),
         new PVector(0,1),
         minSize + 1,
-        0,
+        1,
         new Color(0,255,0),
         this);
 
@@ -62,7 +67,7 @@ public class Window extends PApplet {
           new PVector(this.width/3,this.height/3),
           new PVector(0,1),
           minSize + 1,
-          5,
+          0.3f,
           new Color(255,255,255),
           this);
 //
@@ -86,11 +91,19 @@ public class Window extends PApplet {
     switch( keyCode ) {
       case LEFT:
         // handle left
-        player.setDirection(player.getDirection().rotate(-Window.PI / 16));
+        player.setDirection(new PVector(-2, 0));
         break;
       case RIGHT:
         // handle right
-        player.setDirection(player.getDirection().rotate(Window.PI / 16));
+        player.setDirection(new PVector(2, 0));
+        break;
+      case UP:
+        // handle left
+        player.setDirection(new PVector(0, -2));
+        break;
+      case DOWN:
+        // handle right
+        player.setDirection(new PVector(0, 2));
         break;
     }
   }
@@ -101,10 +114,21 @@ public class Window extends PApplet {
    * in order of function calls.
    */
   public void draw() {
-    background(0);
+    image(backgroundImage, 0, 0, width, height);
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
+
+//      if (sprite instanceof Player) {
+//        Player player = (Player) sprite;
+//        PVector direction = player.getDirection();
+//        PVector position = player.getPosition();
+//        position.add(PVector.mult(direction, player.getSpeed()));
+//        player.setPosition(position);
+//      }
+
+
+      ghost.chase(player); //This will follow the player everywhere they go
     }
 //    ArrayList<Sprite> toRemove = new ArrayList<Sprite>();
 //    for (Sprite enemy : enemies) {

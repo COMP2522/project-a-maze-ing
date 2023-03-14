@@ -23,7 +23,7 @@ public class Ghost extends Enemy{
    * Update ghost position by checking the position of the player and moving
    * the ghost towards the player.
    */
-  public void moveGhost(Player player) {
+  public void chase(Player player) {
     this.player = player;
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     direction.normalize();
@@ -33,7 +33,7 @@ public class Ghost extends Enemy{
 
   public void update() {
     if (player != null) {
-      moveGhost(player);
+      chase(player);
     }
   }
 
