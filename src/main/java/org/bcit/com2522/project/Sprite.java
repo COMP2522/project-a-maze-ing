@@ -43,6 +43,9 @@ public class Sprite {
     this.position = position;
   }
 
+  public float getSize() {
+    return size;
+  }
   //  public void bounce() {
 //    if (this.position.x <= 0 ||
 //        this.position.x >= window.width ||

@@ -57,7 +57,7 @@ public class Window extends PApplet {
     sprites = new ArrayList<Sprite>();
     player = new Player(
         new PVector(this.width/2,this.height/2),
-        new PVector(0,1),
+        new PVector(0,0),
         minSize + 1,
         1,
         new Color(0,255,0),
@@ -114,7 +114,26 @@ public class Window extends PApplet {
    * in order of function calls.
    */
   public void draw() {
-    image(backgroundImage, 0, 0, width, height);
+
+    /**
+     * This section will Zoom the camera in and follow the player around
+     */
+    float zoomFactor = 2.0f; // Increase this value to zoom in more
+    // Calculate the camera position based on the player's position
+    PVector cameraPos = new PVector(
+        player.getPosition().x - width/2,
+        player.getPosition().y - height/2);
+    // Translate the drawing surface to the camera position
+    translate(-cameraPos.x, -cameraPos.y);
+
+    /**
+     * This section will load the background image
+     */
+    image(backgroundImage, -1000, -1000, width*4, height*4);
+
+    /**
+     * Just updates and draws all sprites in the list
+     */
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
