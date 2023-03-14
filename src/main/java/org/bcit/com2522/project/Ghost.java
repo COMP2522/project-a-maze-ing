@@ -1,22 +1,20 @@
 package org.bcit.com2522.project;
 
-public class Ghost extends Enemy implements Movable{
+import processing.core.PVector;
 
-  private float xPos;
-  private float yPos;
-
-  private Player player;
-  private float ghostSpeed = 0.3f;
-
+import java.awt.*;
+public class Ghost extends Enemy{
   private static Ghost ghostInstance = null;
 
-  private Ghost(){
-// singleton for ghost
+  private Player player; //Reference to the player object
+
+  Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window){
+    super(position, direction, size, speed, color, window);
   }
 
-  public static Ghost getInstance() {
+  public static Ghost getInstance(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     if (ghostInstance == null) {
-      ghostInstance = new Ghost();
+      ghostInstance = new Ghost(position, direction, size, speed, color, window);
     }
     return ghostInstance;
   }
@@ -25,15 +23,17 @@ public class Ghost extends Enemy implements Movable{
    * Update ghost position by checking the position of the player and moving
    * the ghost towards the player.
    */
-  public void move() {
-    if (xPos <= player.getXpos()) {
-      xPos += ghostSpeed;
-    } if (yPos <= player.getYpos()) {
-      yPos += ghostSpeed;
-    } if (xPos > player.getXpos()) {
-      xPos -= ghostSpeed;
-    } if (yPos > player.getYpos()) {
-      yPos -= ghostSpeed;
+  public void moveGhost(Player player) {
+    this.player = player;
+    PVector direction = PVector.sub(player.getPosition(), getPosition());
+    direction.normalize();
+    direction.mult(getSpeed());
+    setPosition(PVector.add(getPosition(), direction));
+  }
+
+  public void update() {
+    if (player != null) {
+      moveGhost(player);
     }
   }
 

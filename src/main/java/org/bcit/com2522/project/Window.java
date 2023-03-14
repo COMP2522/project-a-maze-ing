@@ -1,54 +1,70 @@
 package org.bcit.com2522.project;
 
 import processing.core.PApplet;
+import processing.core.PVector;
+import processing.event.KeyEvent;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Window extends PApplet {
-  // ArrayList<Sprite> sprites;
-  //ArrayList<Sprite> enemies;
-  Sprite player;
+
+  ArrayList<Sprite> sprites;
+  ArrayList<Enemy> enemies;
+  Ghost ghost;
+  Player player;
+
   int numEnemies = 10;
   int minSize = 10;
   int maxSize = 20;
 
-  private static Window windowInstance;
-
-  private Window() {
-    //Empty for singleton
-  }
-
-  public static Window getInstance() {
-    if (windowInstance == null) {
-      windowInstance = new Window();
-    }
-    return windowInstance;
+  /**
+   * Provides the size of the window
+   */
+  public void settings(){
+    size(800,600);
   }
 
   /**
-   * Sets the size of the window.
+   * Called to initialize objects once the program starts.
+   * Calls initializeObjects() method
    */
-  public void settings() {
-    size(640, 360);
+  public void setup(){
+    this.initializeObjects();
   }
 
 
-  /**
-   * Called once at the beginning of the program.
-   * Initializes all objects.
-   */
-//  public void setup() {
-//    this.init();
+//  private static Window windowInstance;
+//
+//  private Window() {
+//    //Empty for singleton
 //  }
 //
-//  public void init() {
-//    enemies = new ArrayList<Sprite>();
-//    sprites = new ArrayList<Sprite>();
-//    player = new Sprite(
-//        new PVector(this.width/2,this.height/2),
-//        new PVector(0,1),
-//        minSize + 1,
-//        2,
-//        new Color(0,255,0),
-//        this);
+//  public static Window getInstance() {
+//    if (windowInstance == null) {
+//      windowInstance = new Window();
+//    }
+//    return windowInstance;
+//  }
+//
+  public void initializeObjects() {
+    enemies = new ArrayList<Enemy>();
+    sprites = new ArrayList<Sprite>();
+    player = new Player(
+        new PVector(this.width/2,this.height/2),
+        new PVector(0,1),
+        minSize + 1,
+        0,
+        new Color(0,255,0),
+        this);
+
+      ghost = new Ghost(
+          new PVector(this.width/3,this.height/3),
+          new PVector(0,1),
+          minSize + 1,
+          5,
+          new Color(255,255,255),
+          this);
 //
 //    for (int i = 0; i < numEnemies; i++) {
 //      enemies.add(new Sprite(
@@ -60,36 +76,36 @@ public class Window extends PApplet {
 //          this
 //      ));
 //    }
-//    sprites.addAll(enemies);
-//    sprites.add(player);
-//  }
+    sprites.add(ghost);
+    sprites.add(player);
+  }
 
-//  @Override
-//  public void keyPressed(KeyEvent event) {
-//    int keyCode = event.getKeyCode();
-//    switch( keyCode ) {
-//      case LEFT:
-//        // handle left
-//        player.setDirection(player.getDirection().rotate(-Window.PI / 16));
-//        break;
-//      case RIGHT:
-//        // handle right
-//        player.setDirection(player.getDirection().rotate(Window.PI / 16));
-//        break;
-//    }
-//  }
+  @Override
+  public void keyPressed(KeyEvent event) {
+    int keyCode = event.getKeyCode();
+    switch( keyCode ) {
+      case LEFT:
+        // handle left
+        player.setDirection(player.getDirection().rotate(-Window.PI / 16));
+        break;
+      case RIGHT:
+        // handle right
+        player.setDirection(player.getDirection().rotate(Window.PI / 16));
+        break;
+    }
+  }
 
   /**
    * Called on every frame. Updates scene object
    * state and redraws the scene. Drawings appear
    * in order of function calls.
    */
-//  public void draw() {
-//    background(0);
-//    for (Sprite sprite : sprites) {
-//      sprite.update();
-//      sprite.draw();
-//    }
+  public void draw() {
+    background(0);
+    for (Sprite sprite : sprites) {
+      sprite.update();
+      sprite.draw();
+    }
 //    ArrayList<Sprite> toRemove = new ArrayList<Sprite>();
 //    for (Sprite enemy : enemies) {
 //      if (Sprite.collide(player, enemy)) {
@@ -100,8 +116,8 @@ public class Window extends PApplet {
 //      // TODO: implement compareTo and equals to make this work
 //      enemies.remove(enemy);
 //    }
-//
-//  }
+
+  }
 
 
   /**
