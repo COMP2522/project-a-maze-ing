@@ -11,10 +11,12 @@ public class Window extends PApplet {
 
   ArrayList<Sprite> sprites;
   ArrayList<Enemy> enemies;
+  ArrayList<Blade> blades;
   Ghost ghost;
   Player player;
 
   int numEnemies = 10;
+  int numBlades = 10;
   int minSize = 10;
   int maxSize = 20;
 
@@ -50,6 +52,7 @@ public class Window extends PApplet {
   public void initializeObjects() {
     enemies = new ArrayList<Enemy>();
     sprites = new ArrayList<Sprite>();
+    blades = new ArrayList<Blade>();
     player = new Player(
         new PVector(this.width/2,this.height/2),
         new PVector(0,1),
@@ -65,6 +68,22 @@ public class Window extends PApplet {
           5,
           new Color(255,255,255),
           this);
+
+    for (int i = 0; i < numBlades; i++) {
+      Blade blade = new Blade(
+              new PVector(150 * (i + 1), height / 2),
+              new PVector(0, 1),
+              40,
+              2,
+              new Color(255, 0, 0),
+              this
+      );
+      blades.add(blade);
+      sprites.add(blade);
+    }
+
+
+
 //
 //    for (int i = 0; i < numEnemies; i++) {
 //      enemies.add(new Sprite(
@@ -78,6 +97,7 @@ public class Window extends PApplet {
 //    }
     sprites.add(ghost);
     sprites.add(player);
+
   }
 
   @Override
@@ -95,6 +115,13 @@ public class Window extends PApplet {
     }
   }
 
+  public void handlePlayerDeath() {
+    // Stop the game or restart the level
+    // For now, just print "Game Over" and stop the sketch
+    System.out.println("Game Over");
+    noLoop();
+  }
+
   /**
    * Called on every frame. Updates scene object
    * state and redraws the scene. Drawings appear
@@ -104,6 +131,9 @@ public class Window extends PApplet {
     background(0);
     for (Sprite sprite : sprites) {
       sprite.update();
+      if (sprite instanceof Blade && player.collidesWith(sprite)) {
+        handlePlayerDeath();
+      }
       sprite.draw();
     }
 //    ArrayList<Sprite> toRemove = new ArrayList<Sprite>();

@@ -7,11 +7,12 @@ import java.awt.*;
 public class Sprite {
   private PVector position;
   private PVector direction;
-  private float size;
+  protected float size;
+
   private float speed;
-  private Color color;
+  protected Color color;
   //private java.awt.Window window;
-  private Window window;
+  protected Window window;
 
 
   public Sprite(PVector position, PVector direction, float size, float speed, Color color, Window window) {
@@ -22,6 +23,10 @@ public class Sprite {
     this.window = window;
     this.color = color;
   }
+  public float getSize() {
+    return size;
+  }
+
 
   public void setDirection(PVector direction) {
     this.direction = direction;

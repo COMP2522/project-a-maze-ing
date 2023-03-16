@@ -13,6 +13,11 @@ public class Player extends Sprite{
     super(position, direction, size, speed, color, window);
   }
 
+  public boolean collidesWith(Sprite other) {
+    return getPosition().dist(other.getPosition()) < (size + other.getSize()) / 2;
+  }
+
+
 
 
 }
