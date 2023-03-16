@@ -34,7 +34,7 @@ public class Window extends PApplet {
    */
   public void setup(){
     this.initializeObjects();
-    backgroundImage = loadImage("images/Sleepy.png");
+    //backgroundImage = loadImage("images/Sleepy.png");
     frameRate(144);
   }
 
@@ -129,7 +129,7 @@ public class Window extends PApplet {
     /**
      * This section will load the background image
      */
-    image(backgroundImage, -1000, -1000, width*4, height*4);
+    //image(backgroundImage, -1000, -1000, width*4, height*4);
 
     /**
      * Just updates and draws all sprites in the list
