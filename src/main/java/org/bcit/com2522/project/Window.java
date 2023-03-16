@@ -18,7 +18,7 @@ public class Window extends PApplet {
   Player player;
 
   int numEnemies = 10;
-  int numBlades = 10;
+  int numBlades = 2;
   int numHoles = 4;
   int minSize = 10;
   int maxSize = 20;
@@ -46,32 +46,19 @@ public class Window extends PApplet {
   }
 
 
-
-  //  private static Window windowInstance;
-//
-//  private Window() {
-//    //Empty for singleton
-//  }
-//
-//  public static Window getInstance() {
-//    if (windowInstance == null) {
-//      windowInstance = new Window();
-//    }
-//    return windowInstance;
-//  }
-//
   public void initializeObjects() {
     enemies = new ArrayList<Enemy>();
     sprites = new ArrayList<Sprite>();
     blades = new ArrayList<Blade>();
 
     player = new Player(
-            new PVector(this.width/2 , this.height/2 ),
+            new PVector(this.width / 2, this.height / 2),
             new PVector(0, 1),
-            minSize + 1,
             0,
             this,
-            harryPotterImage);
+            harryPotterImage
+    );
+
 
 
 
@@ -83,13 +70,16 @@ public class Window extends PApplet {
           new Color(255,255,255),
           this);
 
-    // Initialize holes
+// Initialize holes
     for (int i = 0; i < numHoles; i++) {
       PVector holePosition = new PVector(random(0, width), random(0, height));
-      float holeSize = random(minSize, maxSize);
-      Hole hole = new Hole(holePosition, holeSize, this);
-      sprites.add(hole);
+      float holeSize = random(60, 60);
+        Hole hole = new Hole(holePosition, holeSize, new Color(139, 69, 19), this);
+        sprites.add(hole);
+
+
     }
+
 
     // Initialize blades
     for (int i = 0; i < numBlades; i++) {
@@ -103,26 +93,14 @@ public class Window extends PApplet {
       );
       blades.add(blade);
       sprites.add(blade);
-      sprites.add(player);
     }
 
 
-
-//
-//    for (int i = 0; i < numEnemies; i++) {
-//      enemies.add(new Sprite(
-//          new PVector(random(0, this.width), random(0, this.height)),
-//          new PVector(random(-1, 1), random(-1,1)),
-//          random(minSize, maxSize),
-//          random(0,2),
-//          new Color(255, 0, 0),
-//          this
-//      ));
-//    }
     sprites.add(ghost);
-    sprites.add(player);
 
   }
+
+
 
   @Override
   public void keyPressed(KeyEvent event) {
@@ -166,10 +144,15 @@ public class Window extends PApplet {
     noLoop();
   }
 
-  public void handlePlayerFallingThroughHole(PVector holePosition) {
+  public void handlePlayerFallingThroughHole(PVector holePosition, float holeSize) {
     // Set the player's position directly below the hole's position
-    player.setPosition(new PVector(holePosition.x, holePosition.y + player.getSize() + holePosition.y / 2));
+    player.setPosition(new PVector(holePosition.x, holePosition.y + holeSize / 2 + player.getSize() / 2));
   }
+
+
+
+
+
 
 
   /**
@@ -179,28 +162,30 @@ public class Window extends PApplet {
    */
   public void draw() {
     background(200, 200, 200);
+
+    player.update();
+    player.draw();
+
     for (Sprite sprite : sprites) {
       sprite.update();
+
       if (sprite instanceof Blade && player.collidesWith(sprite)) {
         handlePlayerDeath();
       }
       if (sprite instanceof Hole && player.collidesWith(sprite)) {
-        handlePlayerFallingThroughHole(sprite.getPosition());
+        handlePlayerFallingThroughHole(sprite.getPosition(), sprite.getSize());
       }
+      if (sprite instanceof Ghost && player.collidesWith(sprite)) {
+        handlePlayerDeath();
+      }
+
       sprite.draw();
     }
-//    ArrayList<Sprite> toRemove = new ArrayList<Sprite>();
-//    for (Sprite enemy : enemies) {
-//      if (Sprite.collide(player, enemy)) {
-//        toRemove.add(enemy);
-//      }
-//    }
-//    for (Sprite enemy : toRemove) {
-//      // TODO: implement compareTo and equals to make this work
-//      enemies.remove(enemy);
-//    }
-
   }
+
+
+
+
 
 
   /**

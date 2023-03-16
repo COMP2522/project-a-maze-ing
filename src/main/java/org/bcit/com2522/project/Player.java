@@ -11,18 +11,18 @@ public class Player extends Sprite{
   private float rotationAngle;
 
 
-
-  public Player(PVector position, PVector direction, float size, float speed, Window window, PImage harryPotterImage) {
-    super(position, direction, size, speed, null, window); // Pass null for color
+  public Player(PVector position, PVector direction, float speed, Window window, PImage harryPotterImage) {
+    super(position, direction, Math.max(harryPotterImage.width, harryPotterImage.height), speed, null, window); // Pass null for color
     this.harryPotterImage = harryPotterImage;
   }
 
 
 
-
   public boolean collidesWith(Sprite other) {
-    return getPosition().dist(other.getPosition()) < (size + other.getSize()) / 2;
+    float minDistance = size / 2 + other.getSize() / 2;
+    return getPosition().dist(other.getPosition()) < minDistance;
   }
+
 
   public void moveForward(float distance) {
     getPosition().add(PVector.mult(getDirection(), distance));
@@ -61,6 +61,27 @@ public class Player extends Sprite{
     window.popMatrix();
   }
 
+//
+//  @Override
+//  public void draw() {
+//    window.fill(255, 0, 0); // Set a color for the circle (e.g., red)
+//    window.ellipse(getPosition().x, getPosition().y, size, size);
+//  }
+
+
+//  @Override
+//  public void draw() {
+//    window.fill(255, 0, 0);
+//    window.ellipse(getPosition().x, getPosition().y, size, size);
+//
+//    if (harryPotterImage != null) {
+//      window.pushMatrix();
+//      window.translate(getPosition().x, getPosition().y);
+//      window.rotate(rotationAngle);
+//      window.image(harryPotterImage, -harryPotterImage.width / 2, -harryPotterImage.height / 2, harryPotterImage.width/2, harryPotterImage.height/2);
+//      window.popMatrix();
+//    }
+  }
 
 
 
@@ -69,4 +90,4 @@ public class Player extends Sprite{
 
 
 
-}
+
