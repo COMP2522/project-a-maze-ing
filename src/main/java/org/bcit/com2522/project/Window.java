@@ -3,11 +3,13 @@ package org.bcit.com2522.project;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.KeyEvent;
+import processing.core.PImage;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Window extends PApplet {
+  PImage harryPotterImage;
 
   ArrayList<Sprite> sprites;
   ArrayList<Enemy> enemies;
@@ -25,7 +27,7 @@ public class Window extends PApplet {
    * Provides the size of the window
    */
   public void settings(){
-    size(800,600);
+    size(1000,600);
   }
 
   /**
@@ -33,11 +35,19 @@ public class Window extends PApplet {
    * Calls initializeObjects() method
    */
   public void setup(){
+    harryPotterImage = loadImage("/Users/laurieannesolkoski/IdeaProjects/project-a-maze-ing/Data/harry_potter.png");
+    System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
+    if (harryPotterImage == null) {
+      System.out.println("Image is null after loading.");
+    } else {
+      System.out.println("Image successfully loaded.");
+    }
     this.initializeObjects();
   }
 
 
-//  private static Window windowInstance;
+
+  //  private static Window windowInstance;
 //
 //  private Window() {
 //    //Empty for singleton
@@ -54,13 +64,16 @@ public class Window extends PApplet {
     enemies = new ArrayList<Enemy>();
     sprites = new ArrayList<Sprite>();
     blades = new ArrayList<Blade>();
+
     player = new Player(
-        new PVector(this.width/2,this.height/2),
-        new PVector(0,1),
-        minSize + 1,
-        0,
-        new Color(0,255,0),
-        this);
+            new PVector(this.width/2 , this.height/2 ),
+            new PVector(0, 1),
+            minSize + 1,
+            0,
+            this,
+            harryPotterImage);
+
+
 
       ghost = new Ghost(
           new PVector(this.width/3,this.height/3),
@@ -90,6 +103,7 @@ public class Window extends PApplet {
       );
       blades.add(blade);
       sprites.add(blade);
+      sprites.add(player);
     }
 
 
@@ -113,17 +127,37 @@ public class Window extends PApplet {
   @Override
   public void keyPressed(KeyEvent event) {
     int keyCode = event.getKeyCode();
-    switch( keyCode ) {
+    switch (keyCode) {
+      case 'A':
+        // Rotate left
+        player.rotateLeft(0.1f); // Adjust this value to control the rotation speed
+        break;
+      case 'D':
+        // Rotate right
+        player.rotateRight(0.1f); // Adjust this value to control the rotation speed
+        break;
       case LEFT:
-        // handle left
-        player.setDirection(player.getDirection().rotate(-Window.PI / 16));
+        // Move left
+        player.moveLeft(5); // Adjust this value to control the speed of the player
         break;
       case RIGHT:
-        // handle right
-        player.setDirection(player.getDirection().rotate(Window.PI / 16));
+        // Move right
+        player.moveRight(5); // Adjust this value to control the speed of the player
+        break;
+      case DOWN:
+        // Move forward
+        player.moveForward(5); // Adjust this value to control the speed of the player
+        break;
+      case UP:
+        // Move backward
+        player.moveBackward(5); // Adjust this value to control the speed of the player
         break;
     }
   }
+
+
+
+
 
   public void handlePlayerDeath() {
     // Stop the game or restart the level
@@ -132,11 +166,11 @@ public class Window extends PApplet {
     noLoop();
   }
 
-  public void handlePlayerFallingThroughHole() {
-    // Handle the player falling through a hole
-    // For now, it just resets the player's position to the center of the screen
-    player.setPosition(new PVector(width / 2, height / 2));
+  public void handlePlayerFallingThroughHole(PVector holePosition) {
+    // Set the player's position directly below the hole's position
+    player.setPosition(new PVector(holePosition.x, holePosition.y + player.getSize() + holePosition.y / 2));
   }
+
 
   /**
    * Called on every frame. Updates scene object
@@ -144,14 +178,14 @@ public class Window extends PApplet {
    * in order of function calls.
    */
   public void draw() {
-    background(0);
+    background(200, 200, 200);
     for (Sprite sprite : sprites) {
       sprite.update();
       if (sprite instanceof Blade && player.collidesWith(sprite)) {
         handlePlayerDeath();
       }
       if (sprite instanceof Hole && player.collidesWith(sprite)) {
-        handlePlayerFallingThroughHole();
+        handlePlayerFallingThroughHole(sprite.getPosition());
       }
       sprite.draw();
     }
