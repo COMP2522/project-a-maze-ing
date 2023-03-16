@@ -17,6 +17,7 @@ public class Window extends PApplet {
 
   int numEnemies = 10;
   int numBlades = 10;
+  int numHoles = 4;
   int minSize = 10;
   int maxSize = 20;
 
@@ -69,6 +70,15 @@ public class Window extends PApplet {
           new Color(255,255,255),
           this);
 
+    // Initialize holes
+    for (int i = 0; i < numHoles; i++) {
+      PVector holePosition = new PVector(random(0, width), random(0, height));
+      float holeSize = random(minSize, maxSize);
+      Hole hole = new Hole(holePosition, holeSize, this);
+      sprites.add(hole);
+    }
+
+    // Initialize blades
     for (int i = 0; i < numBlades; i++) {
       Blade blade = new Blade(
               new PVector(150 * (i + 1), height / 2),
@@ -122,6 +132,12 @@ public class Window extends PApplet {
     noLoop();
   }
 
+  public void handlePlayerFallingThroughHole() {
+    // Handle the player falling through a hole
+    // For now, it just resets the player's position to the center of the screen
+    player.setPosition(new PVector(width / 2, height / 2));
+  }
+
   /**
    * Called on every frame. Updates scene object
    * state and redraws the scene. Drawings appear
@@ -133,6 +149,9 @@ public class Window extends PApplet {
       sprite.update();
       if (sprite instanceof Blade && player.collidesWith(sprite)) {
         handlePlayerDeath();
+      }
+      if (sprite instanceof Hole && player.collidesWith(sprite)) {
+        handlePlayerFallingThroughHole();
       }
       sprite.draw();
     }
