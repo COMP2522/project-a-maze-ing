@@ -17,18 +17,19 @@ public class Wraith extends Enemy implements Movable{
   @Override
   public void move(Player player) {
     int threshold = 700;
+    float tolerance = 1f;
     this.player = player;
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
     if (distance < threshold) {
-      PVector randomDirection = PVector.random2D();
-      randomDirection.mult(getSpeed());
-      setPosition(PVector.add(getPosition(), randomDirection));
-      //sporadicSound.play();
+      if (Math.abs(player.getPosition().x -getPosition().x) < tolerance
+          || Math.abs(player.getPosition().y - getPosition().y) < tolerance) {
+        direction.normalize();
+        direction.mult(getSpeed());
+        setPosition(PVector.add(getPosition(), direction));
+      }
     } else {
-//      direction.normalize();
-//      direction.mult(getSpeed());
-//      setPosition(PVector.add(getPosition(), direction));
+//Do nothing
     }
 
 

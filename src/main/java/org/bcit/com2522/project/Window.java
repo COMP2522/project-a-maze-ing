@@ -19,6 +19,7 @@ public class Window extends PApplet {
   //Sporadic sporadic;
 
   int numSporadics = 10;
+  int numWraiths = 5;
   int minSize = 10;
   int maxSize = 20;
 
@@ -82,9 +83,19 @@ public class Window extends PApplet {
       enemies.add(new Sporadic(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
-          random(minSize, maxSize),
+          minSize,
           5,
           new Color(255, 0, 0),
+          this
+      ));
+    }
+    for (int i = 0; i < numWraiths; i++) {
+      enemies.add(new Wraith(
+          new PVector(random(0, this.width), random(0, this.height)),
+          new PVector(random(-1, 1), random(-1,1)),
+          minSize,
+          1,
+          new Color(0, 0, 255),
           this
       ));
     }
@@ -157,9 +168,9 @@ public class Window extends PApplet {
 
 
       ghost.move(player); //This will follow the player everywhere they go
-      //Moves multiple enemy sporadic types
-      for (Enemy sporadics : enemies) {
-        sporadics.move(player);
+      //Moves multiple enemy sporadic and wraith types
+      for (Enemy enemyList : enemies) {
+        enemyList.move(player);
       }
 
     }
