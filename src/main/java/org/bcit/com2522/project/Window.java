@@ -67,7 +67,7 @@ public class Window extends PApplet {
         new PVector(this.width/2,this.height/2),
         new PVector(0,0),
         minSize + 1,
-        1,
+        2,
         new Color(0,255,0),
         this);
 
@@ -94,7 +94,7 @@ public class Window extends PApplet {
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
           minSize,
-          1,
+          0.5f,
           new Color(0, 0, 255),
           this
       ));
@@ -123,6 +123,29 @@ public class Window extends PApplet {
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
+        break;
+    }
+  }
+
+  @Override
+  public void keyReleased(KeyEvent event) {
+    int keyCode = event.getKeyCode();
+    switch (keyCode) {
+      case LEFT:
+        // stop moving left
+        player.setDirection(new PVector(0, 0));
+        break;
+      case RIGHT:
+        // stop moving right
+        player.setDirection(new PVector(0, 0));
+        break;
+      case UP:
+        // stop moving up
+        player.setDirection(new PVector(0, 0));
+        break;
+      case DOWN:
+        // stop moving down
+        player.setDirection(new PVector(0, 0));
         break;
     }
   }

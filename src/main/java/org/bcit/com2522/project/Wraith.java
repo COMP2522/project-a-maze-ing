@@ -17,7 +17,7 @@ public class Wraith extends Enemy implements Movable{
   @Override
   public void move(Player player) {
     int threshold = 700;
-    float tolerance = 1f;
+    float tolerance = 3f;
     this.player = player;
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
