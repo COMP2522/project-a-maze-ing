@@ -4,7 +4,7 @@ import processing.core.PVector;
 
 import java.awt.*;
 
-public class Enemy extends Sprite{
+public class Enemy extends Sprite implements Movable{
 
   public Enemy(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     super(position, direction, size, speed, color, window);
@@ -73,8 +73,8 @@ public class Enemy extends Sprite{
 //    }
 //  }
 //
-//  @Override
-//  public void move() {
-//    //Sub classes of enemy all move differently
-//  }
+  @Override
+  public void move(Player player) {
+    //Sub classes of enemy all move differently
+  }
 }
