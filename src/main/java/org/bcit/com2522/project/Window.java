@@ -16,9 +16,8 @@ public class Window extends PApplet {
   ArrayList<Enemy> enemies;
   Ghost ghost;
   Player player;
-  //SoundFile sporadicSound;
 
-  //Sporadic sporadic;
+  PImage harryPotterImage;
 
   int numSporadics = 10;
   int numWraiths = 5;
@@ -42,13 +41,23 @@ public class Window extends PApplet {
    */
   public void setup(){
     //initializes the objects
-    this.initializeObjects();
+//    this.initializeObjects();
     //sets up the background image
     backgroundImage = loadImage("images/Sleepy.png");
     frameRate(FPS);
-    //generates sounds
-    //sporadicSound = loadSound("sound/sporadicEX.mp3");
+    harryPotterImage = loadImage("/Users/laurieannesolkoski/IdeaProjects/2522Alex/project-a-maze-ing/Data/harry_potter.png");
+    System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
+    if (harryPotterImage == null) {
+      System.out.println("Image is null after loading.");
+    } else {
+      System.out.println("Image successfully loaded.");
+    }
+    // initializes the objects
+    this.initializeObjects();
   }
+
+  //generates sounds
+    //sporadicSound = loadSound("sound/sporadicEX.mp3");
 
 
 //  private static Window windowInstance;
@@ -67,13 +76,18 @@ public class Window extends PApplet {
   public void initializeObjects() {
     enemies = new ArrayList<Enemy>();
     sprites = new ArrayList<Sprite>();
+
+
     player = new Player(
-        new PVector(this.width/2,this.height/2),
-        new PVector(0,0),
-        minSize + 1,
-        2,
-        new Color(0,255,0),
-        this);
+            new PVector(this.width / 2, this.height / 2),
+            new PVector(0, 1),
+            Math.max(harryPotterImage.width, harryPotterImage.height),
+            4,
+            null,
+            this,
+            harryPotterImage
+    );
+
 
       ghost = new Ghost(
           new PVector(this.width/3,this.height/3),
@@ -164,12 +178,14 @@ public class Window extends PApplet {
     }
   }
 
+
   /**
    * Called on every frame. Updates scene object
    * state and redraws the scene. Drawings appear
    * in order of function calls.
    */
   public void draw() {
+
 
     /**
      * This section will Zoom the camera in and follow the player around
