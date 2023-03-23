@@ -17,16 +17,4 @@ public class Player extends Sprite {
     this.playerImage = playerImage;
   }
 
-//  @Override
-//  public void draw() {
-//    if (playerImage == null) {
-//      return;
-//    }
-//
-//    window.pushMatrix();
-//    window.translate(getPosition().x, getPosition().y);
-//    window.image(playerImage, playerImage.width / 2, -playerImage.height / 2, playerImage.width / 2, playerImage.height / 2);
-//    window.popMatrix();
-//
-//  }
 }
