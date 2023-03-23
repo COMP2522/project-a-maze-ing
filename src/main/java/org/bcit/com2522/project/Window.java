@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class Window extends PApplet {
 
+  private static final int FPS = 144;
+
   ArrayList<Sprite> sprites;
   ArrayList<Enemy> enemies;
   Ghost ghost;
@@ -22,6 +24,8 @@ public class Window extends PApplet {
   int numWraiths = 5;
   int minSize = 10;
   int maxSize = 20;
+
+  boolean gameover;
 
   PImage backgroundImage; //Background Image for the Window
 
@@ -41,7 +45,7 @@ public class Window extends PApplet {
     this.initializeObjects();
     //sets up the background image
     backgroundImage = loadImage("images/Sleepy.png");
-    frameRate(144);
+    frameRate(FPS);
     //generates sounds
     //sporadicSound = loadSound("sound/sporadicEX.mp3");
   }
@@ -101,6 +105,7 @@ public class Window extends PApplet {
     }
     sprites.add(ghost);
     sprites.add(player);
+    enemies.add(ghost);
     sprites.addAll(enemies);
   }
 
@@ -147,6 +152,15 @@ public class Window extends PApplet {
         // stop moving down
         player.setDirection(new PVector(0, 0));
         break;
+      case 'R':
+        if (gameover){
+          gameover = false;
+          player.setImmunityTimer(1);
+          player.setAlive(true);
+          PVector newPos = new PVector(player.getPosition().x + 30, player.getPosition().y + 30);
+          player.setPosition(newPos);
+        }
+        break;
     }
   }
 
@@ -163,15 +177,15 @@ public class Window extends PApplet {
     float zoomFactor = 2.0f; // Increase this value to zoom in more
     // Calculate the camera position based on the player's position
     PVector cameraPos = new PVector(
-        player.getPosition().x - width/2,
-        player.getPosition().y - height/2);
+        player.getPosition().x - width / 2,
+        player.getPosition().y - height / 2);
     // Translate the drawing surface to the camera position
     translate(-cameraPos.x, -cameraPos.y);
-
+    if (!gameover) {
     /**
      * This section will load the background image
      */
-    image(backgroundImage, -1000, -1000, width*4, height*4);
+    image(backgroundImage, -1000, -1000, width * 4, height * 4);
 
     /**
      * Just updates and draws all sprites in the list
@@ -207,7 +221,25 @@ public class Window extends PApplet {
 //      // TODO: implement compareTo and equals to make this work
 //      enemies.remove(enemy);
 //    }
+    if (player.getImmunityTimer() > 0) {
+      player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
+    }
 
+    for (Enemy e : enemies) {
+      if (player.collision(e) && player.getImmunityTimer() <= 0) {
+        player.setAlive(false);
+      }
+    }
+
+    if (!player.isAlive()) {
+      gameover = true;
+    }
+  } else {
+    background(0);
+    textSize(50);
+    text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
+    text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+  }
   }
 
 

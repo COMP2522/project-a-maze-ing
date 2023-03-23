@@ -1,5 +1,7 @@
 package org.bcit.com2522.project.interfaces;
 
+import org.bcit.com2522.project.Sprite;
+
 /**
  * Interface for objects that can collide with other objects that implement Collidable.
  */
@@ -11,5 +13,5 @@ public interface Collidable {
    * @param b second Collidable object
    * @return true if collision has occurred, false otherwise.
    */
-  boolean collision(Collidable a, Collidable b);
+  boolean collision(Sprite s);
 }
