@@ -73,7 +73,7 @@ public class Window extends PApplet {
    * Calls initializeObjects() method
    */
   public void setup(){
-    backgroundImage = loadImage("images/dirt.png"); //Background image for the window
+    backgroundImage = loadImage("/Users/laurieannesolkoski/IdeaProjects/2522Project/project-a-maze-ing/Data/dirt.png"); //Background image for the window
     frameRate(144);
     this.initializeObjects();
   }
