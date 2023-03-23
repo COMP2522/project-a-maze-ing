@@ -19,9 +19,15 @@ public class Player extends Sprite{
 
 
   public boolean collidesWith(Sprite other) {
-    float minDistance = size / 2 + other.getSize() / 2;
-    return getPosition().dist(other.getPosition()) < minDistance;
+    float margin = 40; // Increase this value to make the collision detection less sensitive
+    float distance = getPosition().dist(other.getPosition());
+    if (distance <= (getSize() / 2 + other.getSize() / 2) - margin) {
+      return true;
+    }
+    return false;
   }
+
+
 
 
   public void moveForward(float distance) {
@@ -47,6 +53,8 @@ public class Player extends Sprite{
   public void rotateRight(float angle) {
     rotationAngle += angle;
   }
+
+
 
   @Override
   public void draw() {

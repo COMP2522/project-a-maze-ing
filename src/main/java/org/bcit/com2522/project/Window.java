@@ -35,6 +35,7 @@ public class Window extends PApplet {
    * Calls initializeObjects() method
    */
   public void setup(){
+
     harryPotterImage = loadImage("/Users/laurieannesolkoski/IdeaProjects/project-a-maze-ing/Data/harry_potter.png");
     System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
     if (harryPotterImage == null) {
@@ -181,6 +182,8 @@ public class Window extends PApplet {
 
       sprite.draw();
     }
+    player.update();
+    player.draw();
   }
 
 
