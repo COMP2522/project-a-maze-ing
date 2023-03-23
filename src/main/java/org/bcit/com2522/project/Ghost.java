@@ -3,7 +3,7 @@ package org.bcit.com2522.project;
 import processing.core.PVector;
 
 import java.awt.*;
-public class Ghost extends Enemy{
+public class Ghost extends Enemy implements Movable{
   private static Ghost ghostInstance = null;
 
   private Player player; //Reference to the player object
@@ -23,7 +23,8 @@ public class Ghost extends Enemy{
    * Update ghost position by checking the position of the player and moving
    * the ghost towards the player.
    */
-  public void chase(Player player) {
+  @Override
+  public void move(Player player) {
     this.player = player;
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     direction.normalize();
@@ -33,7 +34,7 @@ public class Ghost extends Enemy{
 
   public void update() {
     if (player != null) {
-      chase(player);
+      move(player);
     }
   }
 

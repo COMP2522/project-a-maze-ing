@@ -14,8 +14,12 @@ public class Window extends PApplet {
   ArrayList<Enemy> enemies;
   Ghost ghost;
   Player player;
+  //SoundFile sporadicSound;
 
-  int numEnemies = 10;
+  //Sporadic sporadic;
+
+  int numSporadics = 10;
+  int numWraiths = 5;
   int minSize = 10;
   int maxSize = 20;
 
@@ -33,9 +37,13 @@ public class Window extends PApplet {
    * Calls initializeObjects() method
    */
   public void setup(){
+    //initializes the objects
     this.initializeObjects();
+    //sets up the background image
     backgroundImage = loadImage("images/Sleepy.png");
     frameRate(144);
+    //generates sounds
+    //sporadicSound = loadSound("sound/sporadicEX.mp3");
   }
 
 
@@ -59,7 +67,7 @@ public class Window extends PApplet {
         new PVector(this.width/2,this.height/2),
         new PVector(0,0),
         minSize + 1,
-        1,
+        2,
         new Color(0,255,0),
         this);
 
@@ -67,22 +75,33 @@ public class Window extends PApplet {
           new PVector(this.width/3,this.height/3),
           new PVector(0,1),
           minSize + 1,
-          0.3f,
+          0.05f,
           new Color(255,255,255),
           this);
 //
-//    for (int i = 0; i < numEnemies; i++) {
-//      enemies.add(new Sprite(
-//          new PVector(random(0, this.width), random(0, this.height)),
-//          new PVector(random(-1, 1), random(-1,1)),
-//          random(minSize, maxSize),
-//          random(0,2),
-//          new Color(255, 0, 0),
-//          this
-//      ));
-//    }
+    for (int i = 0; i < numSporadics; i++) {
+      enemies.add(new Sporadic(
+          new PVector(random(0, this.width), random(0, this.height)),
+          new PVector(random(-1, 1), random(-1,1)),
+          minSize,
+          5,
+          new Color(255, 0, 0),
+          this
+      ));
+    }
+    for (int i = 0; i < numWraiths; i++) {
+      enemies.add(new Wraith(
+          new PVector(random(0, this.width), random(0, this.height)),
+          new PVector(random(-1, 1), random(-1,1)),
+          minSize,
+          0.5f,
+          new Color(0, 0, 255),
+          this
+      ));
+    }
     sprites.add(ghost);
     sprites.add(player);
+    sprites.addAll(enemies);
   }
 
   @Override
@@ -104,6 +123,29 @@ public class Window extends PApplet {
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
+        break;
+    }
+  }
+
+  @Override
+  public void keyReleased(KeyEvent event) {
+    int keyCode = event.getKeyCode();
+    switch (keyCode) {
+      case LEFT:
+        // stop moving left
+        player.setDirection(new PVector(0, 0));
+        break;
+      case RIGHT:
+        // stop moving right
+        player.setDirection(new PVector(0, 0));
+        break;
+      case UP:
+        // stop moving up
+        player.setDirection(new PVector(0, 0));
+        break;
+      case DOWN:
+        // stop moving down
+        player.setDirection(new PVector(0, 0));
         break;
     }
   }
@@ -138,6 +180,7 @@ public class Window extends PApplet {
       sprite.update();
       sprite.draw();
 
+
 //      if (sprite instanceof Player) {
 //        Player player = (Player) sprite;
 //        PVector direction = player.getDirection();
@@ -147,7 +190,12 @@ public class Window extends PApplet {
 //      }
 
 
-      ghost.chase(player); //This will follow the player everywhere they go
+      ghost.move(player); //This will follow the player everywhere they go
+      //Moves multiple enemy sporadic and wraith types
+      for (Enemy enemyList : enemies) {
+        enemyList.move(player);
+      }
+
     }
 //    ArrayList<Sprite> toRemove = new ArrayList<Sprite>();
 //    for (Sprite enemy : enemies) {
@@ -161,6 +209,7 @@ public class Window extends PApplet {
 //    }
 
   }
+
 
 
   /**
