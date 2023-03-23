@@ -12,6 +12,7 @@ public class Sprite {
   private Color color;
   //private java.awt.Window window;
   private Window window;
+  public CompoundGraphic graphic;
 
 
   public Sprite(PVector position, PVector direction, float size, float speed, Color color, Window window) {
@@ -21,6 +22,7 @@ public class Sprite {
     this.speed = speed;
     this.window = window;
     this.color = color;
+    this.graphic = new CompoundGraphic();
   }
 
   public void setDirection(PVector direction) {
@@ -66,6 +68,10 @@ public class Sprite {
   public void update() {
     this.position = this.getPosition().add(this.direction.copy().mult(speed));
   }
+
+  public void draw() {
+    graphic.draw(this, window);
+  }
 //
 //  public float getSize() {
 //    return size;
@@ -86,12 +92,6 @@ public class Sprite {
 //
 //  }
 
-  public void draw() {
-    window.pushStyle();
-    window.fill(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
-    window.ellipse(this.position.x, this.position.y, size, size);
-    window.popStyle();
-  }
 //
 //  public void setDirection(PVector direction) {
 //    this.direction = direction;
