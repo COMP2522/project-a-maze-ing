@@ -103,7 +103,7 @@ public class Window extends PApplet {
           this
       ));
     }
-    sprites.add(ghost);
+    //sprites.add(ghost);
     sprites.add(player);
     enemies.add(ghost);
     sprites.addAll(enemies);
