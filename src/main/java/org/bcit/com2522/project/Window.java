@@ -8,15 +8,21 @@ import processing.event.KeyEvent;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * The window class runs the display that initializes and displays all
+ * other classes represented in the front-end of the maze game
+ */
 public class Window extends PApplet {
+  private Timer timer;
 
+  PImage playerImage;
   ArrayList<Sprite> sprites;
   ArrayList<Enemy> enemies;
   Ghost ghost;
   Player player;
-  //SoundFile sporadicSound;
 
-  //Sporadic sporadic;
+  //int num walls = whatever number matt or alex gets for this, need to call it
+  //also need to get position of that wall and put in constructor of initialize objects method
 
   int numSporadics = 10;
   int numWraiths = 5;
@@ -37,45 +43,33 @@ public class Window extends PApplet {
    * Calls initializeObjects() method
    */
   public void setup(){
-    //initializes the objects
-    this.initializeObjects();
-    //sets up the background image
-    backgroundImage = loadImage("images/Sleepy.png");
+    backgroundImage = loadImage("images/dirt.png");
     frameRate(144);
+
     //generates sounds
     //sporadicSound = loadSound("sound/sporadicEX.mp3");
+
+    this.initializeObjects();
   }
 
-
-//  private static Window windowInstance;
-//
-//  private Window() {
-//    //Empty for singleton
-//  }
-//
-//  public static Window getInstance() {
-//    if (windowInstance == null) {
-//      windowInstance = new Window();
-//    }
-//    return windowInstance;
-//  }
-//
   public void initializeObjects() {
     enemies = new ArrayList<Enemy>();
     sprites = new ArrayList<Sprite>();
+    //walls = new ArrayList<Wall>();
+    timer = new Timer(this, new PVector(0,0));
     player = new Player(
         new PVector(this.width/2,this.height/2),
         new PVector(0,0),
         minSize + 1,
         2,
         new Color(0,255,0),
-        this);
+        this, playerImage);
 
       ghost = new Ghost(
           new PVector(this.width/3,this.height/3),
           new PVector(0,1),
           minSize + 1,
-          0.05f,
+          0.3f,
           new Color(255,255,255),
           this);
 //
@@ -99,6 +93,13 @@ public class Window extends PApplet {
           this
       ));
     }
+//    for (int i = 0; i < numWalls; i++) {
+//      walls.add(new Wall(
+//          new PVector(random(0, this.width), random(0, this.height)),
+//          random(minSize, maxSize),
+//          this
+//      ));
+//    }
     sprites.add(ghost);
     sprites.add(player);
     sprites.addAll(enemies);
@@ -166,12 +167,20 @@ public class Window extends PApplet {
         player.getPosition().x - width/2,
         player.getPosition().y - height/2);
     // Translate the drawing surface to the camera position
+    //timer.setPosition(player.getPosition());
     translate(-cameraPos.x, -cameraPos.y);
-
     /**
      * This section will load the background image
      */
     image(backgroundImage, -1000, -1000, width*4, height*4);
+
+    //timer.setPosition(player.getPosition());
+    float timeElapsed = timer.getTime();
+    text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
+
+//    float timeElapsed = timer.getTime();
+    //text("Time elapsed: " + timeElapsed + " seconds", 10, 10);
+
 
     /**
      * Just updates and draws all sprites in the list
@@ -179,38 +188,19 @@ public class Window extends PApplet {
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
-
-
-//      if (sprite instanceof Player) {
-//        Player player = (Player) sprite;
-//        PVector direction = player.getDirection();
-//        PVector position = player.getPosition();
-//        position.add(PVector.mult(direction, player.getSpeed()));
-//        player.setPosition(position);
-//      }
-
-
-      ghost.move(player); //This will follow the player everywhere they go
-      //Moves multiple enemy sporadic and wraith types
-      for (Enemy enemyList : enemies) {
-        enemyList.move(player);
-      }
-
     }
-//    ArrayList<Sprite> toRemove = new ArrayList<Sprite>();
-//    for (Sprite enemy : enemies) {
-//      if (Sprite.collide(player, enemy)) {
-//        toRemove.add(enemy);
-//      }
-//    }
-//    for (Sprite enemy : toRemove) {
-//      // TODO: implement compareTo and equals to make this work
-//      enemies.remove(enemy);
-//    }
 
+    ghost.move(player); //This will follow the player everywhere they go
+    //Moves multiple enemy sporadic and wraith types
+
+    for (Enemy enemyList : enemies) {
+      enemyList.move(player);
+    }
+
+//    for (Wall wall : walls) {
+//      wall.draw();
+//    }
   }
-
-
 
   /**
    * Main function.
@@ -218,8 +208,8 @@ public class Window extends PApplet {
    * @param passedArgs arguments from command line
    */
   public static void main(String[] passedArgs) {
-    String[] appletArgs = new String[]{"eatBubbles"};
-    Window eatBubbles = new Window();
-    PApplet.runSketch(appletArgs, eatBubbles);
+    String[] appletArgs = new String[]{"find the End"};
+    Window mazeRun = new Window();
+    PApplet.runSketch(appletArgs, mazeRun);
   }
 }
