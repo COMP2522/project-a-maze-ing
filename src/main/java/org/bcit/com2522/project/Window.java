@@ -20,6 +20,7 @@ public class Window extends PApplet {
 
   ArrayList<Sprite> sprites;
   ArrayList<Enemy> enemies;
+  EnemyManager enMan = new EnemyManager();
   Ghost ghost;
   Player player;
 

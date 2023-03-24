@@ -17,6 +17,10 @@ public class EnemyManager{
     enemies.remove(e);
   }
 
+  public Enemy get(){
+    return (Enemy) iterator.next();
+  }
+
 
   public void draw(){
     while (iterator.hasNext()){
