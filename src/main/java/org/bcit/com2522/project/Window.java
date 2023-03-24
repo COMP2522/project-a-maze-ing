@@ -256,6 +256,7 @@ public class Window extends PApplet {
    * are drawn in order of appearance in this method.
    */
   public void draw() {
+    image(backgroundImage, -1000, -1000, width * 4, height * 4);
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -274,7 +275,6 @@ public class Window extends PApplet {
 //       */
 //      image(backgroundImage, -1000, -1000, width * 4, height * 4);
 //    }
-    image(backgroundImage, -1000, -1000, width * 4, height * 4);
 
     //Updates timer time and position in the window
     float timeElapsed = timer.getTime();
@@ -323,7 +323,7 @@ public class Window extends PApplet {
       }
     }
 
-    if (!player.isAlive()) {
+    if (player.isAlive()) {
       gameover = true;
     } else {
     background(0);
@@ -331,6 +331,7 @@ public class Window extends PApplet {
     text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
     text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
   }
+
 
 
   }
