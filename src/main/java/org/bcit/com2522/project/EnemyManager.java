@@ -1,4 +1,35 @@
 package org.bcit.com2522.project;
 
-public class EnemyManager {
+import org.bcit.com2522.project.enemy.Enemy;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class EnemyManager{
+  ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+  Iterator iterator = enemies.iterator();
+
+  public void add(Enemy e){
+    enemies.add(e);
+  }
+
+  public void remove(Enemy e){
+    enemies.remove(e);
+  }
+
+
+  public void draw(){
+    while (iterator.hasNext()){
+      Enemy e = (Enemy) iterator.next();
+      e.draw();
+    }
+  }
+
+  public void collision(Sprite s){
+    while (iterator.hasNext()){
+      Enemy e = (Enemy) iterator.next();
+      e.collision(s);
+    }
+  }
+
 }
