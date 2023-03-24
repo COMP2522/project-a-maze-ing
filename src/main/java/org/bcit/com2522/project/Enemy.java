@@ -1,16 +1,26 @@
 package org.bcit.com2522.project;
 
+import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PVector;
 
 import java.awt.*;
 
-public class Enemy extends Sprite implements Movable{
+public class Enemy extends Sprite implements Movable {
 
   public Enemy(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     super(position, direction, size, speed, color, window);
   }
 
-//  /**
+  @Override
+  public boolean collision(Sprite s) {
+    float dist = PVector.dist(s.getPosition(), getPosition());
+    if (dist <= (s.getSize() / 2) + (getSize() / 2)){
+      return true;
+    }
+    return false;
+  }
+
+  //  /**
 //   * Draws a circle onscreen at x, y, circle.
 //   *
 //   * @param x position of centre of circle

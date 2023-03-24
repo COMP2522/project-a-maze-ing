@@ -1,9 +1,10 @@
 package org.bcit.com2522.project;
 
+import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PVector;
 
 import java.awt.*;
-public class Sporadic extends Enemy implements Movable{
+public class Sporadic extends Enemy implements Movable {
 //  private static Ghost ghostInstance = null;
 //
   private Player player; //Reference to the player object

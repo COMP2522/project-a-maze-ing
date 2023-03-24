@@ -1,10 +1,11 @@
 package org.bcit.com2522.project;
 
+import org.bcit.com2522.project.interfaces.Collidable;
 import processing.core.PVector;
 
 import java.awt.*;
 
-public class Sprite {
+public abstract class Sprite implements Collidable {
   private PVector position;
   private PVector direction;
   private float size;
@@ -14,6 +15,29 @@ public class Sprite {
   private Window window;
   public CompoundGraphic graphic;
 
+  public void setSize(float size) {
+    this.size = size;
+  }
+
+  public void setSpeed(float speed) {
+    this.speed = speed;
+  }
+
+  public Color getColor() {
+    return color;
+  }
+
+  public void setColor(Color color) {
+    this.color = color;
+  }
+
+  public Window getWindow() {
+    return window;
+  }
+
+  public void setWindow(Window window) {
+    this.window = window;
+  }
 
   public Sprite(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     this.position = position;
@@ -69,9 +93,9 @@ public class Sprite {
     this.position = this.getPosition().add(this.direction.copy().mult(speed));
   }
 
-  public void draw() {
-    graphic.draw(this, window);
-  }
+//  public void draw() {
+//    graphic.draw(this, window);
+//  }
 //
 //  public float getSize() {
 //    return size;
@@ -91,6 +115,18 @@ public class Sprite {
 //    }
 //
 //  }
+
+
+  public void draw() {
+    window.pushStyle();
+    window.fill(this.color.getRed(), this.color.getGreen(), this.color.getBlue());
+    window.ellipse(this.position.x, this.position.y, size, size);
+    window.popStyle();
+  }
+
+  @Override
+  public abstract boolean collision(Sprite s);
+}
 
 //
 //  public void setDirection(PVector direction) {
@@ -128,4 +164,4 @@ public class Sprite {
 //      throw new ClassCastException("Invalid type");
 //    }
 //  }
-}
+
