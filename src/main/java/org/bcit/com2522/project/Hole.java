@@ -4,14 +4,24 @@ import processing.core.PVector;
 
 import java.awt.*;
 
-public class Hole {
-  public Hole(PVector pVector, PVector pVector1, int i, int i1, Color black, Window window) {
-  }
 
-  public void draw() {
-  }
+public class Hole extends Trap {
+    public Hole(PVector position, PVector direction, float size, float speed, Color color, Window window) {
+        super(position, direction, size, speed, color, window);
+    }
 
-  public boolean collision(Player player) {
-    return false;
-  }
+    @Override
+    public void draw() {
+        getWindow().pushStyle();
+        getWindow().fill(getColor().getRed(), getColor().getGreen(), getColor().getBlue());
+        getWindow().ellipse(getPosition().x, getPosition().y, getSize(), getSize());
+        getWindow().popStyle();
+    }
+
+    @Override
+    public boolean collision(Sprite s) {
+        float dist = PVector.dist(s.getPosition(), getPosition());
+        return dist <= (s.getSize() / 2) + (getSize() / 2);
+    }
+
 }
