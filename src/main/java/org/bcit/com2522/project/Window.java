@@ -1,5 +1,7 @@
 package org.bcit.com2522.project;
 
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -13,6 +15,12 @@ import java.util.ArrayList;
  * other classes represented in the front-end of the maze game
  */
 public class Window extends PApplet {
+
+  /* Minim object for playing sound */
+  Minim minim;
+
+  /* AudioPlayer object for sound file */
+  AudioPlayer sound;
 
   /* Timer object that shows how long it takes player to complete the maze.*/
   private Timer timer;
@@ -73,9 +81,17 @@ public class Window extends PApplet {
    * Calls initializeObjects() method
    */
   public void setup(){
-    backgroundImage = loadImage("/Users/laurieannesolkoski/IdeaProjects/2522Project/project-a-maze-ing/Data/dirt.png"); //Background image for the window
+    // initializes the Minim object
+//    minim = new Minim(this);
+////
+////    // loads a sound file
+//    sound = minim.loadFile("sound/hero.mp3");
+//
+//    sound.play();
+    backgroundImage = loadImage("images/Sleepy.png"); //Background image for the window
     frameRate(144);
     this.initializeObjects();
+
   }
 
   /**
@@ -127,7 +143,7 @@ public class Window extends PApplet {
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
           WRAITH_SIZE,
-          0.5f,
+          2.5f,
           new Color(0, 0, 255),
           this
       ));
