@@ -8,7 +8,6 @@ import java.awt.Color;
  * Player. Defines a player character controlled by the user.
  */
 public class Player extends Sprite {
-
   private boolean alive;
   private float immunityTimer;
   private PImage harryPotterImage;

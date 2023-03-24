@@ -9,8 +9,4 @@ public class Wall extends Tile {
     super(pos);
   }
 
-  @Override
-  public boolean collision(Collidable a, Collidable b) {
-    return false;
-  }
 }
