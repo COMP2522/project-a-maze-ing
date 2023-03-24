@@ -66,14 +66,6 @@ public class Window extends PApplet {
   /* Hitbox size in pixels of sporadic enemy type.*/
   int playerSize = 10;
 
-  /* Hitbox size in pixels of sporadic enemy type.*/
-  public static final int SPORADIC_SIZE = 20;
-
-  /* Hitbox size in pixels of ghost enemy type.*/
-  public static final int GHOST_SIZE = 30;
-
-  /* Hitbox size in pixels of wraith enemy type.*/
-  public static final int WRAITH_SIZE = 10;
 
 
 
@@ -152,7 +144,7 @@ public class Window extends PApplet {
     ghost = new Ghost(
         new PVector(this.width/3,this.height/3),
         new PVector(0,1),
-        GHOST_SIZE,
+        Ghost.GHOST_SIZE,
         0.3f,
         new Color(255,255,255),
         this);
@@ -162,7 +154,7 @@ public class Window extends PApplet {
       enemies.add(new Sporadic(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
-          SPORADIC_SIZE,
+          Sporadic.SPORADIC_SIZE,
           5,
           new Color(255, 0, 0),
           this
@@ -174,7 +166,7 @@ public class Window extends PApplet {
       enemies.add(new Wraith(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
-          WRAITH_SIZE,
+          Wraith.WRAITH_SIZE,
           2.5f,
           new Color(0, 0, 255),
           this
