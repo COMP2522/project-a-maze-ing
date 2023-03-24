@@ -13,7 +13,6 @@ public abstract class Sprite implements Collidable {
   private Color color;
   //private java.awt.Window window;
   private Window window;
-  public CompoundGraphic graphic;
 
   public void setSize(float size) {
     this.size = size;
@@ -46,7 +45,6 @@ public abstract class Sprite implements Collidable {
     this.speed = speed;
     this.window = window;
     this.color = color;
-    this.graphic = new CompoundGraphic();
   }
 
   public void setDirection(PVector direction) {
@@ -93,9 +91,6 @@ public abstract class Sprite implements Collidable {
     this.position = this.getPosition().add(this.direction.copy().mult(speed));
   }
 
-//  public void draw() {
-//    graphic.draw(this, window);
-//  }
 //
 //  public float getSize() {
 //    return size;

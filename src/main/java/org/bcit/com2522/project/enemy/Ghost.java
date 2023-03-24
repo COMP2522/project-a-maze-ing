@@ -7,6 +7,9 @@ import processing.core.PVector;
 
 import java.awt.*;
 public class Ghost extends Enemy implements Movable {
+
+  /* Hitbox size in pixels of ghost enemy type.*/
+  public static final int GHOST_SIZE = 30;
   private static Ghost ghostInstance = null;
 
   private Player player; //Reference to the player object
