@@ -119,6 +119,7 @@ public abstract class Sprite implements Collidable {
 
   @Override
   public abstract boolean collision(Sprite s);
+}
 //
 //  public void setDirection(PVector direction) {
 //    this.direction = direction;
@@ -155,4 +156,4 @@ public abstract class Sprite implements Collidable {
 //      throw new ClassCastException("Invalid type");
 //    }
 //  }
-}
+

@@ -7,6 +7,8 @@ import processing.event.KeyEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class Window extends PApplet {
 
@@ -16,6 +18,12 @@ public class Window extends PApplet {
   ArrayList<Enemy> enemies;
   Ghost ghost;
   Player player;
+
+  private Blade blade1;
+  private Blade blade2;
+  private Blade blade3;
+
+  private List<Hole> holes;
 
   PImage harryPotterImage;
 
@@ -96,6 +104,21 @@ public class Window extends PApplet {
           0.05f,
           new Color(255,255,255),
           this);
+
+      // blades
+    blade1 = new Blade(new PVector(100, 100), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
+    blade2 = new Blade(new PVector(200, 200), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
+    blade3 = new Blade(new PVector(300, 300), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
+
+    // holes
+    holes = new ArrayList<>();
+    Hole hole1 = new Hole(new PVector(200, 300), new PVector(0, 0), 50, 0, Color.BLACK, this);
+    Hole hole2 = new Hole(new PVector(400, 500), new PVector(0, 0), 50, 0, Color.BLACK, this);
+    Hole hole3 = new Hole(new PVector(600, 700), new PVector(0, 0), 50, 0, Color.BLACK, this);
+
+    holes.add(hole1);
+    holes.add(hole2);
+    holes.add(hole3);
 //
     for (int i = 0; i < numSporadics; i++) {
       enemies.add(new Sporadic(
@@ -209,6 +232,25 @@ public class Window extends PApplet {
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
+
+
+      // draw blades
+      blade1.draw();
+      blade2.draw();
+      blade3.draw();
+
+      // draw holes
+      for (Hole hole : holes) {
+        hole.draw();
+        if (hole.collision(player)) {
+          player.setFalling(true);
+          break;
+        }
+      }
+
+      if (player.isFalling()) {
+        player.moveDown(.5F); // You need to define fallSpeed
+      }
 
 
 //      if (sprite instanceof Player) {

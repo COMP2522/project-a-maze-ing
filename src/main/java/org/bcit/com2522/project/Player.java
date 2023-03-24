@@ -13,6 +13,16 @@ public class Player extends Sprite{
   private float immunityTimer;
   private PImage harryPotterImage;
   private float rotationAngle;
+  private boolean falling;
+
+  public PImage getHarryPotterImage() {
+    return harryPotterImage;
+  }
+
+  public float getRotationAngle() {
+    return rotationAngle;
+  }
+
 
   public boolean isAlive() {
     return alive;
@@ -21,6 +31,19 @@ public class Player extends Sprite{
   public void setAlive(boolean alive) {
     this.alive = alive;
   }
+
+  public boolean isFalling() {
+    return falling;
+  }
+
+  public void setFalling(boolean falling) {
+    this.falling = falling;
+  }
+
+  public void moveDown(float speed) {
+    getPosition().y += speed;
+  }
+
 
   public Player(PVector position, PVector direction, float size, float speed, Color color, Window window, PImage harryPotterImage) {
     super(position, direction, size, speed, color, window);
