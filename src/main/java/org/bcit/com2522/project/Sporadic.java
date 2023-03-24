@@ -24,11 +24,13 @@ public class Sporadic extends Enemy implements Movable {
   private Player player; //Reference to the player object
   //SoundFile sporadicSound;
 
+  /* Hitbox size in pixels of sporadic enemy type.*/
+  public static final int SPORADIC_SIZE = 20;
+
   Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window){
     super(position, direction, size, speed, color, window);
 //    minim = new Minim(getWindow());
 //    sound = minim.loadFile("sound/sporadicSound.wav");
-
   }
 
 

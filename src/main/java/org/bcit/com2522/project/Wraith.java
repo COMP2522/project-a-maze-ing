@@ -23,6 +23,9 @@ public class Wraith extends Enemy implements Movable {
   private Player player; //Reference to the player object
   //SoundFile sporadicSound;
 
+  /* Hitbox size in pixels of wraith enemy type.*/
+  public static final int WRAITH_SIZE = 10;
+
   Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window){
     super(position, direction, size, speed, color, window);
 //    minim = new Minim(getWindow());
