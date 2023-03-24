@@ -1,5 +1,9 @@
 package org.bcit.com2522.project;
 
+import org.bcit.com2522.project.enemy.Enemy;
+import org.bcit.com2522.project.enemy.Ghost;
+import org.bcit.com2522.project.enemy.Sporadic;
+import org.bcit.com2522.project.enemy.Wraith;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
