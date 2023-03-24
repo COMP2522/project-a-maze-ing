@@ -257,6 +257,7 @@ public class Window extends PApplet {
    */
   public void draw() {
     image(backgroundImage, -1000, -1000, width * 4, height * 4);
+    image(harryPotterImage, player.getPosition().x, player.getPosition().y, width/10 , height/10);
     /**
      * This section will Zoom the camera in and follow the player around
      */
