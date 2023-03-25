@@ -6,6 +6,7 @@ import org.bcit.com2522.project.interfaces.Movable;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
@@ -21,22 +22,36 @@ public class Wraith extends Enemy implements Movable {
   private boolean soundPlaying = false;
   //
   private Player player; //Reference to the player object
+
+  PImage wraithImage;
   //SoundFile sporadicSound;
 
   /* Hitbox size in pixels of wraith enemy type.*/
-  public static final int WRAITH_SIZE = 10;
+  public static final int WRAITH_SIZE = 30;
 
-  Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window){
+  public static final int WRAITH_LENGTH = 40;
+
+
+  Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
+    this.wraithImage = window.loadImage(imagePath);
 //    minim = new Minim(getWindow());
 //    sound = minim.loadFile("sound/wraithSound.mp3");
+  }
+
+  public PImage getImage(){
+    return wraithImage;
+  }
+
+  public void setImage(PImage image){
+    this.wraithImage = image;
   }
 
 
   @Override
   public void move(Player player) {
     int threshold = 700;
-    float tolerance = 5f;
+    float tolerance = 10f;
     this.player = player;
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
