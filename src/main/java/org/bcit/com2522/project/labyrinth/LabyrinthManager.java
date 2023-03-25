@@ -7,6 +7,7 @@ import org.bcit.com2522.project.labyrinth.Tiles.Wall;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LabyrinthManager {
 
@@ -18,17 +19,29 @@ public class LabyrinthManager {
 
   private ArrayList<Tile> tiles;
 
-  private LabyrinthManager() {
+  private LabyrinthManager(int width, int height) {
     tiles = new ArrayList<Tile>();
+    current = new Labyrinth(width, height);
   }
 
   /**
-   * returns the labyrinth manager if one exists, creates a new one and returns if one doesn't exist.
+   * returns the labyrinth manager if one exists, creates a new one with given size and returns if one doesn't exist.
+   * @return the labyrinthManager instance.
+   */
+  public static LabyrinthManager getInstance(int width, int height) {
+    if(instance == null) {
+      instance = new LabyrinthManager(width, height);
+    }
+    return instance;
+  }
+
+  /**
+   * returns the labyrinth manager if one exists, creates a new one with default size and returns if one doesn't exist.
    * @return the labyrinthManager instance.
    */
   public static LabyrinthManager getInstance() {
     if(instance == null) {
-      instance = new LabyrinthManager();
+      instance = new LabyrinthManager(20, 20);  //arbitrary default value of 20x20 if no instance exists.
     }
     return instance;
   }
@@ -103,6 +116,10 @@ public class LabyrinthManager {
     }
   }
 
+  public void renderTiles() {
+    //tiles.stream().forEach(); draw each tile. Don't know how to do this yet.
+  }
+
   /**
    * generates a new labyrinth with given width and height, and sets it as current labyrinth.
    * @param width - the width of the new labyrinth
@@ -110,6 +127,7 @@ public class LabyrinthManager {
    */
   public void newLabyrinth(int width, int height) {
     current = new Labyrinth(width, height);
+    generateTiles();
   }
 
   /**
