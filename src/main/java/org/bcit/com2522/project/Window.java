@@ -61,10 +61,6 @@ public class Window extends PApplet {
   PImage playerRight;
   PImage playerUp;
 
-  PImage wraithLeft;
-
-  PImage wraithRight;
-
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
 
@@ -107,12 +103,10 @@ public class Window extends PApplet {
 
 
     playerDown = loadImage("Data/HPfront.png");
+
     playerLeft = loadImage("Data/HPleft.png");
     playerRight = loadImage("Data/HPright.png");
     playerUp = loadImage("Data/HPup.png");
-
-
-
 
 
     System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
@@ -280,7 +274,9 @@ public class Window extends PApplet {
    * are drawn in order of appearance in this method.
    */
   public void draw() {
+
     image(backgroundImage, -1000, -1000, width*3, height*3);
+
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -316,7 +312,6 @@ public class Window extends PApplet {
 
     image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
         player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
-
 
 
       // draw blades
@@ -380,3 +375,7 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, mazeRun);
   }
 }
+
+
+
+
