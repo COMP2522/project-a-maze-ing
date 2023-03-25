@@ -51,7 +51,7 @@ public class Window extends PApplet {
 
   private List<Hole> holes;
 
-  PImage harryPotterImage;
+  PImage playerDown;
 
   PImage playerLeft;
   PImage playerRight;
@@ -98,16 +98,16 @@ public class Window extends PApplet {
     backgroundImage = loadImage("Data/dirt.png");
 
 
-    harryPotterImage = loadImage("Data/HPfront.png");
+    playerDown = loadImage("Data/HPfront.png");
 
     playerLeft = loadImage("Data/HPleft.png");
-    playerRight = loadImage("Data/HPleft.png");
-    playerUp = loadImage("Data/HPleft.png");
+    playerRight = loadImage("Data/HPright.png");
+    playerUp = loadImage("Data/HPup.png");
 
 
 
     System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
-    if (harryPotterImage == null) {
+    if (playerDown == null) {
       System.out.println("Image is null after loading.");
     } else {
       System.out.println("Image successfully loaded.");
@@ -208,14 +208,17 @@ public class Window extends PApplet {
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
+        player.setHarryPotterImage(playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
+        player.setHarryPotterImage(playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
+        player.setHarryPotterImage(playerDown);
         break;
     }
   }
