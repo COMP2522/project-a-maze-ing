@@ -54,6 +54,8 @@ public class Window extends PApplet {
   PImage harryPotterImage;
 
   PImage playerLeft;
+  PImage playerRight;
+  PImage playerUp;
 
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
@@ -99,6 +101,9 @@ public class Window extends PApplet {
     harryPotterImage = loadImage("Data/HPfront.png");
 
     playerLeft = loadImage("Data/HPleft.png");
+    playerRight = loadImage("Data/HPleft.png");
+    playerUp = loadImage("Data/HPleft.png");
+
 
 
     System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
@@ -198,7 +203,6 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        //PImage playerLeft = loadImage("HPleft.png");
         player.setHarryPotterImage(playerLeft);
         break;
       case RIGHT:

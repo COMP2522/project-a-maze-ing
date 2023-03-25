@@ -21,7 +21,8 @@ public class Player extends Sprite {
   private float immunityTimer;
   private PImage harryPotterImage;
 
-  private PImage playerLeft;
+  //private PImage playerLeft;
+
   private float rotationAngle;
   private boolean falling;
 
@@ -61,6 +62,7 @@ public class Player extends Sprite {
   public Player(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath) {
     super(position, direction, size, speed, color, window);
     this.harryPotterImage = window.loadImage(imagePath);
+
     alive = true;
     immunityTimer = 0;
   }
