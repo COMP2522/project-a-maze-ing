@@ -38,6 +38,8 @@ public class Window extends PApplet {
   /* List of all in-game enemies to be loaded. */
   ArrayList<Enemy> enemies;
 
+  ArrayList<Wraith> wraiths;
+
   /*Single enemy type that follows player around the map. */
   Ghost ghost;
 
@@ -56,6 +58,10 @@ public class Window extends PApplet {
   PImage playerLeft;
   PImage playerRight;
   PImage playerUp;
+
+  PImage wraithLeft;
+
+  PImage wraithRight;
 
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
@@ -99,10 +105,13 @@ public class Window extends PApplet {
 
 
     playerDown = loadImage("Data/HPfront.png");
-
     playerLeft = loadImage("Data/HPleft.png");
     playerRight = loadImage("Data/HPright.png");
     playerUp = loadImage("Data/HPup.png");
+
+    wraithLeft = loadImage("Data/Wraithleft.png");
+    wraithRight = loadImage("Data/Wraithright.png");
+
 
 
 
@@ -125,6 +134,8 @@ public class Window extends PApplet {
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
 
     sprites = new ArrayList<Sprite>();  //List of all sprites
+
+    wraiths = new ArrayList<Wraith>();  //List of all wraiths
 
     //walls = new ArrayList<Wall>();  //List of all walls that make up the Labyrinth
 
@@ -177,17 +188,18 @@ public class Window extends PApplet {
 
     //Initializes all wraith enemies and adds them to enemy array list
     for (int i = 0; i < numWraiths; i++) {
-      enemies.add(new Wraith(
+      wraiths.add(new Wraith(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
           Wraith.WRAITH_SIZE,
           2.5f,
           new Color(0, 0, 255),
-          this
+          this, "Data/Wraithright.png"
       ));
     }
     sprites.add(ghost);  //Adds ghost to list of sprites
     sprites.add(player);  //Adds player to list of sprites
+    enemies.addAll(wraiths);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
     enemies.add(ghost);
   }
@@ -265,7 +277,7 @@ public class Window extends PApplet {
    * are drawn in order of appearance in this method.
    */
   public void draw() {
-    image(backgroundImage, -1000, -1000, width * 4, height * 4);
+    image(backgroundImage, -1000, -1000, width*3, height*3);
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -288,8 +300,15 @@ public class Window extends PApplet {
       sprite.draw();
     }
 
+    //draws the wraith image to every wraith
+    for (Wraith wraith : wraiths) {
+      image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
+          wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
+    }
+
     image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
         player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
+
 
 
       // draw blades
