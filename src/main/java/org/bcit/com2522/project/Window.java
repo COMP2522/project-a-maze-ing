@@ -277,7 +277,7 @@ public class Window extends PApplet {
    * are drawn in order of appearance in this method.
    */
   public void draw() {
-    image(backgroundImage, -1000, -1000, width * 4, height * 4);
+    image(backgroundImage, -1000, -1000, width*3, height*3);
     /**
      * This section will Zoom the camera in and follow the player around
      */

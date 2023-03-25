@@ -10,6 +10,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
+
 public class Wraith extends Enemy implements Movable {
   //  private static Ghost ghostInstance = null;
 
@@ -29,7 +30,7 @@ public class Wraith extends Enemy implements Movable {
   /* Hitbox size in pixels of wraith enemy type.*/
   public static final int WRAITH_SIZE = 30;
 
-  public static final int WRAITH_LENGTH = 40;
+  public static final int WRAITH_LENGTH = 50;
 
 
   Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
@@ -64,6 +65,11 @@ public class Wraith extends Enemy implements Movable {
         if(!soundPlaying){
           //sound.play();
           soundPlaying = true;
+        }
+        if (direction.x < 0){
+          this.setImage(player.getWindow().loadImage("Data/Wraithleft.png"));
+        } else if (direction.x > 0){
+          this.setImage(player.getWindow().loadImage("Data/Wraithright.png"));
         }
       } else if (Math.abs(player.getPosition().x -getPosition().x) > tolerance
           || Math.abs(player.getPosition().y - getPosition().y) > tolerance){
