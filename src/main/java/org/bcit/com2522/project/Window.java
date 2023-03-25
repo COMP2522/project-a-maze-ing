@@ -40,6 +40,8 @@ public class Window extends PApplet {
 
   ArrayList<Wraith> wraiths;
 
+  ArrayList<Sporadic> sporadics;
+
   /*Single enemy type that follows player around the map. */
   Ghost ghost;
 
@@ -109,8 +111,6 @@ public class Window extends PApplet {
     playerRight = loadImage("Data/HPright.png");
     playerUp = loadImage("Data/HPup.png");
 
-    wraithLeft = loadImage("Data/Wraithleft.png");
-    wraithRight = loadImage("Data/Wraithright.png");
 
 
 
@@ -136,6 +136,8 @@ public class Window extends PApplet {
     sprites = new ArrayList<Sprite>();  //List of all sprites
 
     wraiths = new ArrayList<Wraith>();  //List of all wraiths
+
+    sporadics = new ArrayList<Sporadic>();  //List of all sporadics
 
     //walls = new ArrayList<Wall>();  //List of all walls that make up the Labyrinth
 
@@ -176,13 +178,13 @@ public class Window extends PApplet {
 
     //Initializes all sporadic enemies and adds them to enemy array list
     for (int i = 0; i < numSporadics; i++) {
-      enemies.add(new Sporadic(
+      sporadics.add(new Sporadic(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
           Sporadic.SPORADIC_SIZE,
           5,
           new Color(255, 0, 0),
-          this
+          this, "Data/sporadicSleep.png"
       ));
     }
 
@@ -200,6 +202,7 @@ public class Window extends PApplet {
     sprites.add(ghost);  //Adds ghost to list of sprites
     sprites.add(player);  //Adds player to list of sprites
     enemies.addAll(wraiths);
+    enemies.addAll(sporadics);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
     enemies.add(ghost);
   }
@@ -304,6 +307,11 @@ public class Window extends PApplet {
     for (Wraith wraith : wraiths) {
       image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
           wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
+    }
+
+    for (Sporadic sporadic : sporadics) {
+      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
+          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
     }
 
     image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
