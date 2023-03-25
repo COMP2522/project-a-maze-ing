@@ -14,7 +14,7 @@ public class Ghost extends Enemy implements Movable {
 
   private Player player; //Reference to the player object
 
-  Ghost(PVector position, PVector direction, float size, float speed, Color color, org.bcit.com2522.project.Window window){
+  public Ghost(PVector position, PVector direction, float size, float speed, Color color, org.bcit.com2522.project.Window window){
     super(position, direction, size, speed, color, window);
   }
 

@@ -1,7 +1,11 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.enemy;
 
 
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.enemy.Enemy;
 import org.bcit.com2522.project.interfaces.Movable;
+
+import org.bcit.com2522.project.Window;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
@@ -27,7 +31,7 @@ public class Sporadic extends Enemy implements Movable {
   /* Hitbox size in pixels of sporadic enemy type.*/
   public static final int SPORADIC_SIZE = 20;
 
-  Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window){
+  public Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window){
     super(position, direction, size, speed, color, window);
 //    minim = new Minim(getWindow());
 //    sound = minim.loadFile("sound/sporadicSound.wav");
