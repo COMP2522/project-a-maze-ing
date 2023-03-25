@@ -47,7 +47,7 @@ public class LabyrinthManager {
   }
 
   /**
-   * generates the current labyrinth into the window. starts at PVector (0, 0).
+   * generates the current labyrinth's tiles into the window. starts at PVector (0, 0).
    * should only be called once per labyrinth.
    */
   public void generateTiles() {
@@ -70,9 +70,9 @@ public class LabyrinthManager {
       addTile(location, TileType.WALL);
     }
 
+    //bottom row
     location.set(0, (tileList.length + 2) * Tile.TILE_SIZE);
 
-    //bottom row
     for (int j = 0; j < tileList[0].length + 2; j++) {
       addTile(location, TileType.WALL);
       location.add(Tile.TILE_SIZE, 0);
