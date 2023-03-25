@@ -88,9 +88,10 @@ public class Window extends PApplet {
    */
   public void setup(){
 
+    frameRate(FPS);
+
     //sets up the background image
     backgroundImage = loadImage("images/Sleepy.png");
-    frameRate(FPS);
     harryPotterImage = loadImage("Data/harry_potter.png");
     System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
     if (harryPotterImage == null) {
@@ -249,7 +250,6 @@ public class Window extends PApplet {
    */
   public void draw() {
     image(backgroundImage, -1000, -1000, width * 4, height * 4);
-    image(harryPotterImage, player.getPosition().x, player.getPosition().y, width/10 , height/10);
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -261,6 +261,7 @@ public class Window extends PApplet {
         player.getPosition().y - height / 2);
     // Translate the drawing surface to the camera position
     translate(-cameraPos.x, -cameraPos.y);
+
 
 //    if (!gameover) {
 //      /**
@@ -279,20 +280,22 @@ public class Window extends PApplet {
       sprite.draw();
     }
 
+    image(harryPotterImage, player.getPosition().x, player.getPosition().y, width/10 , height/10);
+
 
       // draw blades
-//      blade1.draw();
-//      blade2.draw();
-//      blade3.draw();
+      blade1.draw();
+      blade2.draw();
+      blade3.draw();
 
       // draw holes
-//      for (Hole hole : holes) {
-//        hole.draw();
-//        if (hole.collision(player)) {
-//          player.setFalling(true);
-//          break;
-//        }
-//      }
+      for (Hole hole : holes) {
+        hole.draw();
+        if (hole.collision(player)) {
+          player.setFalling(true);
+          break;
+        }
+      }
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed

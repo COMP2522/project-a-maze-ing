@@ -103,8 +103,8 @@ public class Player extends Sprite {
       return;
     }
 
-    float scaleFactor = 0.35f; // Adjust this value to change the image size (e.g., 0.5 for half size, 0.25 for quarter size)
-    getWindow().image(harryPotterImage, getPosition().x, getPosition().y, getSize() * scaleFactor, getSize() * scaleFactor);
+//    float scaleFactor = 0.35f; // Adjust this value to change the image size (e.g., 0.5 for half size, 0.25 for quarter size)
+//    getWindow().image(harryPotterImage, getPosition().x, getPosition().y, getSize() * scaleFactor, getSize() * scaleFactor);
   }
 
 }
