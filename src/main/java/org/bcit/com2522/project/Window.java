@@ -91,9 +91,11 @@ public class Window extends PApplet {
     frameRate(FPS);
 
     //sets up the background image
-    backgroundImage = loadImage("images/Sleepy.png");
-    harryPotterImage = loadImage("Data/harry_potter.png");
-    System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
+    backgroundImage = loadImage("Data/dirt.png");
+
+
+    harryPotterImage = loadImage("HPfront.png");
+    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
     if (harryPotterImage == null) {
       System.out.println("Image is null after loading.");
     } else {
@@ -271,7 +273,8 @@ public class Window extends PApplet {
       sprite.draw();
     }
 
-    image(harryPotterImage, player.getPosition().x, player.getPosition().y, width/10 , height/10);
+    image(harryPotterImage, player.getPosition().x - player.PLAYER_WIDTH/2,
+        player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
 
 
       // draw blades

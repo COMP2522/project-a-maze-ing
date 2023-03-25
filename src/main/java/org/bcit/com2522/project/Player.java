@@ -9,6 +9,10 @@ import java.awt.Color;
  */
 public class Player extends Sprite {
 
+  public static final int PLAYER_HEIGHT = 44;
+
+  public static final int PLAYER_WIDTH = 27;
+
   private boolean alive;
   private float immunityTimer;
   private PImage harryPotterImage;
