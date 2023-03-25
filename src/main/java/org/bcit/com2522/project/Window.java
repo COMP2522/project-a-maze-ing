@@ -173,11 +173,10 @@ public class Window extends PApplet {
           this
       ));
     }
-
     sprites.add(ghost);  //Adds ghost to list of sprites
     sprites.add(player);  //Adds player to list of sprites
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
-
+    enemies.add(ghost);
   }
 
   /**
@@ -261,14 +260,6 @@ public class Window extends PApplet {
         player.getPosition().y - height / 2);
     // Translate the drawing surface to the camera position
     translate(-cameraPos.x, -cameraPos.y);
-
-
-//    if (!gameover) {
-//      /**
-//       * This section will load the background image
-//       */
-//      image(backgroundImage, -1000, -1000, width * 4, height * 4);
-//    }
 
     //Updates timer time and position in the window
     float timeElapsed = timer.getTime();
