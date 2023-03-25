@@ -53,6 +53,8 @@ public class Window extends PApplet {
 
   PImage harryPotterImage;
 
+  PImage playerLeft;
+
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
 
@@ -94,7 +96,11 @@ public class Window extends PApplet {
     backgroundImage = loadImage("Data/dirt.png");
 
 
-    harryPotterImage = loadImage("HPfront.png");
+    harryPotterImage = loadImage("Data/HPfront.png");
+
+    playerLeft = loadImage("Data/HPleft.png");
+
+
     System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
     if (harryPotterImage == null) {
       System.out.println("Image is null after loading.");
@@ -141,7 +147,7 @@ public class Window extends PApplet {
         playerSize,
         2,
         new Color(0,255,0),
-        this, playerImage);
+        this, "Data/HPfront.png");
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -192,6 +198,8 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
+        //PImage playerLeft = loadImage("HPleft.png");
+        player.setHarryPotterImage(playerLeft);
         break;
       case RIGHT:
         // handle right
@@ -273,7 +281,7 @@ public class Window extends PApplet {
       sprite.draw();
     }
 
-    image(harryPotterImage, player.getPosition().x - player.PLAYER_WIDTH/2,
+    image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
         player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
 
 
