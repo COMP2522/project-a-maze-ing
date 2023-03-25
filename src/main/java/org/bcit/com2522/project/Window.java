@@ -320,12 +320,13 @@ public class Window extends PApplet {
     }
 
     if (player.isAlive()) {
-      gameover = true;
+      gameover = false;
     } else {
     background(0);
     textSize(50);
     text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
     text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+    gameover = true;
   }
 
 
