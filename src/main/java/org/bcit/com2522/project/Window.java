@@ -51,7 +51,11 @@ public class Window extends PApplet {
 
   private List<Hole> holes;
 
-  PImage harryPotterImage;
+  PImage playerDown;
+
+  PImage playerLeft;
+  PImage playerRight;
+  PImage playerUp;
 
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
@@ -91,10 +95,19 @@ public class Window extends PApplet {
     frameRate(FPS);
 
     //sets up the background image
-    backgroundImage = loadImage("images/Sleepy.png");
-    harryPotterImage = loadImage("Data/harry_potter.png");
-    System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
-    if (harryPotterImage == null) {
+    backgroundImage = loadImage("Data/dirt.png");
+
+
+    playerDown = loadImage("Data/HPfront.png");
+
+    playerLeft = loadImage("Data/HPleft.png");
+    playerRight = loadImage("Data/HPright.png");
+    playerUp = loadImage("Data/HPup.png");
+
+
+
+    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
+    if (playerDown == null) {
       System.out.println("Image is null after loading.");
     } else {
       System.out.println("Image successfully loaded.");
@@ -139,7 +152,7 @@ public class Window extends PApplet {
         playerSize,
         2,
         new Color(0,255,0),
-        this, playerImage);
+        this, "Data/HPfront.png");
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -190,18 +203,22 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
+        player.setHarryPotterImage(playerLeft);
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
+        player.setHarryPotterImage(playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
+        player.setHarryPotterImage(playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
+        player.setHarryPotterImage(playerDown);
         break;
     }
   }
@@ -271,7 +288,8 @@ public class Window extends PApplet {
       sprite.draw();
     }
 
-    image(harryPotterImage, player.getPosition().x, player.getPosition().y, width/10 , height/10);
+    image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
+        player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
 
 
       // draw blades

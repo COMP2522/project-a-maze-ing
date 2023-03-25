@@ -1,17 +1,28 @@
 package org.bcit.com2522.project;
 
+import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
-import java.awt.Color;
+
+import java.awt.*;
+
+//import static processing.awt.ShimAWT.loadImage;
 
 /**
  * Player. Defines a player character controlled by the user.
  */
 public class Player extends Sprite {
 
+  public static final int PLAYER_HEIGHT = 44;
+
+  public static final int PLAYER_WIDTH = 27;
+
   private boolean alive;
   private float immunityTimer;
   private PImage harryPotterImage;
+
+  //private PImage playerLeft;
+
   private float rotationAngle;
   private boolean falling;
 
@@ -44,10 +55,14 @@ public class Player extends Sprite {
     getPosition().y += speed;
   }
 
-
-  public Player(PVector position, PVector direction, float size, float speed, Color color, Window window, PImage harryPotterImage) {
-    super(position, direction, size, speed, color, window);
+  public void setHarryPotterImage(PImage harryPotterImage) {
     this.harryPotterImage = harryPotterImage;
+  }
+
+  public Player(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath) {
+    super(position, direction, size, speed, color, window);
+    this.harryPotterImage = window.loadImage(imagePath);
+
     alive = true;
     immunityTimer = 0;
   }
