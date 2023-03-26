@@ -278,6 +278,10 @@ public class Window extends PApplet {
           player.setPosition(newPos);
         }
         break;
+      case 'T':
+        enemies = new ArrayList<Enemy>();
+        wraiths = new ArrayList<Wraith>();
+        sporadics = new ArrayList<Sporadic>();
     }
   }
 
