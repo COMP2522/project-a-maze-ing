@@ -30,8 +30,8 @@ public class Wall extends Tile implements Collidable{
   }
 
   public void walkIntoWall(Sprite s) {
-    float fX = s.getPosition().x + s.getDirection().x;
-    float fY = s.getPosition().y + s.getDirection().y;
+    float fX = s.getPosition().copy().add(s.getDirection().copy().mult(s.getSpeed())).x;
+    float fY = s.getPosition().copy().add(s.getDirection().copy().mult(s.getSpeed())).y;
     float iX = s.getPosition().x;
     float iY = s.getPosition().y;
     float vX = s.getDirection().x;
