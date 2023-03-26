@@ -1,5 +1,8 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.enemy;
 
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.Sprite;
+import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PVector;
 

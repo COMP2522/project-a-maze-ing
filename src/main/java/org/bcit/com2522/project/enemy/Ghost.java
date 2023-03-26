@@ -1,5 +1,7 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.enemy;
 
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -18,7 +20,7 @@ public class Ghost extends Enemy implements Movable {
 
   PImage ghostImage;
 
-  Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
+  public Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.ghostImage = window.loadImage(imagePath);
   }
