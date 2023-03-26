@@ -36,8 +36,8 @@ public class Wraith extends Enemy implements Movable {
   Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.wraithImage = window.loadImage(imagePath);
-//    minim = new Minim(getWindow());
-//    sound = minim.loadFile("sound/wraithSound.mp3");
+    minim = new Minim(getWindow());
+    sound = minim.loadFile("sound/wraithSound.mp3");
   }
 
   public PImage getImage(){
@@ -63,7 +63,7 @@ public class Wraith extends Enemy implements Movable {
         direction.mult(getSpeed());
         setPosition(PVector.add(getPosition(), direction));
         if(!soundPlaying){
-          //sound.play();
+          sound.play();
           soundPlaying = true;
         }
         if (direction.x < 0){
@@ -74,7 +74,7 @@ public class Wraith extends Enemy implements Movable {
       } else if (Math.abs(player.getPosition().x -getPosition().x) > tolerance
           || Math.abs(player.getPosition().y - getPosition().y) > tolerance){
         soundPlaying = false;
-        //sound.pause();
+        sound.pause();
 
       }
     } else {

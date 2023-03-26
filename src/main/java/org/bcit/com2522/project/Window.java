@@ -96,6 +96,10 @@ public class Window extends PApplet {
    */
   public void setup(){
 
+    minim = new Minim(this);
+    sound = minim.loadFile("sound/heroSong.mp3");
+    sound.play();
+
     frameRate(FPS);
 
     //sets up the background image
@@ -115,6 +119,8 @@ public class Window extends PApplet {
     } else {
       System.out.println("Image successfully loaded.");
     }
+
+
     // initializes the objects
     this.initializeObjects();
   }
@@ -296,7 +302,7 @@ public class Window extends PApplet {
     //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
-      sprite.draw();
+      //sprite.draw();
     }
 
     //draws the wraith image to every wraith

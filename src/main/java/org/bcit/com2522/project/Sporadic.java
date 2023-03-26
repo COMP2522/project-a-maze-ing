@@ -37,8 +37,8 @@ public class Sporadic extends Enemy implements Movable {
   Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.sporadicImage = window.loadImage(imagePath);
-//    minim = new Minim(getWindow());
-//    sound = minim.loadFile("sound/sporadicSound.wav");
+    minim = new Minim(getWindow());
+    sound = minim.loadFile("sound/sporadicSound.mp3");
   }
 
   public PImage getImage(){
@@ -62,12 +62,12 @@ public class Sporadic extends Enemy implements Movable {
       randomDirection.mult(getSpeed());
       setPosition(PVector.add(getPosition(), randomDirection));
       if(!soundPlaying){
-        //sound.play();
+        sound.play();
         soundPlaying = true;
       }
     } else if (distance >= threshold) {
       soundPlaying = false;
-      //sound.pause();
+      sound.pause();
     }
 //Do nothing
   }
