@@ -2,6 +2,13 @@ package org.bcit.com2522.project;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
+import org.bcit.com2522.project.enemy.Enemy;
+import org.bcit.com2522.project.enemy.Ghost;
+import org.bcit.com2522.project.enemy.Sporadic;
+import org.bcit.com2522.project.enemy.Wraith;
+import org.bcit.com2522.project.labyrinth.LabyrinthManager;
+import org.bcit.com2522.project.labyrinth.Tiles.Tile;
+import org.bcit.com2522.project.labyrinth.Tiles.Wall;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -23,6 +30,9 @@ public class Window extends PApplet {
 
   /* Minim object for playing sound */
   Minim minim;
+
+  /* Manager for the labyrinth */
+  private LabyrinthManager labManager;
 
   /* AudioPlayer object for sound file */
   AudioPlayer sound;
@@ -74,8 +84,7 @@ public class Window extends PApplet {
   /* Hitbox size in pixels of sporadic enemy type.*/
   int playerSize = 10;
 
-
-
+  Wall testWall;
 
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 800;
@@ -96,6 +105,10 @@ public class Window extends PApplet {
    */
   public void setup(){
 
+    minim = new Minim(this);
+    sound = minim.loadFile("sound/heroSong.mp3");
+    sound.play();
+
     frameRate(FPS);
 
     //sets up the background image
@@ -115,6 +128,8 @@ public class Window extends PApplet {
     } else {
       System.out.println("Image successfully loaded.");
     }
+
+
     // initializes the objects
     this.initializeObjects();
   }
@@ -125,6 +140,10 @@ public class Window extends PApplet {
    * be called and updated in the draw() method
    */
   public void initializeObjects() {
+
+    labManager = LabyrinthManager.getInstance(20, 20, this);
+    System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
+
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
 
     sprites = new ArrayList<Sprite>();  //List of all sprites
@@ -154,12 +173,14 @@ public class Window extends PApplet {
 
     //Initializes player object
     player = new Player(
-        new PVector(this.width/2,this.height/2),
+        //new PVector(this.width/2,this.height/2),
+        labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2),
         new PVector(0,0),
         playerSize,
         2,
         new Color(0,255,0),
         this, "Data/HPfront.png");
+    System.out.println("player: " + player.getPosition().x  + " " + player.getPosition().y);
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -168,7 +189,7 @@ public class Window extends PApplet {
         Ghost.GHOST_SIZE,
         0.3f,
         new Color(255,255,255),
-        this);
+        this, "Data/ghostRight.png");
 
     //Initializes all sporadic enemies and adds them to enemy array list
     for (int i = 0; i < numSporadics; i++) {
@@ -193,12 +214,15 @@ public class Window extends PApplet {
           this, "Data/Wraithright.png"
       ));
     }
-    sprites.add(ghost);  //Adds ghost to list of sprites
     sprites.add(player);  //Adds player to list of sprites
     enemies.addAll(wraiths);
     enemies.addAll(sporadics);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
     enemies.add(ghost);
+    sprites.add(ghost);  //Adds ghost to list of sprites
+
+    testWall = new Wall(new PVector(100, 100), this);
+
   }
 
   /**
@@ -265,6 +289,10 @@ public class Window extends PApplet {
           player.setPosition(newPos);
         }
         break;
+      case 'T':
+        enemies = new ArrayList<Enemy>();
+        wraiths = new ArrayList<Wraith>();
+        sporadics = new ArrayList<Sporadic>();
     }
   }
 
@@ -277,6 +305,7 @@ public class Window extends PApplet {
 
     image(backgroundImage, -1000, -1000, width*3, height*3);
 
+
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -288,6 +317,8 @@ public class Window extends PApplet {
         player.getPosition().y - height / 2);
     // Translate the drawing surface to the camera position
     translate(-cameraPos.x, -cameraPos.y);
+
+    labManager.renderTiles();
 
     //Updates timer time and position in the window
     float timeElapsed = timer.getTime();
@@ -328,13 +359,17 @@ public class Window extends PApplet {
         }
       }
 
+      testWall.draw();
+
+
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed
 //      }
 
-
-
       ghost.move(player); //This will follow the player everywhere they go
+      image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
+        ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
+
       //Moves multiple enemy sporadic and wraith types
       for (Enemy enemyList : enemies) {
         enemyList.move(player);

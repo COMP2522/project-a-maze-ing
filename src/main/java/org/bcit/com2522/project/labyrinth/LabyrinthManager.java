@@ -1,13 +1,10 @@
 package org.bcit.com2522.project.labyrinth;
 
 import org.bcit.com2522.project.Window;
-import org.bcit.com2522.project.labyrinth.Tiles.Tile;
-import org.bcit.com2522.project.labyrinth.Tiles.TileType;
-import org.bcit.com2522.project.labyrinth.Tiles.Wall;
+import org.bcit.com2522.project.labyrinth.Tiles.*;
 import processing.core.PVector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LabyrinthManager {
 
@@ -19,18 +16,24 @@ public class LabyrinthManager {
 
   private ArrayList<Tile> tiles;
 
-  private LabyrinthManager(int width, int height) {
+  private StartTile start;
+
+  private EndTile end;
+
+  private LabyrinthManager(int width, int height, Window w) {
     tiles = new ArrayList<Tile>();
     current = new Labyrinth(width, height);
+    window = w;
   }
 
   /**
    * returns the labyrinth manager if one exists, creates a new one with given size and returns if one doesn't exist.
    * @return the labyrinthManager instance.
    */
-  public static LabyrinthManager getInstance(int width, int height) {
+  public static LabyrinthManager getInstance(int width, int height, Window w) {
     if(instance == null) {
-      instance = new LabyrinthManager(width, height);
+      instance = new LabyrinthManager(width, height, w);
+      instance.newLabyrinth(width, height);
     }
     return instance;
   }
@@ -40,9 +43,7 @@ public class LabyrinthManager {
    * @return the labyrinthManager instance.
    */
   public static LabyrinthManager getInstance() {
-    if(instance == null) {
-      instance = new LabyrinthManager(20, 20);  //arbitrary default value of 20x20 if no instance exists.
-    }
+
     return instance;
   }
 
@@ -58,23 +59,23 @@ public class LabyrinthManager {
                                                           //render outer wall of labyrinth
     // top row
     for (int j = 0; j < tileList[0].length + 2; j++) {
-      addTile(location, TileType.WALL);
+      addTile(location.copy(), TileType.WALL);
       location.add(Tile.TILE_SIZE, 0);
     }
 
     // middle rows
     for(int i = 1; i < tileList.length + 1; i++) {
       location.set(0, i * Tile.TILE_SIZE);
-      addTile(location, TileType.WALL);
-      location.set((tileList[0].length + 2) * Tile.TILE_SIZE, i * Tile.TILE_SIZE);
-      addTile(location, TileType.WALL);
+      addTile(location.copy(), TileType.WALL);
+      location.set((tileList[0].length + 1) * Tile.TILE_SIZE, i * Tile.TILE_SIZE);
+      addTile(location.copy(), TileType.WALL);
     }
 
-    location.set(0, (tileList.length + 2) * Tile.TILE_SIZE);
+    location.set(0, (tileList.length) * Tile.TILE_SIZE);
 
     //bottom row
     for (int j = 0; j < tileList[0].length + 2; j++) {
-      addTile(location, TileType.WALL);
+      addTile(location.copy(), TileType.WALL);
       location.add(Tile.TILE_SIZE, 0);
     }
 
@@ -85,7 +86,7 @@ public class LabyrinthManager {
     for (int i = 0; i < tileList.length; i++) {
       for (int j = 0; j < tileList[0].length; j++) {
         //render tile
-        addTile(location, tileList[i][j]);
+        addTile(location.copy(), tileList[i][j]);
 
         //move to next place in row
         location.add(Tile.TILE_SIZE, 0);
@@ -93,6 +94,7 @@ public class LabyrinthManager {
       //set location to start of next row
       location.set(Tile.TILE_SIZE, (i + 1) * Tile.TILE_SIZE);
     }
+    System.out.println("generation done");
   }
 
   /**
@@ -103,21 +105,32 @@ public class LabyrinthManager {
   private void addTile(PVector pos, TileType type) {
     switch (type) {
       case WALL:
-        tiles.add(new Wall(pos));
+        tiles.add(new Wall(pos, window));
         break;
       case PATH:
-        //todo: add path tile at location
+        tiles.add(new EmptyPath(pos, window));
         break;
       case END:
-        //todo: add end tile at <location>
+        end = new EndTile(pos, window);
+        tiles.add(end);
         break;
       case START:
-        //todo: add start tile at <location>
+        start = new StartTile(pos, window);
+        tiles.add(start);
+        break;
+      default:
+        break;
     }
   }
 
+  /**
+   * Renders tiles into the window.
+   */
   public void renderTiles() {
     //tiles.stream().forEach(); draw each tile. Don't know how to do this yet.
+    for (Tile t : tiles){
+      t.draw();
+    }
   }
 
   /**
@@ -127,6 +140,7 @@ public class LabyrinthManager {
    */
   public void newLabyrinth(int width, int height) {
     current = new Labyrinth(width, height);
+    current.print();
     generateTiles();
   }
 
@@ -145,6 +159,24 @@ public class LabyrinthManager {
   public ArrayList<Tile> getTiles() {
     return tiles;
   }
+
+  /**
+   * Getter for start tile.
+   * @return the start tile
+   */
+  public StartTile getStart() {
+    return start;
+  }
+
+  /**
+   * getter for end tile.
+   * @return the end tile.
+   */
+  public EndTile getEnd() {
+    return end;
+  }
+
+
 
 
 }

@@ -13,7 +13,7 @@ public class MazeGenerationQueue {
   }
 
   public void push(QueueNode addition) {
-    System.out.println("\t\tpush called on point: (" + addition.getX() + ", " + addition.getY() + ")");
+    //System.out.println("\t\tpush called on point: (" + addition.getX() + ", " + addition.getY() + ")");
     if (head == null) {
       head = addition;
       tail = addition;
@@ -25,9 +25,9 @@ public class MazeGenerationQueue {
   }
 
   public QueueNode pop() {
-    System.out.println("pop called");
+    //System.out.println("pop called");
     if (head == null) {
-      System.out.println("head null");
+      //System.out.println("head null");
       return null;
     } else {
       QueueNode temp = head;

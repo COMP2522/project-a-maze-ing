@@ -88,7 +88,11 @@ public abstract class Sprite implements Collidable {
 //  }
 //
   public void update() {
+    if (window.testWall.collision(this)){
+      window.testWall.walkIntoWall(this);
+    } else {
     this.position = this.getPosition().add(this.direction.copy().mult(speed));
+    }
   }
 
 //
