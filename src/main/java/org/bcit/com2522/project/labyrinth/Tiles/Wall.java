@@ -37,20 +37,6 @@ public class Wall extends Tile implements Collidable{
     float vX = s.getDirection().x;
     float vY = s.getDirection().y;
     float aX, aY;
-//    while ((iX != position.x || iX != position.x + TILE_SIZE)
-//      && (iY != position.y || iY != position.y + TILE_SIZE)){
-//      if (iX < position.x){
-//        iX++;
-//      } else {
-//        iX--;
-//      }
-//      if (iY < position.y){
-//        iX++;
-//      } else {
-//        iX--;
-//      }
-//
-//    }
     if (vX > 0) {
       aX = position.x;
     } else if (vX < 0){
