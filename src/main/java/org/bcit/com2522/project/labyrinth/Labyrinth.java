@@ -166,7 +166,7 @@ public class Labyrinth {
   }
 
   /**
-   * print method for debugging, remove later.
+   * print method for debugging maze generation, remove later.
    */
   public void print() {
     System.out.print("\t");
