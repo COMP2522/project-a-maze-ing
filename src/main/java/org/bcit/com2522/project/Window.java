@@ -302,7 +302,7 @@ public class Window extends PApplet {
     //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
-      //sprite.draw();
+      sprite.draw();
     }
 
     //draws the wraith image to every wraith
