@@ -1,7 +1,11 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.enemy;
 
 
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.enemy.Enemy;
 import org.bcit.com2522.project.interfaces.Movable;
+
+import org.bcit.com2522.project.Window;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
@@ -34,7 +38,7 @@ public class Sporadic extends Enemy implements Movable {
 
   public static final int SPORADIC_WIDTH = 43;
 
-  Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
+  public Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.sporadicImage = window.loadImage(imagePath);
     minim = new Minim(getWindow());
