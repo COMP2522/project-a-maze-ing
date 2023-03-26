@@ -103,7 +103,7 @@ public class LabyrinthManager {
   private void addTile(PVector pos, TileType type) {
     switch (type) {
       case WALL:
-        tiles.add(new Wall(pos));
+        tiles.add(new Wall(pos, window));
         break;
       case PATH:
         //todo: add path tile at location
@@ -118,6 +118,9 @@ public class LabyrinthManager {
 
   public void renderTiles() {
     //tiles.stream().forEach(); draw each tile. Don't know how to do this yet.
+    for (Tile t : tiles){
+      t.draw();
+    }
   }
 
   /**
