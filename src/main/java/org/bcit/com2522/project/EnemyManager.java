@@ -21,6 +21,9 @@ public class EnemyManager{
     return (Enemy) iterator.next();
   }
 
+  public void resetIterator(){
+    iterator = enemies.iterator();
+  }
 
   public void draw(){
     while (iterator.hasNext()){

@@ -36,7 +36,7 @@ public class Wraith extends Enemy implements Movable {
   public static final int WRAITH_LENGTH = 50;
 
 
-  Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
+  public Wraith(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.wraithImage = window.loadImage(imagePath);
 //    minim = new Minim(getWindow());

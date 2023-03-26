@@ -20,7 +20,7 @@ public class Ghost extends Enemy implements Movable {
 
   PImage ghostImage;
 
-  Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
+  public Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.ghostImage = window.loadImage(imagePath);
   }
