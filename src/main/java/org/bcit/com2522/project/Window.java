@@ -6,6 +6,8 @@ import org.bcit.com2522.project.enemy.Enemy;
 import org.bcit.com2522.project.enemy.Ghost;
 import org.bcit.com2522.project.enemy.Sporadic;
 import org.bcit.com2522.project.enemy.Wraith;
+import org.bcit.com2522.project.labyrinth.LabyrinthManager;
+import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.labyrinth.Tiles.Wall;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -28,6 +30,9 @@ public class Window extends PApplet {
 
   /* Minim object for playing sound */
   Minim minim;
+
+  /* Manager for the labyrinth */
+  private LabyrinthManager labManager;
 
   /* AudioPlayer object for sound file */
   AudioPlayer sound;
@@ -135,6 +140,10 @@ public class Window extends PApplet {
    * be called and updated in the draw() method
    */
   public void initializeObjects() {
+
+    labManager = LabyrinthManager.getInstance(20, 20, this);
+    System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
+
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
 
     sprites = new ArrayList<Sprite>();  //List of all sprites
@@ -164,12 +173,14 @@ public class Window extends PApplet {
 
     //Initializes player object
     player = new Player(
-        new PVector(this.width/2,this.height/2),
+        //new PVector(this.width/2,this.height/2),
+        labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2),
         new PVector(0,0),
         playerSize,
         2,
         new Color(0,255,0),
         this, "Data/HPfront.png");
+    System.out.println("player: " + player.getPosition().x  + " " + player.getPosition().y);
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -294,6 +305,7 @@ public class Window extends PApplet {
 
     image(backgroundImage, -1000, -1000, width*3, height*3);
 
+
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -305,6 +317,8 @@ public class Window extends PApplet {
         player.getPosition().y - height / 2);
     // Translate the drawing surface to the camera position
     translate(-cameraPos.x, -cameraPos.y);
+
+    labManager.renderTiles();
 
     //Updates timer time and position in the window
     float timeElapsed = timer.getTime();

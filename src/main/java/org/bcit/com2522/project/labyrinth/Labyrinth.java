@@ -44,6 +44,13 @@ public class Labyrinth {
    */
   public Labyrinth(int width, int height) {
     tiles = new TileType[height][width];
+
+    for(int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        tiles[i][j] = TileType.WALL;
+      }
+    }
+
     randomizer = new Random();
 
     init();
@@ -67,10 +74,9 @@ public class Labyrinth {
       repeats++;                        // debugging variable, remove later
     } while ( max(tiles[0].length / 2, tiles.length / 2) > sqrt((abs(pow((eX - sX), 2) - pow((eY - sY), 2)))));
     tiles[sY][sX] = TileType.START;
-    tiles [eY][eX] = TileType.END;
-    System.out.println("repeats: " + repeats);// debugging variable, remove later
+    tiles[eY][eX] = TileType.END;
+    //System.out.println("repeats: " + repeats);// debugging variable, remove later
 
-    int[][] empty = {};
 
     generateCorrectPath();
 
@@ -93,8 +99,8 @@ public class Labyrinth {
 
     while (!endFound) {
       curr = queue.pop();
-      System.out.println("queue size: " + queue.size);
-      System.out.println("\tcoordinate: (" + curr.getX() + ", " + curr.getY() + ")");
+      //System.out.println("queue size: " + queue.size);
+      //System.out.println("\tcoordinate: (" + curr.getX() + ", " + curr.getY() + ")");
 
 
       if(curr.getX() == eX && curr.getY() == eY) {
@@ -184,9 +190,9 @@ public class Labyrinth {
       System.out.print("\n" + i + "\t");
 
       for (int j = 0; j < tiles[0].length; j++) {
-        if ((j == sX) && (i == sY)) {
+        if (tiles[i][j] == TileType.START) {
           System.out.print("SSS\t");
-        } else if ((j == eX) && (i == eY)) {
+        } else if (tiles[i][j] == TileType.END) {
           System.out.print("EEE\t");
         } else if (tiles[i][j] == TileType.PATH) {
           System.out.print("   \t");

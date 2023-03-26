@@ -9,11 +9,9 @@ import processing.core.PVector;
 public class Wall extends Tile implements Collidable{
 
   PImage wallImage;
-  Window window;
 
   public Wall(PVector pos, Window w) {
-    super(pos);
-    window = w;
+    super(pos, w);
     wallImage = new PImage(TILE_SIZE, TILE_SIZE);
     wallImage = window.loadImage("images/wall.png");
   }
