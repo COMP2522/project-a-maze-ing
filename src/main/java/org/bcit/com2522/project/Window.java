@@ -168,7 +168,7 @@ public class Window extends PApplet {
         Ghost.GHOST_SIZE,
         0.3f,
         new Color(255,255,255),
-        this);
+        this, "Data/ghostRight.png");
 
     //Initializes all sporadic enemies and adds them to enemy array list
     for (int i = 0; i < numSporadics; i++) {
@@ -193,12 +193,12 @@ public class Window extends PApplet {
           this, "Data/Wraithright.png"
       ));
     }
-    sprites.add(ghost);  //Adds ghost to list of sprites
     sprites.add(player);  //Adds player to list of sprites
     enemies.addAll(wraiths);
     enemies.addAll(sporadics);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
     enemies.add(ghost);
+    sprites.add(ghost);  //Adds ghost to list of sprites
   }
 
   /**
@@ -332,9 +332,10 @@ public class Window extends PApplet {
 //        player.moveDown(.5F); // You need to define fallSpeed
 //      }
 
-
-
       ghost.move(player); //This will follow the player everywhere they go
+      image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
+        ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
+
       //Moves multiple enemy sporadic and wraith types
       for (Enemy enemyList : enemies) {
         enemyList.move(player);
