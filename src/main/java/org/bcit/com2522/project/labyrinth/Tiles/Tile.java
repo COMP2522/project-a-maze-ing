@@ -6,15 +6,18 @@ import processing.core.PVector;
 public abstract class Tile {
 
   // The side length of a tile
-  public static final int TILE_SIZE = 250; // placeholder value, adjust as needed
+  public static final int TILE_SIZE = 50; // placeholder value, adjust as needed
 
-  private PVector position;
+  /* The position of the tile's top-left corner. */
+  protected PVector position;
 
   private Window window;
 
   public Tile(PVector pos) {
     position = pos;
   }
+
+  public abstract void draw();
 
 
 
