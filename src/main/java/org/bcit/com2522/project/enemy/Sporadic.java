@@ -10,6 +10,7 @@ import org.bcit.com2522.project.Window;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
@@ -25,16 +26,31 @@ public class Sporadic extends Enemy implements Movable {
 
   private boolean soundPlaying = false;
 
+  PImage sporadicImage;
+
   private Player player; //Reference to the player object
   //SoundFile sporadicSound;
 
   /* Hitbox size in pixels of sporadic enemy type.*/
-  public static final int SPORADIC_SIZE = 20;
+  public static final int SPORADIC_SIZE = 25;
 
-  public Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window){
+  public static final int SPORADIC_HEIGHT = 32;
+
+  public static final int SPORADIC_WIDTH = 43;
+
+  Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
+    this.sporadicImage = window.loadImage(imagePath);
 //    minim = new Minim(getWindow());
 //    sound = minim.loadFile("sound/sporadicSound.wav");
+  }
+
+  public PImage getImage(){
+    return sporadicImage;
+  }
+
+  public void setImage(PImage image){
+    this.sporadicImage = image;
   }
 
 

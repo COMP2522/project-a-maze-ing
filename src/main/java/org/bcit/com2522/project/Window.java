@@ -42,6 +42,10 @@ public class Window extends PApplet {
   /* List of all in-game enemies to be loaded. */
   ArrayList<Enemy> enemies;
 
+  ArrayList<Wraith> wraiths;
+
+  ArrayList<Sporadic> sporadics;
+
   /*Single enemy type that follows player around the map. */
   Ghost ghost;
 
@@ -55,7 +59,11 @@ public class Window extends PApplet {
 
   private List<Hole> holes;
 
-  PImage harryPotterImage;
+  PImage playerDown;
+
+  PImage playerLeft;
+  PImage playerRight;
+  PImage playerUp;
 
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
@@ -92,12 +100,21 @@ public class Window extends PApplet {
    */
   public void setup(){
 
-    //sets up the background image
-    backgroundImage = loadImage("images/Sleepy.png");
     frameRate(FPS);
-    harryPotterImage = loadImage("Data/harry_potter.png");
-    System.out.println("Loading image from path: " + sketchPath("Data/harry_potter.png"));
-    if (harryPotterImage == null) {
+
+    //sets up the background image
+    backgroundImage = loadImage("Data/dirt.png");
+
+
+    playerDown = loadImage("Data/HPfront.png");
+
+    playerLeft = loadImage("Data/HPleft.png");
+    playerRight = loadImage("Data/HPright.png");
+    playerUp = loadImage("Data/HPup.png");
+
+
+    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
+    if (playerDown == null) {
       System.out.println("Image is null after loading.");
     } else {
       System.out.println("Image successfully loaded.");
@@ -115,6 +132,10 @@ public class Window extends PApplet {
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
 
     sprites = new ArrayList<Sprite>();  //List of all sprites
+
+    wraiths = new ArrayList<Wraith>();  //List of all wraiths
+
+    sporadics = new ArrayList<Sporadic>();  //List of all sporadics
 
     //walls = new ArrayList<Wall>();  //List of all walls that make up the Labyrinth
 
@@ -142,7 +163,7 @@ public class Window extends PApplet {
         playerSize,
         2,
         new Color(0,255,0),
-        this, playerImage);
+        this, "Data/HPfront.png");
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -151,36 +172,37 @@ public class Window extends PApplet {
         Ghost.GHOST_SIZE,
         0.3f,
         new Color(255,255,255),
-        this);
+        this, "Data/ghostRight.png");
 
     //Initializes all sporadic enemies and adds them to enemy array list
     for (int i = 0; i < numSporadics; i++) {
-      enemies.add(new Sporadic(
+      sporadics.add(new Sporadic(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
           Sporadic.SPORADIC_SIZE,
           5,
           new Color(255, 0, 0),
-          this
+          this, "Data/sporadicSleep.png"
       ));
     }
 
     //Initializes all wraith enemies and adds them to enemy array list
     for (int i = 0; i < numWraiths; i++) {
-      enemies.add(new Wraith(
+      wraiths.add(new Wraith(
           new PVector(random(0, this.width), random(0, this.height)),
           new PVector(random(-1, 1), random(-1,1)),
           Wraith.WRAITH_SIZE,
           2.5f,
           new Color(0, 0, 255),
-          this
+          this, "Data/Wraithright.png"
       ));
     }
-
-    sprites.add(ghost);  //Adds ghost to list of sprites
     sprites.add(player);  //Adds player to list of sprites
+    enemies.addAll(wraiths);
+    enemies.addAll(sporadics);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
-
+    enemies.add(ghost);
+    sprites.add(ghost);  //Adds ghost to list of sprites
   }
 
   /**
@@ -194,18 +216,22 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
+        player.setHarryPotterImage(playerLeft);
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
+        player.setHarryPotterImage(playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
+        player.setHarryPotterImage(playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
+        player.setHarryPotterImage(playerDown);
         break;
     }
   }
@@ -252,8 +278,9 @@ public class Window extends PApplet {
    * are drawn in order of appearance in this method.
    */
   public void draw() {
-    image(backgroundImage, -1000, -1000, width * 4, height * 4);
-    image(harryPotterImage, player.getPosition().x, player.getPosition().y, width/10 , height/10);
+
+    image(backgroundImage, -1000, -1000, width*3, height*3);
+
     /**
      * This section will Zoom the camera in and follow the player around
      */
@@ -266,13 +293,6 @@ public class Window extends PApplet {
     // Translate the drawing surface to the camera position
     translate(-cameraPos.x, -cameraPos.y);
 
-//    if (!gameover) {
-//      /**
-//       * This section will load the background image
-//       */
-//      image(backgroundImage, -1000, -1000, width * 4, height * 4);
-//    }
-
     //Updates timer time and position in the window
     float timeElapsed = timer.getTime();
     text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
@@ -283,28 +303,43 @@ public class Window extends PApplet {
       sprite.draw();
     }
 
+    //draws the wraith image to every wraith
+    for (Wraith wraith : wraiths) {
+      image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
+          wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
+    }
+
+    for (Sporadic sporadic : sporadics) {
+      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
+          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
+    }
+
+    image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
+        player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
+
 
       // draw blades
-//      blade1.draw();
-//      blade2.draw();
-//      blade3.draw();
+      blade1.draw();
+      blade2.draw();
+      blade3.draw();
 
       // draw holes
-//      for (Hole hole : holes) {
-//        hole.draw();
-//        if (hole.collision(player)) {
-//          player.setFalling(true);
-//          break;
-//        }
-//      }
+      for (Hole hole : holes) {
+        hole.draw();
+        if (hole.collision(player)) {
+          player.setFalling(true);
+          break;
+        }
+      }
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed
 //      }
 
-
-
       ghost.move(player); //This will follow the player everywhere they go
+      image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
+        ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
+
       //Moves multiple enemy sporadic and wraith types
       for (Enemy enemyList : enemies) {
         enemyList.move(player);
@@ -321,12 +356,13 @@ public class Window extends PApplet {
     }
 
     if (player.isAlive()) {
-      gameover = true;
+      gameover = false;
     } else {
     background(0);
     textSize(50);
     text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
     text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+    gameover = true;
   }
 
 
@@ -344,3 +380,7 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, mazeRun);
   }
 }
+
+
+
+
