@@ -8,6 +8,8 @@ import org.bcit.com2522.project.enemy.Sporadic;
 import org.bcit.com2522.project.enemy.Wraith;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
+import org.bcit.com2522.project.traps.Blade;
+import org.bcit.com2522.project.traps.Hole;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;

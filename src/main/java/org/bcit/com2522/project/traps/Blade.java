@@ -1,5 +1,6 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.traps;
 
+import org.bcit.com2522.project.Window;
 import processing.core.PVector;
 
 import java.awt.*;
