@@ -11,6 +11,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
@@ -21,8 +22,7 @@ import java.util.ArrayList;
  */
 public class Window extends PApplet {
 
-
-  private static final int FPS = 60;
+  private static final int FPS = 144;
 
   /* Minim object for playing sound */
   Minim minim;
@@ -50,12 +50,6 @@ public class Window extends PApplet {
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
-  PImage playerDown;
-
-  PImage playerLeft;
-  PImage playerRight;
-  PImage playerUp;
-
   PImage backgroundImage; //Background Image for the Window
 
 
@@ -81,6 +75,7 @@ public class Window extends PApplet {
   float timeElapsed;
   float elpCount = 0;
   int loadingTimer = 0;
+  AltMenu menu;
 
   /**
    * Provides the size of the window
@@ -104,24 +99,10 @@ public class Window extends PApplet {
     //sets up the background image
     backgroundImage = loadImage("Data/dirt.png");
 
-
-    playerDown = loadImage("Data/HPfront.png");
-
-    playerLeft = loadImage("Data/HPleft.png");
-    playerRight = loadImage("Data/HPright.png");
-    playerUp = loadImage("Data/HPup.png");
-
-
-    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
-    if (playerDown == null) {
-      System.out.println("Image is null after loading.");
-    } else {
-      System.out.println("Image successfully loaded.");
-    }
-
-
     // initializes the objects
     this.initializeObjects();
+    state = State.MENU;
+    menu = new AltMenu(this);
   }
 
 
@@ -135,12 +116,18 @@ public class Window extends PApplet {
     enemyManager = EnemyManager.getInstance(this);
     trapManager = TrapManager.getInstance();
 
+
     labManager = LabyrinthManager.getInstance(20, 20, this);
+
+    trapManager = TrapManager.getInstance();
+
 
     sprites = new ArrayList<Sprite>();  //List of all sprites
 
     //Initializes player object
     player = Player.getInstance(this);
+
+
 
 //    //Initializes ghost object
 //    ghost = new Ghost(
@@ -162,9 +149,7 @@ public class Window extends PApplet {
 //          this, "Data/sporadicSleep.png"
 //      ));
 //    }
-
     sprites.add(player);  //Adds player to list of sprites
-
   }
 
   /**
@@ -178,22 +163,22 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        player.setHarryPotterImage(playerLeft);
+        player.setHarryPotterImage(player.playerLeft);
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(playerRight);
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(playerUp);
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(playerDown);
+        player.setHarryPotterImage(player.playerDown);
         break;
     }
   }
@@ -229,8 +214,17 @@ public class Window extends PApplet {
           player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
         }
         break;
-      case 'T':
-        enemies = new ArrayList<Enemy>();
+      case 'M':
+        if (state == State.WIN || state == State.GAMEOVER);
+        state = state.MENU;
+        break;
+
+    }
+  }
+
+  public void mouseClicked(MouseEvent m){
+    if (state == State.MENU){
+      menu.click(m);
     }
   }
 
@@ -241,13 +235,12 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-    if (!(labManager.isGenerating()) && (state == State.LOAD)) {
-      player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-      state = State.PLAY;
-    }
-
     switch (state) {
+      case MENU:
+        menu.draw();
+        break;
       case LOAD:
+        timer = null;
         background(0);
         textSize(50);
         if (funFact == null) {
@@ -261,13 +254,20 @@ public class Window extends PApplet {
         for (int i = 0; i < elpCount; i++){
           loading += ".";
         }
+        fill(255);
         text(loading, width / 3, height / 2);
         textSize(30);
         text("Fun fact: " + funFact, width / 4, height / 2 + 50);
+        if (!(labManager.isGenerating()) && (state == State.LOAD)) {
+          player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+          state = State.PLAY;
+          enemyManager.spawnGhost();
+        }
         break;
 
       case PLAY:
-        if (timer == null){
+
+        if (timer == null) {
           timer = new Timer(this, new PVector(0, 0));
         }
         image(backgroundImage, -1000, -1000, width*3, height*3);
@@ -295,7 +295,9 @@ public class Window extends PApplet {
     trapManager.draw();
 
     enemyManager.collision(player);
-    //Just updates and draws all sprites in the list
+    trapManager.collision(player);
+
+        //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
@@ -324,16 +326,11 @@ public class Window extends PApplet {
         break;
 
       case GAMEOVER:
-        // Calculate the camera position based on the player's position
-        cameraPos = new PVector(
-            player.getPosition().x - width / 2,
-            player.getPosition().y - height / 2);
-        // Translate the drawing surface to the camera position
-        translate(-cameraPos.x, -cameraPos.y);
         background(0);
         textSize(50);
-        text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
-        text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+        text("Game Over!", width / 3, height / 2);
+        text("Press R to restart.", width / 3, height / 2 + 50);
+        text("OR press M to return to menu", width / 3, height / 2 + 100);
         break;
 
       case WIN:
@@ -342,7 +339,8 @@ public class Window extends PApplet {
         text("You Won!!!", width / 3, height / 2);
         textSize(30);
         String time = String.format("%.1f", timeElapsed);
-        text("Your time was " + time + " seconds!", width / 4, height / 2 + 70);
+        text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
+        text("Press M to return to menu", width / 3, height / 2 + 100);
     }
   }
 

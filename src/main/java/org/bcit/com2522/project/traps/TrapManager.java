@@ -1,5 +1,8 @@
 package org.bcit.com2522.project.traps;
 
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.Sprite;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -36,6 +39,19 @@ public class TrapManager {
         while (iterator.hasNext()) {
             Trap t = iterator.next();
             t.draw();
+        }
+    }
+
+
+    public void collision(Sprite s){
+        Player player = Player.getInstance();
+        resetIterator();
+
+        while (iterator.hasNext()) {
+            Trap trap = iterator.next();
+            if (trap.collision(player)) {
+                player.setAlive(false);
+            }
         }
     }
 }

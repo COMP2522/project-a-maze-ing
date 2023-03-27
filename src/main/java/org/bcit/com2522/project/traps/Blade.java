@@ -11,12 +11,21 @@ public class Blade extends Trap {
     private float oscillationAngle;
     private float verticalSpeed;
     private float movementDirection;
-    public Blade(PVector position, PVector direction, float size, float speed, Color color, Window window, float oscillationSpeed, float verticalSpeed) {
+
+    private PVector startPosition;
+    private PVector endPosition;
+
+    public Blade(PVector position, PVector direction, float size,
+                 float speed, Color color, Window window,
+                 float oscillationSpeed, float verticalSpeed,
+                 PVector startPosition, PVector endPosition) {
         super(position, direction, size, speed, color, window);
         this.oscillationSpeed = oscillationSpeed;
         this.oscillationAngle = 0;
         this.verticalSpeed = verticalSpeed;
         this.movementDirection = 1;
+        this.endPosition = endPosition;
+        this.startPosition = startPosition;
     }
 
     public Blade(PVector pos, Window w) {
@@ -25,10 +34,22 @@ public class Blade extends Trap {
 
 
     public void move() {
-        getPosition().y += movementDirection * verticalSpeed;
+//        getPosition().y += movementDirection * verticalSpeed;
+//
+//        if (getPosition().y <= 0 || getPosition().y >= getWindow().height - getSize()) {
+//            movementDirection *= -1;
+//        }
 
-        if (getPosition().y <= 0 || getPosition().y >= getWindow().height - getSize()) {
-            movementDirection *= -1;
+        PVector direction = endPosition.copy().sub(startPosition);
+        direction.normalize();
+        direction.mult(verticalSpeed);
+        getPosition().add(direction);
+
+
+        if (getPosition().dist(startPosition) > endPosition.dist(startPosition)) {
+            PVector tempPosition = endPosition;
+            endPosition = startPosition;
+            startPosition = tempPosition;
         }
     }
 
@@ -59,6 +80,7 @@ public class Blade extends Trap {
 
         oscillationAngle += oscillationSpeed;
     }
+
 
 }
 

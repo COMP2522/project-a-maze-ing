@@ -17,6 +17,7 @@ public class Trap extends Sprite {
 
     @Override
     public boolean collision(Sprite s) {
-        return false;
+        float dist = PVector.dist(s.getPosition(), getPosition());
+        return dist <= (s.getSize() / 2) + (getSize() / 2);
     }
 }
