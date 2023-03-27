@@ -20,6 +20,8 @@ public class LabyrinthManager {
 
   private EndTile end;
 
+  private boolean generating = false;
+
   private LabyrinthManager(int width, int height, Window w) {
     tiles = new ArrayList<Tile>();
     current = new Labyrinth(width, height);
@@ -141,7 +143,8 @@ public class LabyrinthManager {
   public void newLabyrinth(int width, int height) {
     current = new Labyrinth(width, height);
     current.print();
-    generateTiles();
+    generating = true;
+    new Thread(() -> {generateTiles(); generating = false;}).start();
   }
 
   /**
@@ -176,7 +179,9 @@ public class LabyrinthManager {
     return end;
   }
 
-
+  public boolean isGenerating() {
+    return generating;
+  }
 
 
 }

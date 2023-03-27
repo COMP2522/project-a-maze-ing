@@ -92,6 +92,16 @@ public class Window extends PApplet {
   /* Height of window in pixels.*/
   public static final int WINDOW_Y = 600;
 
+  /* Captures the current state of the game. */
+  enum State{
+    MENU,
+    LOAD,
+    GAMEOVER,
+    PLAY
+  }
+
+  State state;
+
   /**
    * Provides the size of the window
    */
@@ -140,9 +150,11 @@ public class Window extends PApplet {
    * be called and updated in the draw() method
    */
   public void initializeObjects() {
+    state = State.LOAD;
 
     labManager = LabyrinthManager.getInstance(20, 20, this);
-    System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
+
+    //System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
 
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
 
@@ -174,13 +186,12 @@ public class Window extends PApplet {
     //Initializes player object
     player = new Player(
         //new PVector(this.width/2,this.height/2),
-        labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2),
+        new PVector(0, 0),
         new PVector(0,0),
         playerSize,
         2,
         new Color(0,255,0),
         this, "Data/HPfront.png");
-    System.out.println("player: " + player.getPosition().x  + " " + player.getPosition().y);
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -303,99 +314,114 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-    image(backgroundImage, -1000, -1000, width*3, height*3);
-
-
-    /**
-     * This section will Zoom the camera in and follow the player around
-     */
-    float zoomFactor = 2.0f; // Increase this value to zoom in more
-
-    // Calculate the camera position based on the player's position
-    PVector cameraPos = new PVector(
-        player.getPosition().x - width / 2,
-        player.getPosition().y - height / 2);
-    // Translate the drawing surface to the camera position
-    translate(-cameraPos.x, -cameraPos.y);
-
-    labManager.renderTiles();
-
-    //Updates timer time and position in the window
-    float timeElapsed = timer.getTime();
-    text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
-
-    //Just updates and draws all sprites in the list
-    for (Sprite sprite : sprites) {
-      sprite.update();
-      sprite.draw();
-    }
-
-    //draws the wraith image to every wraith
-    for (Wraith wraith : wraiths) {
-      image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
-          wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
-    }
-
-    for (Sporadic sporadic : sporadics) {
-      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
-          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
-    }
-
-    image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
-        player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
-
-
-      // draw blades
-      blade1.draw();
-      blade2.draw();
-      blade3.draw();
-
-      // draw holes
-      for (Hole hole : holes) {
-        hole.draw();
-        if (hole.collision(player)) {
-          player.setFalling(true);
-          break;
-        }
+    if (!(labManager.isGenerating())) {
+      if (state == State.LOAD){
+        player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
       }
+      state = State.PLAY;
+    }
 
-      testWall.draw();
+
+
+    switch (state) {
+      case LOAD:
+        background(0);
+        textSize(50);
+        text("Loading...", width / 3, height / 2);
+        text("Fun fact:", width / 3, height / 2 + 50);
+        break;
+      case PLAY:
+        image(backgroundImage, -1000, -1000, width*3, height*3);
+
+
+        /**
+         * This section will Zoom the camera in and follow the player around
+         */
+        float zoomFactor = 2.0f; // Increase this value to zoom in more
+        // Calculate the camera position based on the player's position
+        PVector cameraPos = new PVector(
+            player.getPosition().x - width / 2,
+            player.getPosition().y - height / 2);
+        // Translate the drawing surface to the camera position
+        translate(-cameraPos.x, -cameraPos.y);
+
+        labManager.renderTiles();
+
+        //Updates timer time and position in the window
+        float timeElapsed = timer.getTime();
+        text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
+
+        //Just updates and draws all sprites in the list
+        for (Sprite sprite : sprites) {
+          sprite.update();
+          sprite.draw();
+        }
+
+        //draws the wraith image to every wraith
+        for (Wraith wraith : wraiths) {
+          image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
+              wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
+        }
+
+        for (Sporadic sporadic : sporadics) {
+          image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
+              sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
+        }
+
+        image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
+            player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
+
+
+        // draw blades
+        blade1.draw();
+        blade2.draw();
+        blade3.draw();
+
+        // draw holes
+        for (Hole hole : holes) {
+          hole.draw();
+          if (hole.collision(player)) {
+            player.setFalling(true);
+            break;
+          }
+        }
+
+        testWall.draw();
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed
 //      }
 
-      ghost.move(player); //This will follow the player everywhere they go
-      image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
-        ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
+        ghost.move(player); //This will follow the player everywhere they go
+        image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
+            ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
 
-      //Moves multiple enemy sporadic and wraith types
-      for (Enemy enemyList : enemies) {
-        enemyList.move(player);
-      }
+        //Moves multiple enemy sporadic and wraith types
+        for (Enemy enemyList : enemies) {
+          enemyList.move(player);
+        }
 
-    if (player.getImmunityTimer() > 0) {
-      player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
+        if (player.getImmunityTimer() > 0) {
+          player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
+        }
+
+        for (Enemy e : enemies) {
+          if (player.collision(e) && player.getImmunityTimer() <= 0) {
+            player.setAlive(false);
+          }
+        }
+
+        if (player.isAlive()) {
+          gameover = false;
+        } else {
+          background(0);
+          textSize(50);
+          text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
+          text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+          gameover = true;
+        }
+        break;
     }
-
-    for (Enemy e : enemies) {
-      if (player.collision(e) && player.getImmunityTimer() <= 0) {
-        player.setAlive(false);
-      }
-    }
-
-    if (player.isAlive()) {
-      gameover = false;
-    } else {
-    background(0);
-    textSize(50);
-    text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
-    text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
-    gameover = true;
-  }
-
-
-
   }
 
   /**
