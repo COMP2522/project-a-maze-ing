@@ -34,6 +34,9 @@ public class Window extends PApplet {
   /* Manager for the labyrinth */
   private LabyrinthManager labManager;
 
+  private EnemyManager enemyManager;
+
+
   /* AudioPlayer object for sound file */
   AudioPlayer sound;
 
@@ -141,8 +144,11 @@ public class Window extends PApplet {
    */
   public void initializeObjects() {
 
+    enemyManager = EnemyManager.getInstance();
+
     labManager = LabyrinthManager.getInstance(20, 20, this);
     System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
+
 
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
 
@@ -191,38 +197,37 @@ public class Window extends PApplet {
         new Color(255,255,255),
         this, "Data/ghostRight.png");
 
-    //Initializes all sporadic enemies and adds them to enemy array list
-    for (int i = 0; i < numSporadics; i++) {
-      sporadics.add(new Sporadic(
-          new PVector(random(0, this.width), random(0, this.height)),
-          new PVector(random(-1, 1), random(-1,1)),
-          Sporadic.SPORADIC_SIZE,
-          5,
-          new Color(255, 0, 0),
-          this, "Data/sporadicSleep.png"
-      ));
-    }
-
-    //Initializes all wraith enemies and adds them to enemy array list
-    for (int i = 0; i < numWraiths; i++) {
-      wraiths.add(new Wraith(
-          new PVector(random(0, this.width), random(0, this.height)),
-          new PVector(random(-1, 1), random(-1,1)),
-          Wraith.WRAITH_SIZE,
-          2.5f,
-          new Color(0, 0, 255),
-          this, "Data/Wraithright.png"
-      ));
-    }
+//    //Initializes all sporadic enemies and adds them to enemy array list
+//    for (int i = 0; i < numSporadics; i++) {
+//      sporadics.add(new Sporadic(
+//          new PVector(random(0, this.width), random(0, this.height)),
+//          new PVector(random(-1, 1), random(-1,1)),
+//          Sporadic.SPORADIC_SIZE,
+//          5,
+//          new Color(255, 0, 0),
+//          this, "Data/sporadicSleep.png"
+//      ));
+//    }
+//
+//    //Initializes all wraith enemies and adds them to enemy array list
+//    for (int i = 0; i < numWraiths; i++) {
+//      wraiths.add(new Wraith(
+//          new PVector(random(0, this.width), random(0, this.height)),
+//          new PVector(random(-1, 1), random(-1,1)),
+//          Wraith.WRAITH_SIZE,
+//          Wraith.WRAITH_SPEED,
+//          new Color(0, 0, 255),
+//          this, "Data/Wraithright.png"
+//      ));
+//    }
     sprites.add(player);  //Adds player to list of sprites
-    enemies.addAll(wraiths);
-    enemies.addAll(sporadics);
+//    enemies.addAll(wraiths);
+//    enemies.addAll(sporadics);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
     enemies.add(ghost);
     sprites.add(ghost);  //Adds ghost to list of sprites
 
-    testWall = new Wall(new PVector(100, 100), this);
-
+    testWall = new Wall(new PVector(-Tile.TILE_SIZE, -Tile.TILE_SIZE), this);
   }
 
   /**
@@ -267,7 +272,6 @@ public class Window extends PApplet {
       case LEFT:
         // stop moving left
         player.setDirection(new PVector(0, 0));
-        break;
       case RIGHT:
         // stop moving right
         player.setDirection(new PVector(0, 0));
@@ -324,6 +328,8 @@ public class Window extends PApplet {
     float timeElapsed = timer.getTime();
     text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
 
+    enemyManager.spawn();
+    enemyManager.draw();
     //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
@@ -331,15 +337,15 @@ public class Window extends PApplet {
     }
 
     //draws the wraith image to every wraith
-    for (Wraith wraith : wraiths) {
-      image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
-          wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
-    }
+//    for (Wraith wraith : wraiths) {
+//      image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
+//          wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
+//    }
 
-    for (Sporadic sporadic : sporadics) {
-      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
-          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
-    }
+//    for (Sporadic sporadic : sporadics) {
+//      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
+//          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
+//    }
 
     image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
         player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
@@ -359,7 +365,7 @@ public class Window extends PApplet {
         }
       }
 
-      testWall.draw();
+//      testWall.draw();
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed

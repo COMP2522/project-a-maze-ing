@@ -1,20 +1,22 @@
 package org.bcit.com2522.project.enemy;
 
 
-import org.bcit.com2522.project.Player;
-import org.bcit.com2522.project.enemy.Enemy;
-import org.bcit.com2522.project.interfaces.Movable;
-import org.bcit.com2522.project.Window;
-
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
 
 public class Wraith extends Enemy implements Movable {
+  public static final float WRAITH_SPEED = 2.5f;
+
+  public static final Color WRAITH_COLOR = new Color(0, 0, 255);
+
+  public static final String WRAITH_IMAGE_PATH = "Data/Wraithright.png";
   //  private static Ghost ghostInstance = null;
 
   /* Minim object for playing sound */

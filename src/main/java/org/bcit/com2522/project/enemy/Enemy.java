@@ -3,12 +3,15 @@ package org.bcit.com2522.project.enemy;
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PVector;
 
 import java.awt.*;
 
 public class Enemy extends Sprite implements Movable {
+
+  private EnemySpawner spawner;
 
   public Enemy(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     super(position, direction, size, speed, color, window);
@@ -21,6 +24,10 @@ public class Enemy extends Sprite implements Movable {
       return true;
     }
     return false;
+  }
+
+  public EnemySpawner getSpawner() {
+    return spawner;
   }
 
   //  /**

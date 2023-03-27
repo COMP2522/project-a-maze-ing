@@ -35,7 +35,8 @@ public class Labyrinth {
    */
   private int eY;
 
-  Random randomizer;
+
+  private Random randomizer;
 
   /**
    * Constructor
@@ -147,7 +148,16 @@ public class Labyrinth {
    */
   private void drawPath(int[][] path) {
     for (int i = 1; i < path.length; ++i) {
-      tiles[path[i][1]][path[i][0]] = TileType.PATH;
+      tiles[path[i][1]][path[i][0]] = randPathTile();
+    }
+  }
+
+  private TileType randPathTile() {
+    int pick = randomizer.nextInt(100);
+    if (pick <= 25) {
+      return TileType.WRAITH;
+    } else {
+      return TileType.PATH;
     }
   }
 
@@ -196,6 +206,8 @@ public class Labyrinth {
           System.out.print("EEE\t");
         } else if (tiles[i][j] == TileType.PATH) {
           System.out.print("   \t");
+        } else if (tiles[i][j] == TileType.WRAITH) {
+          System.out.print(" W \t");
         } else {
           System.out.print("[-]\t");
         }

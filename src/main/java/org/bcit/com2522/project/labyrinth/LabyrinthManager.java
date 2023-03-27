@@ -118,6 +118,8 @@ public class LabyrinthManager {
         start = new StartTile(pos, window);
         tiles.add(start);
         break;
+      case WRAITH:
+        tiles.add(new WraithTile(pos, window));
       default:
         break;
     }
