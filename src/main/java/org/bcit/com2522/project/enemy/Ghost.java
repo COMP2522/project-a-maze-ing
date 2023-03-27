@@ -61,4 +61,12 @@ public class Ghost extends Enemy implements Movable {
 
   }
 
+@Override
+  public void draw() {
+    EnemyManager.getInstance().getWindow().image(getImage(), getPosition().x - GHOST_LENGTH/2,
+        getPosition().y - GHOST_LENGTH/2 , GHOST_LENGTH , GHOST_LENGTH);
+}
+
+
+
 }

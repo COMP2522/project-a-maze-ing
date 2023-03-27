@@ -1,12 +1,13 @@
 package org.bcit.com2522.project;
 
 import org.bcit.com2522.project.interfaces.Collidable;
+import org.bcit.com2522.project.interfaces.Drawable;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import processing.core.PVector;
 
 import java.awt.*;
 
-public abstract class Sprite implements Collidable {
+public abstract class Sprite implements Drawable, Collidable {
   private PVector position;
   private PVector direction;
   private float size;

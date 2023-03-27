@@ -25,17 +25,11 @@ public class Player extends Sprite {
 
   //private PImage playerLeft;
 
-  private float rotationAngle;
   private boolean falling;
 
   public PImage getHarryPotterImage() {
     return harryPotterImage;
   }
-
-  public float getRotationAngle() {
-    return rotationAngle;
-  }
-
 
   public boolean isAlive() {
     return alive;
@@ -104,39 +98,11 @@ public class Player extends Sprite {
     return false;
   }
 
-
-  public void moveForward(float distance) {
-    getPosition().add(PVector.mult(getDirection(), distance));
-  }
-
-  public void moveBackward(float distance) {
-    getPosition().sub(PVector.mult(getDirection(), distance));
-  }
-
-  public void moveLeft(float distance) {
-    getPosition().x -= distance;
-  }
-
-  public void moveRight(float distance) {
-    getPosition().x += distance;
-  }
-
-  public void rotateLeft(float angle) {
-    rotationAngle -= angle;
-  }
-
-  public void rotateRight(float angle) {
-    rotationAngle += angle;
-  }
-
   @Override
   public void draw() {
-    if (harryPotterImage == null) {
-      return;
-    }
+    getWindow().image(getHarryPotterImage(), getPosition().x - PLAYER_WIDTH/2,
+        getPosition().y - PLAYER_HEIGHT/2, PLAYER_WIDTH , PLAYER_HEIGHT);
 
-//    float scaleFactor = 0.35f; // Adjust this value to change the image size (e.g., 0.5 for half size, 0.25 for quarter size)
-//    getWindow().image(harryPotterImage, getPosition().x, getPosition().y, getSize() * scaleFactor, getSize() * scaleFactor);
   }
 
 }
