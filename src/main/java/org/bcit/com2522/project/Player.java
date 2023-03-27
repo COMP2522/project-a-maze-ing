@@ -23,7 +23,11 @@ public class Player extends Sprite {
   private float immunityTimer;
   private PImage harryPotterImage;
 
-  //private PImage playerLeft;
+  PImage playerDown;
+
+  PImage playerLeft;
+  PImage playerRight;
+  PImage playerUp;
 
   private boolean falling;
 
@@ -47,14 +51,14 @@ public class Player extends Sprite {
     this.falling = falling;
   }
 
-  public void moveDown(float speed) {
-    getPosition().y += speed;
-  }
-
-
   private Player(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     super(position, direction, size, speed, color, window);
     this.harryPotterImage = window.loadImage("Data/HPfront.png");
+
+    this.playerDown = window.loadImage("Data/HPfront.png");
+    this.playerLeft = window.loadImage("Data/HPleft.png");
+    this.playerRight = window.loadImage("Data/HPright.png");
+    this.playerUp = window.loadImage("Data/HPup.png");
 
     alive = true;
     immunityTimer = 0;
@@ -79,7 +83,6 @@ public class Player extends Sprite {
   public void setHarryPotterImage(PImage harryPotterImage) {
     this.harryPotterImage = harryPotterImage;
   }
-
 
   public float getImmunityTimer() {
     return immunityTimer;
