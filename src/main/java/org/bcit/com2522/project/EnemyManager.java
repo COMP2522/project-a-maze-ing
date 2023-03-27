@@ -9,6 +9,13 @@ public class EnemyManager{
   ArrayList<Enemy> enemies = new ArrayList<Enemy>();
   Iterator iterator = enemies.iterator();
 
+  /**
+   * Constructor to initialize iterator.
+   */
+  public EnemyManager() {
+    iterator = enemies.iterator();
+  }
+
   public void add(Enemy e){
     enemies.add(e);
   }
