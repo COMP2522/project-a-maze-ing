@@ -7,15 +7,16 @@ import java.awt.event.ActionListener;
 
 public class Menu {
 
+  JFrame frame;
+
+    public JFrame getMenu(){
+      return frame;
+    }
 
 
-
-    public static void main (String[] args) {
-
-
-
+    public void initMenu(){
         //setting up the window
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setTitle("Menu");
         frame.setSize(800, 425);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -128,6 +129,8 @@ public class Menu {
                 System.out.println("clicked");
             }
         });
+
+
 
         System.out.println("345");
 

@@ -11,6 +11,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
@@ -74,6 +75,7 @@ public class Window extends PApplet {
   float timeElapsed;
   float elpCount = 0;
   int loadingTimer = 0;
+  AltMenu menu;
 
   /**
    * Provides the size of the window
@@ -99,6 +101,8 @@ public class Window extends PApplet {
 
     // initializes the objects
     this.initializeObjects();
+    state = State.MENU;
+    menu = new AltMenu(this);
   }
 
 
@@ -205,8 +209,17 @@ public class Window extends PApplet {
           player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
         }
         break;
-      case 'T':
-        enemies = new ArrayList<Enemy>();
+      case 'M':
+        if (state == State.WIN || state == State.GAMEOVER);
+        state = state.MENU;
+        break;
+
+    }
+  }
+
+  public void mouseClicked(MouseEvent m){
+    if (state == State.MENU){
+      menu.click(m);
     }
   }
 
@@ -217,14 +230,12 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-//    if (!(labManager.isGenerating()) && (state == State.LOAD)) {
-//      player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-//      state = State.PLAY;
-//      enemyManager.spawnGhost();
-//    }
-
     switch (state) {
+      case MENU:
+        menu.draw();
+        break;
       case LOAD:
+        timer = null;
         background(0);
         textSize(50);
         if (funFact == null) {
@@ -238,6 +249,7 @@ public class Window extends PApplet {
         for (int i = 0; i < elpCount; i++){
           loading += ".";
         }
+        fill(255);
         text(loading, width / 3, height / 2);
         textSize(30);
         text("Fun fact: " + funFact, width / 4, height / 2 + 50);
@@ -249,7 +261,7 @@ public class Window extends PApplet {
         break;
 
       case PLAY:
-        if (timer == null){
+        if (timer == null) {
           timer = new Timer(this, new PVector(0, 0));
         }
         image(backgroundImage, -1000, -1000, width*3, height*3);
@@ -306,16 +318,11 @@ public class Window extends PApplet {
         break;
 
       case GAMEOVER:
-        // Calculate the camera position based on the player's position
-        cameraPos = new PVector(
-            player.getPosition().x - width / 2,
-            player.getPosition().y - height / 2);
-        // Translate the drawing surface to the camera position
-        translate(-cameraPos.x, -cameraPos.y);
         background(0);
         textSize(50);
-        text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
-        text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+        text("Game Over!", width / 3, height / 2);
+        text("Press R to restart.", width / 3, height / 2 + 50);
+        text("OR press M to return to menu", width / 3, height / 2 + 100);
         break;
 
       case WIN:
@@ -324,7 +331,8 @@ public class Window extends PApplet {
         text("You Won!!!", width / 3, height / 2);
         textSize(30);
         String time = String.format("%.1f", timeElapsed);
-        text("Your time was " + time + " seconds!", width / 4, height / 2 + 70);
+        text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
+        text("Press M to return to menu", width / 3, height / 2 + 100);
     }
   }
 
