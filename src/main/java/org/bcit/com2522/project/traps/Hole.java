@@ -12,6 +12,9 @@ public class Hole extends Trap {
         super(position, direction, size, speed, color, window);
     }
 
+    public Hole(PVector pos, Window w) {
+    }
+
     @Override
     public void draw() {
         getWindow().pushStyle();
