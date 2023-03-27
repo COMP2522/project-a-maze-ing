@@ -14,6 +14,10 @@ public abstract class Sprite implements Collidable {
   //private java.awt.Window window;
   private Window window;
 
+    public Sprite() {
+
+    }
+
   public void setSize(float size) {
     this.size = size;
   }

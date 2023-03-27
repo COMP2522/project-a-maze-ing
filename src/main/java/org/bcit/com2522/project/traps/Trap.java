@@ -11,6 +11,10 @@ public class Trap extends Sprite {
         super(position, direction, size, speed, color, window);
     }
 
+    public Trap() {
+        super();
+    }
+
     @Override
     public boolean collision(Sprite s) {
         return false;

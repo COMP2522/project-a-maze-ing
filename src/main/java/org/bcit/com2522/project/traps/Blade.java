@@ -19,6 +19,10 @@ public class Blade extends Trap {
         this.movementDirection = 1;
     }
 
+    public Blade(PVector pos, Window w) {
+        super();
+    }
+
 
     public void move() {
         getPosition().y += movementDirection * verticalSpeed;
