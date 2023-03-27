@@ -2,13 +2,14 @@ package org.bcit.com2522.project.labyrinth.Tiles;
 
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.interfaces.Drawable;
 import processing.core.PVector;
 
-public abstract class Tile {
+public abstract class Tile implements Drawable {
 
   // The side length of a tile
 
-  public static final int TILE_SIZE = 200; // placeholder value, adjust as needed
+  public static final int TILE_SIZE = 250; // placeholder value, adjust as needed
 
 
   /* The position of the tile's top-left corner. */
@@ -21,8 +22,6 @@ public abstract class Tile {
     position = pos;
     window = w;
   }
-
-  public abstract void draw();
 
   /**
    * Getter for tile position.

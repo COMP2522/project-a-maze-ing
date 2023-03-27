@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.enemy;
 
+import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
@@ -80,9 +81,14 @@ public class EnemyManager{
 
 
   public void collision(Sprite s){
+    Player player = Player.getInstance();
+    resetIterator();
+
     while (iterator.hasNext()){
       Enemy e = (Enemy) iterator.next();
-      e.collision(s);
+      if (e.collision(player)) {
+        player.setAlive(false);
+      }
     }
   }
 

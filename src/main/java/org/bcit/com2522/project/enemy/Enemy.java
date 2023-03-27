@@ -3,14 +3,15 @@ package org.bcit.com2522.project.enemy;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
+import org.bcit.com2522.project.interfaces.Collidable;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PVector;
 
 import java.awt.*;
 
-public class Enemy extends Sprite implements Movable {
+public class Enemy extends Sprite implements Movable, Collidable {
 
-  private EnemySpawner spawner;
+  private EnemySpawner spawner; // for future use in case we want to destroy enemies
 
   public Enemy(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     super(position, direction, size, speed, color, window);
