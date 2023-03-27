@@ -18,6 +18,12 @@ public class HoleTile extends Tile {
         TrapManager.getInstance().addTrap(
             new Hole(pos.copy().add(x, y),
                 new PVector(0, 0), 50, 0, Color.black, w));
+
+      x = rand.nextInt(Tile.TILE_SIZE);
+      y = rand.nextInt(Tile.TILE_SIZE);
+      TrapManager.getInstance().addTrap(
+          new Hole(pos.copy().add(x, y),
+              new PVector(0, 0), 50, 0, Color.black, w));
     }
 
     @Override

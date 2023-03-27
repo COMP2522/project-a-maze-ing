@@ -7,7 +7,9 @@ public class QuoteGenerator {
       "This game was pretty hard to make.",
       "Paul is very cool!",
       "Do you even read these?",
-      "We've been trying to reach \nyou about your car's extended warranty"
+      "We've been trying to reach \nyou about your car's extended warranty.",
+      "I used to be an adventurer \nlike you, until I took CST.",
+      "(o_o)/"
   };
 
   private static Random rng = new Random();
