@@ -8,7 +8,7 @@ public abstract class Tile {
 
   // The side length of a tile
 
-  public static final int TILE_SIZE = 100; // placeholder value, adjust as needed
+  public static final int TILE_SIZE = 200; // placeholder value, adjust as needed
 
 
   /* The position of the tile's top-left corner. */

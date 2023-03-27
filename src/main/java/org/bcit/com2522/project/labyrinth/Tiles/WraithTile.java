@@ -1,7 +1,7 @@
 package org.bcit.com2522.project.labyrinth.Tiles;
 
-import org.bcit.com2522.project.EnemyManager;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.enemy.spawners.WraithSpawner;
 import processing.core.PVector;
 

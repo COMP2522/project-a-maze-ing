@@ -127,6 +127,11 @@ public class LabyrinthManager {
         break;
       case WRAITH:
         tiles.add(new WraithTile(pos, window));
+        break;
+      case BLADE_TILE:
+        tiles.add(new BladeTile(pos, window));
+      case HOLE_TILE:
+        tiles.add(new HoleTile(pos, window));
       default:
         break;
     }

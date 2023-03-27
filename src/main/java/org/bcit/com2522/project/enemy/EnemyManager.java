@@ -1,7 +1,7 @@
 package org.bcit.com2522.project.enemy;
 
 import org.bcit.com2522.project.Sprite;
-import org.bcit.com2522.project.enemy.Enemy;
+import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
 
 import java.util.ArrayList;
@@ -15,26 +15,30 @@ public class EnemyManager{
   private ArrayList<EnemySpawner> spawners;
   private Iterator iterator;
 
+
+
+  private Window window;
+
   private static EnemyManager instance;
 
-  private EnemyManager() {
+  private EnemyManager(Window w) {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
     iterator = enemies.iterator();
+    window = w;
   }
 
-  public static EnemyManager getInstance() {
+  public static EnemyManager getInstance(Window w) {
     if (instance == null) {
-      instance = new EnemyManager();
+      instance = new EnemyManager(w);
     }
     return instance;
   }
 
-  /**
-   * Constructor to initialize iterator.
-   */
-  public EnemyManager() {
-    iterator = enemies.iterator();
+
+  public static EnemyManager getInstance() {
+
+    return instance;
   }
 
   public void add(Enemy e){
@@ -62,6 +66,7 @@ public class EnemyManager{
     while (iterator.hasNext()){
       Enemy e = (Enemy) iterator.next();
       e.draw();
+      e.update();
     }
   }
 
@@ -73,11 +78,16 @@ public class EnemyManager{
     }
   }
 
+
   public void collision(Sprite s){
     while (iterator.hasNext()){
       Enemy e = (Enemy) iterator.next();
       e.collision(s);
     }
+  }
+
+  public Window getWindow() {
+    return window;
   }
 
 }

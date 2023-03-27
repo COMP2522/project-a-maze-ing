@@ -7,6 +7,7 @@ import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.traps.Blade;
 import org.bcit.com2522.project.traps.Hole;
+import org.bcit.com2522.project.traps.TrapManager;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -30,9 +31,10 @@ public class Window extends PApplet {
   Minim minim;
 
   /* Manager for the labyrinth */
-  LabyrinthManager labManager;
+  private LabyrinthManager labManager;
 
   private EnemyManager enemyManager;
+  private TrapManager trapManager;
 
 
   /* AudioPlayer object for sound file */
@@ -79,9 +81,6 @@ public class Window extends PApplet {
 
   /* Number of Wraith enemy types in the maze. */
   int numWraiths = 5;
-
-  /* Hitbox size in pixels of sporadic enemy type.*/
-  int playerSize = 10;
 
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 800;
@@ -156,7 +155,8 @@ public class Window extends PApplet {
   public void initializeObjects() {
     state = State.LOAD;
 
-    enemyManager = EnemyManager.getInstance();
+    enemyManager = EnemyManager.getInstance(this);
+    trapManager = TrapManager.getInstance();
 
     labManager = LabyrinthManager.getInstance(20, 20, this);
 
@@ -171,32 +171,17 @@ public class Window extends PApplet {
 
     sporadics = new ArrayList<Sporadic>();  //List of all sporadics
 
-    //walls = new ArrayList<Wall>();  //List of all walls that make up the Labyrinth
-
-    // blades
-    blade1 = new Blade(new PVector(100, 100), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
-    blade2 = new Blade(new PVector(200, 200), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
-    blade3 = new Blade(new PVector(300, 300), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
-
-    // holes
-    holes = new ArrayList<>();
-    Hole hole1 = new Hole(new PVector(200, 300), new PVector(0, 0), 50, 0, Color.BLACK, this);
-    Hole hole2 = new Hole(new PVector(400, 500), new PVector(0, 0), 50, 0, Color.BLACK, this);
-    Hole hole3 = new Hole(new PVector(600, 700), new PVector(0, 0), 50, 0, Color.BLACK, this);
-
-    holes.add(hole1);
-    holes.add(hole2);
-    holes.add(hole3);
-
     //Initializes player object
-    player = new Player(
-        //new PVector(this.width/2,this.height/2),
-        new PVector(0, 0),
-        new PVector(0,0),
-        playerSize,
-        5,
-        new Color(0,255,0),
-        this, "Data/HPfront.png");
+    player = Player.getInstance(this);
+
+//        new Player(
+//        //new PVector(this.width/2,this.height/2),
+//        new PVector(0, 0),
+//        new PVector(0,0),
+//        playerSize,
+//        5,
+//        new Color(0,255,0),
+//        this);
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -231,8 +216,6 @@ public class Window extends PApplet {
 //      ));
 //    }
     sprites.add(player);  //Adds player to list of sprites
-//    enemies.addAll(wraiths);
-//    enemies.addAll(sporadics);
     sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
     enemies.add(ghost);
     sprites.add(ghost);  //Adds ghost to list of sprites
@@ -356,7 +339,7 @@ public class Window extends PApplet {
         // Translate the drawing surface to the camera position
         translate(-cameraPos.x, -cameraPos.y);
 
-
+        // renders all tiles in labyrinth
         labManager.renderTiles();
 
         //Updates timer time and position in the window
@@ -366,6 +349,7 @@ public class Window extends PApplet {
 
     enemyManager.spawn();
     enemyManager.draw();
+    trapManager.draw();
     //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
@@ -374,8 +358,7 @@ public class Window extends PApplet {
 
     //draws the wraith image to every wraith
 //    for (Wraith wraith : wraiths) {
-//      image(wraith.getImage(), wraith.getPosition().x - wraith.WRAITH_LENGTH/2,
-//          wraith.getPosition().y - wraith.WRAITH_LENGTH/2 , wraith.WRAITH_LENGTH , wraith.WRAITH_LENGTH);
+//
 //    }
 
 //    for (Sporadic sporadic : sporadics) {
@@ -387,33 +370,28 @@ public class Window extends PApplet {
             player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
 
 
-        // draw blades
-        blade1.draw();
-        blade2.draw();
-        blade3.draw();
-
-        // draw holes
-        for (Hole hole : holes) {
-          hole.draw();
-          if (hole.collision(player)) {
-            player.setFalling(true);
-            break;
-          }
-        }
+//        // draw holes
+//        for (Hole hole : holes) {
+//          hole.draw();
+//          if (hole.collision(player)) {
+//            player.setFalling(true);
+//            break;
+//          }
+//        }
 
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed
 //      }
 
-        ghost.move(player); //This will follow the player everywhere they go
+        ghost.move(); //This will follow the player everywhere they go
         image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
             ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
 
         //Moves multiple enemy sporadic and wraith types
-        for (Enemy enemyList : enemies) {
-          enemyList.move(player);
-        }
+//        for (Enemy enemyList : enemies) {
+//          enemyList.move(player);
+//        }
 
         if (player.getImmunityTimer() > 0) {
           player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));

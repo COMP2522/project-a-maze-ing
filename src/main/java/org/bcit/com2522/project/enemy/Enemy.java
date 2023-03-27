@@ -1,6 +1,5 @@
 package org.bcit.com2522.project.enemy;
 
-import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
@@ -94,7 +93,7 @@ public class Enemy extends Sprite implements Movable {
 //  }
 //
   @Override
-  public void move(Player player) {
+  public void move() {
     //Sub classes of enemy all move differently
   }
 }

@@ -15,6 +15,9 @@ public class Player extends Sprite {
   public static final int PLAYER_HEIGHT = 44;
 
   public static final int PLAYER_WIDTH = 27;
+  private static final int PLAYER_SPEED = 5;
+
+  private static Player instance;
 
   private boolean alive = true;
   private float immunityTimer;
@@ -54,19 +57,34 @@ public class Player extends Sprite {
     getPosition().y += speed;
   }
 
-  public void setHarryPotterImage(PImage harryPotterImage) {
-    this.harryPotterImage = harryPotterImage;
-  }
 
-  public Player(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath) {
+  private Player(PVector position, PVector direction, float size, float speed, Color color, Window window) {
     super(position, direction, size, speed, color, window);
-    this.harryPotterImage = window.loadImage(imagePath);
+    this.harryPotterImage = window.loadImage("Data/HPfront.png");
 
     alive = true;
     immunityTimer = 0;
   }
 
+  public static Player getInstance(Window w) {
+    if (instance == null) {
+      instance = new Player(
+          new PVector(0, 0),
+          new PVector(0, 0),
+          10,
+          PLAYER_SPEED,
+          new Color(0, 255, 0), w);
+    }
+    return instance;
+  }
 
+  public static Player getInstance() {
+    return instance;
+  }
+
+  public void setHarryPotterImage(PImage harryPotterImage) {
+    this.harryPotterImage = harryPotterImage;
+  }
 
 
   public float getImmunityTimer() {

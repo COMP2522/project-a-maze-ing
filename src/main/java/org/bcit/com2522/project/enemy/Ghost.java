@@ -16,8 +16,6 @@ public class Ghost extends Enemy implements Movable {
 
   private static Ghost ghostInstance = null;
 
-  private Player player; //Reference to the player object
-
   PImage ghostImage;
 
   public Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
@@ -45,8 +43,8 @@ public class Ghost extends Enemy implements Movable {
    * the ghost towards the player.
    */
   @Override
-  public void move(Player player) {
-    this.player = player;
+  public void move() {
+    Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     direction.normalize();
     direction.mult(getSpeed());
@@ -59,9 +57,8 @@ public class Ghost extends Enemy implements Movable {
   }
 
   public void update() {
-    if (player != null) {
-      move(player);
-    }
+      move();
+
   }
 
 }

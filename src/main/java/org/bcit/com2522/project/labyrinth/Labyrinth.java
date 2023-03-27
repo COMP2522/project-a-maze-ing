@@ -154,8 +154,12 @@ public class Labyrinth {
 
   private TileType randPathTile() {
     int pick = randomizer.nextInt(100);
-    if (pick <= 25) {
+    if (pick <= 10) {
       return TileType.WRAITH;
+    } else if (pick <= 25) {
+      return TileType.BLADE_TILE;
+    } else if (pick <= 35) {
+      return TileType.HOLE_TILE;
     } else {
       return TileType.PATH;
     }
@@ -208,6 +212,10 @@ public class Labyrinth {
           System.out.print("   \t");
         } else if (tiles[i][j] == TileType.WRAITH) {
           System.out.print(" W \t");
+        } else if (tiles[i][j] == TileType.BLADE_TILE) {
+          System.out.print(" B \t");
+        } else if (tiles[i][j] == TileType.HOLE_TILE) {
+          System.out.print(" H \t");
         } else {
           System.out.print("[-]\t");
         }

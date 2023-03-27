@@ -26,9 +26,6 @@ public class Wraith extends Enemy implements Movable {
   AudioPlayer sound;
 
   private boolean soundPlaying = false;
-  //
-  private Player player; //Reference to the player object
-
   PImage wraithImage;
   //SoundFile sporadicSound;
 
@@ -55,10 +52,10 @@ public class Wraith extends Enemy implements Movable {
 
 
   @Override
-  public void move(Player player) {
+  public void move() {
     int threshold = 700;
     float tolerance = 10f;
-    this.player = player;
+    Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
     if (distance < threshold) {
@@ -87,12 +84,18 @@ public class Wraith extends Enemy implements Movable {
     }
   }
 
+  @Override
+  public void draw() {
+    EnemyManager.getInstance().getWindow().image(wraithImage, getPosition().x - WRAITH_LENGTH / 2,
+          getPosition().y - WRAITH_LENGTH / 2 , WRAITH_LENGTH , WRAITH_LENGTH);
+  }
+
 
 
   public void update() {
-    if (player != null) {
-      move(player);
-    }
+
+      move();
+
   }
 
 }

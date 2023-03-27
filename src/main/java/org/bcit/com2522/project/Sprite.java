@@ -1,6 +1,7 @@
 package org.bcit.com2522.project;
 
 import org.bcit.com2522.project.interfaces.Collidable;
+import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import processing.core.PVector;
 
 import java.awt.*;
@@ -92,7 +93,7 @@ public abstract class Sprite implements Collidable {
 //  }
 //
   public void update() {
-    if (!(window.labManager.collision(this))){
+    if (!(LabyrinthManager.getInstance().collision(this))){
     this.position = this.getPosition().add(this.direction.copy().mult(speed));
     }
   }

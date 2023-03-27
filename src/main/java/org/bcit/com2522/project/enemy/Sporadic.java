@@ -1,15 +1,11 @@
 package org.bcit.com2522.project.enemy;
 
 
-import org.bcit.com2522.project.Player;
-import org.bcit.com2522.project.enemy.Enemy;
-import org.bcit.com2522.project.interfaces.Movable;
-
-import org.bcit.com2522.project.Window;
-
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-
+import org.bcit.com2522.project.Player;
+import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -55,9 +51,9 @@ public class Sporadic extends Enemy implements Movable {
 
 
   @Override
-  public void move(Player player) {
+  public void move() {
     int threshold = 200;
-    this.player = player;
+    Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
     if (distance < threshold) {
@@ -77,9 +73,7 @@ public class Sporadic extends Enemy implements Movable {
   }
 
   public void update() {
-    if (player != null) {
-      move(player);
-    }
+    move();
   }
 
 }
