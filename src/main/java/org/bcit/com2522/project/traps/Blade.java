@@ -1,5 +1,6 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.traps;
 
+import org.bcit.com2522.project.Window;
 import processing.core.PVector;
 
 import java.awt.*;
@@ -16,6 +17,10 @@ public class Blade extends Trap {
         this.oscillationAngle = 0;
         this.verticalSpeed = verticalSpeed;
         this.movementDirection = 1;
+    }
+
+    public Blade(PVector pos, Window w) {
+        super();
     }
 
 

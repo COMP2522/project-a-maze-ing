@@ -1,5 +1,6 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.enemy;
 
+import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.enemy.Enemy;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
 
@@ -27,6 +28,13 @@ public class EnemyManager{
       instance = new EnemyManager();
     }
     return instance;
+  }
+
+  /**
+   * Constructor to initialize iterator.
+   */
+  public EnemyManager() {
+    iterator = enemies.iterator();
   }
 
   public void add(Enemy e){

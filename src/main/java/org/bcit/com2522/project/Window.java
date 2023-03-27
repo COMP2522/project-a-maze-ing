@@ -2,12 +2,11 @@ package org.bcit.com2522.project;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-import org.bcit.com2522.project.enemy.Enemy;
-import org.bcit.com2522.project.enemy.Ghost;
-import org.bcit.com2522.project.enemy.Sporadic;
-import org.bcit.com2522.project.enemy.Wraith;
+import org.bcit.com2522.project.enemy.*;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
+import org.bcit.com2522.project.traps.Blade;
+import org.bcit.com2522.project.traps.Hole;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;

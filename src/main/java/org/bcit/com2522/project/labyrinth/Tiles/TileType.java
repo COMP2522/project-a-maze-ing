@@ -5,5 +5,8 @@ public enum TileType {
   PATH,
   START,
   END,
-  WRAITH
+  WRAITH,
+  BLADE_TILE,
+  HOLE_TILE
+
 }
