@@ -44,11 +44,9 @@ public class Blade extends Trap {
         direction.normalize();
         direction.mult(verticalSpeed);
         getPosition().add(direction);
-        if (getPosition().y >= endPosition.y) {
-            setPosition(startPosition);
-        }
 
-        if (getPosition() == endPosition) {
+
+        if (getPosition().dist(startPosition) > endPosition.dist(startPosition)) {
             PVector tempPosition = endPosition;
             endPosition = startPosition;
             startPosition = tempPosition;
