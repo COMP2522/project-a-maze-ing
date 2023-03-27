@@ -21,8 +21,7 @@ import java.util.ArrayList;
  */
 public class Window extends PApplet {
 
-
-  private static final int FPS = 60;
+  private static final int FPS = 144;
 
   /* Minim object for playing sound */
   Minim minim;
@@ -49,12 +48,6 @@ public class Window extends PApplet {
 
   /*Player that is controlled by user to navigate maze.*/
   Player player;
-
-  PImage playerDown;
-
-  PImage playerLeft;
-  PImage playerRight;
-  PImage playerUp;
 
   PImage backgroundImage; //Background Image for the Window
 
@@ -104,22 +97,6 @@ public class Window extends PApplet {
     //sets up the background image
     backgroundImage = loadImage("Data/dirt.png");
 
-
-    playerDown = loadImage("Data/HPfront.png");
-
-    playerLeft = loadImage("Data/HPleft.png");
-    playerRight = loadImage("Data/HPright.png");
-    playerUp = loadImage("Data/HPup.png");
-
-
-    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
-    if (playerDown == null) {
-      System.out.println("Image is null after loading.");
-    } else {
-      System.out.println("Image successfully loaded.");
-    }
-
-
     // initializes the objects
     this.initializeObjects();
   }
@@ -134,6 +111,7 @@ public class Window extends PApplet {
 
     enemyManager = EnemyManager.getInstance(this);
     trapManager = TrapManager.getInstance();
+
 
     labManager = LabyrinthManager.getInstance(20, 20, this);
 
@@ -162,9 +140,7 @@ public class Window extends PApplet {
 //          this, "Data/sporadicSleep.png"
 //      ));
 //    }
-
     sprites.add(player);  //Adds player to list of sprites
-
   }
 
   /**
@@ -178,22 +154,22 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        player.setHarryPotterImage(playerLeft);
+        player.setHarryPotterImage(player.playerLeft);
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(playerRight);
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(playerUp);
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(playerDown);
+        player.setHarryPotterImage(player.playerDown);
         break;
     }
   }
@@ -241,10 +217,11 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-    if (!(labManager.isGenerating()) && (state == State.LOAD)) {
-      player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-      state = State.PLAY;
-    }
+//    if (!(labManager.isGenerating()) && (state == State.LOAD)) {
+//      player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+//      state = State.PLAY;
+//      enemyManager.spawnGhost();
+//    }
 
     switch (state) {
       case LOAD:
@@ -264,6 +241,11 @@ public class Window extends PApplet {
         text(loading, width / 3, height / 2);
         textSize(30);
         text("Fun fact: " + funFact, width / 4, height / 2 + 50);
+        if (!(labManager.isGenerating()) && (state == State.LOAD)) {
+          player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+          state = State.PLAY;
+          enemyManager.spawnGhost();
+        }
         break;
 
       case PLAY:

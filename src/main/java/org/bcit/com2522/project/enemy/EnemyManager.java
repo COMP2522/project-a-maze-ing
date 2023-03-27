@@ -4,7 +4,9 @@ import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
+import processing.core.PVector;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -27,6 +29,7 @@ public class EnemyManager{
     spawners = new ArrayList<>();
     iterator = enemies.iterator();
     window = w;
+
   }
 
   public static EnemyManager getInstance(Window w) {
@@ -77,6 +80,18 @@ public class EnemyManager{
       EnemySpawner s = (EnemySpawner) iterator.next();
       s.spawn();
     }
+  }
+
+  public void spawnGhost(){
+    Player player = Player.getInstance();
+    enemies.add(new Ghost(
+        new PVector(player.getPosition().x + Ghost.GHOST_START,
+            player.getPosition().y + Ghost.GHOST_START),
+        new PVector(0,1),
+        Ghost.GHOST_SIZE,
+        Ghost.GHOST_SPEED,
+        new Color(255,255,255),
+        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png"));
   }
 
 
