@@ -6,7 +6,8 @@ public class QuoteGenerator {
   private static String[] quotes = {
       "This game was pretty hard to make.",
       "Paul is very cool!",
-      "Do you even read these?"
+      "Do you even read these?",
+      "We've been trying to reach \nyou about your car's extended warranty"
   };
 
   private static Random rng = new Random();

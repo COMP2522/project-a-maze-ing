@@ -2,11 +2,10 @@ package org.bcit.com2522.project;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-import org.bcit.com2522.project.enemy.*;
+import org.bcit.com2522.project.enemy.Enemy;
+import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
-import org.bcit.com2522.project.traps.Blade;
-import org.bcit.com2522.project.traps.Hole;
 import org.bcit.com2522.project.traps.TrapManager;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -14,9 +13,7 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -25,8 +22,7 @@ import java.util.List;
  */
 public class Window extends PApplet {
 
-
-  private static final int FPS = 60;
+  private static final int FPS = 144;
 
   /* Minim object for playing sound */
   Minim minim;
@@ -44,7 +40,6 @@ public class Window extends PApplet {
   /* Timer object that shows how long it takes player to complete the maze.*/
   private Timer timer;
 
-  PImage playerImage;
 
   /* List of all in-game sprites to be loaded. */
   ArrayList<Sprite> sprites;
@@ -52,36 +47,11 @@ public class Window extends PApplet {
   /* List of all in-game enemies to be loaded. */
   ArrayList<Enemy> enemies;
 
-  ArrayList<Wraith> wraiths;
-
-  ArrayList<Sporadic> sporadics;
-
-  /*Single enemy type that follows player around the map. */
-  Ghost ghost;
-
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
-
-  private Blade blade1;
-  private Blade blade2;
-  private Blade blade3;
-
-  private List<Hole> holes;
-
-  PImage playerDown;
-
-  PImage playerLeft;
-  PImage playerRight;
-  PImage playerUp;
-
-  /* Number of Sporadic enemy types in the maze. */
-  int numSporadics = 10;
-
   PImage backgroundImage; //Background Image for the Window
 
-  /* Number of Wraith enemy types in the maze. */
-  int numWraiths = 5;
 
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 800;
@@ -129,20 +99,8 @@ public class Window extends PApplet {
     //sets up the background image
     backgroundImage = loadImage("Data/dirt.png");
 
-
-    playerDown = loadImage("Data/HPfront.png");
-
-    playerLeft = loadImage("Data/HPleft.png");
-    playerRight = loadImage("Data/HPright.png");
-    playerUp = loadImage("Data/HPup.png");
-
-
-    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
-    if (playerDown == null) {
-      System.out.println("Image is null after loading.");
-    } else {
-      System.out.println("Image successfully loaded.");
-    }
+    // initializes the objects
+    this.initializeObjects();
     state = State.MENU;
     menu = new AltMenu(this);
   }
@@ -161,37 +119,19 @@ public class Window extends PApplet {
 
     labManager = LabyrinthManager.getInstance(20, 20, this);
 
-    //System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
-
-
-    enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
-
     sprites = new ArrayList<Sprite>();  //List of all sprites
-
-    wraiths = new ArrayList<Wraith>();  //List of all wraiths
-
-    sporadics = new ArrayList<Sporadic>();  //List of all sporadics
 
     //Initializes player object
     player = Player.getInstance(this);
 
-//        new Player(
-//        //new PVector(this.width/2,this.height/2),
-//        new PVector(0, 0),
-//        new PVector(0,0),
-//        playerSize,
-//        5,
-//        new Color(0,255,0),
-//        this);
-
-    //Initializes ghost object
-    ghost = new Ghost(
-        new PVector(this.width/3,this.height/3),
-        new PVector(0,1),
-        Ghost.GHOST_SIZE,
-        0.3f,
-        new Color(255,255,255),
-        this, "Data/ghostRight.png");
+//    //Initializes ghost object
+//    ghost = new Ghost(
+//        new PVector(this.width/3,this.height/3),
+//        new PVector(0,1),
+//        Ghost.GHOST_SIZE,
+//        0.3f,
+//        new Color(255,255,255),
+//        this, "Data/ghostRight.png");
 
 //    //Initializes all sporadic enemies and adds them to enemy array list
 //    for (int i = 0; i < numSporadics; i++) {
@@ -204,23 +144,7 @@ public class Window extends PApplet {
 //          this, "Data/sporadicSleep.png"
 //      ));
 //    }
-//
-//    //Initializes all wraith enemies and adds them to enemy array list
-//    for (int i = 0; i < numWraiths; i++) {
-//      wraiths.add(new Wraith(
-//          new PVector(random(0, this.width), random(0, this.height)),
-//          new PVector(random(-1, 1), random(-1,1)),
-//          Wraith.WRAITH_SIZE,
-//          Wraith.WRAITH_SPEED,
-//          new Color(0, 0, 255),
-//          this, "Data/Wraithright.png"
-//      ));
-//    }
     sprites.add(player);  //Adds player to list of sprites
-    sprites.addAll(enemies);  //Adds remaining enemies to list of sprites
-    enemies.add(ghost);
-    sprites.add(ghost);  //Adds ghost to list of sprites
-
   }
 
   /**
@@ -234,22 +158,22 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        player.setHarryPotterImage(playerLeft);
+        player.setHarryPotterImage(player.playerLeft);
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(playerRight);
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(playerUp);
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(playerDown);
+        player.setHarryPotterImage(player.playerDown);
         break;
     }
   }
@@ -329,9 +253,10 @@ public class Window extends PApplet {
         text(loading, width / 3, height / 2);
         textSize(30);
         text("Fun fact: " + funFact, width / 4, height / 2 + 50);
-        if (!(labManager.isGenerating())) {
+        if (!(labManager.isGenerating()) && (state == State.LOAD)) {
           player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
           state = State.PLAY;
+          enemyManager.spawnGhost();
         }
         break;
 
@@ -362,43 +287,18 @@ public class Window extends PApplet {
     enemyManager.spawn();
     enemyManager.draw();
     trapManager.draw();
+
+    enemyManager.collision(player);
     //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
     }
 
-    //draws the wraith image to every wraith
-//    for (Wraith wraith : wraiths) {
-//
-//    }
-
 //    for (Sporadic sporadic : sporadics) {
 //      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
 //          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
 //    }
-
-        image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
-            player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
-
-
-//        // draw holes
-//        for (Hole hole : holes) {
-//          hole.draw();
-//          if (hole.collision(player)) {
-//            player.setFalling(true);
-//            break;
-//          }
-//        }
-
-
-//      if (player.isFalling()) {
-//        player.moveDown(.5F); // You need to define fallSpeed
-//      }
-
-        ghost.move(); //This will follow the player everywhere they go
-        image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
-            ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
 
         //Moves multiple enemy sporadic and wraith types
 //        for (Enemy enemyList : enemies) {
@@ -407,12 +307,6 @@ public class Window extends PApplet {
 
         if (player.getImmunityTimer() > 0) {
           player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
-        }
-
-        for (Enemy e : enemies) {
-          if (player.collision(e) && player.getImmunityTimer() <= 0) {
-            player.setAlive(false);
-          }
         }
 
         if (!(player.isAlive())){

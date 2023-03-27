@@ -12,7 +12,10 @@ public class Ghost extends Enemy implements Movable {
   /* Hitbox size in pixels of ghost enemy type.*/
   public static final int GHOST_SIZE = 30;
 
+  public static final int GHOST_SPEED = 2;
   public static final int GHOST_LENGTH = 35;
+
+  public static final int GHOST_START = 100;
 
   private static Ghost ghostInstance = null;
 
@@ -60,5 +63,13 @@ public class Ghost extends Enemy implements Movable {
       move();
 
   }
+
+@Override
+  public void draw() {
+    EnemyManager.getInstance().getWindow().image(getImage(), getPosition().x - GHOST_LENGTH/2,
+        getPosition().y - GHOST_LENGTH/2 , GHOST_LENGTH , GHOST_LENGTH);
+}
+
+
 
 }
