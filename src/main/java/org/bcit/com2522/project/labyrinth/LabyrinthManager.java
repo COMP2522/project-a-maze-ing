@@ -1,5 +1,6 @@
 package org.bcit.com2522.project.labyrinth;
 
+import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.labyrinth.Tiles.*;
 import processing.core.PVector;
@@ -19,6 +20,8 @@ public class LabyrinthManager {
   private StartTile start;
 
   private EndTile end;
+
+  private WallManager wm = new WallManager();
 
   private boolean generating = false;
 
@@ -107,7 +110,9 @@ public class LabyrinthManager {
   private void addTile(PVector pos, TileType type) {
     switch (type) {
       case WALL:
-        tiles.add(new Wall(pos, window));
+        Wall w = new Wall(pos, window);
+        tiles.add(w);
+        wm.add(w);
         break;
       case PATH:
         tiles.add(new EmptyPath(pos, window));
@@ -183,5 +188,12 @@ public class LabyrinthManager {
     return generating;
   }
 
+  public boolean collision(Sprite s){
+    return wm.collision(s);
+  }
+
+  public void draw(){
+    wm.draw();
+  }
 
 }
