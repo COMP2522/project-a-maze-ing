@@ -21,7 +21,6 @@ import java.util.ArrayList;
  */
 public class Window extends PApplet {
 
-
   private static final int FPS = 60;
 
   /* Minim object for playing sound */
@@ -50,11 +49,11 @@ public class Window extends PApplet {
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
-  PImage playerDown;
-
-  PImage playerLeft;
-  PImage playerRight;
-  PImage playerUp;
+//  PImage playerDown;
+//
+//  PImage playerLeft;
+//  PImage playerRight;
+//  PImage playerUp;
 
   PImage backgroundImage; //Background Image for the Window
 
@@ -103,23 +102,7 @@ public class Window extends PApplet {
 
     //sets up the background image
     backgroundImage = loadImage("Data/dirt.png");
-
-
-    playerDown = loadImage("Data/HPfront.png");
-
-    playerLeft = loadImage("Data/HPleft.png");
-    playerRight = loadImage("Data/HPright.png");
-    playerUp = loadImage("Data/HPup.png");
-
-
-    System.out.println("Loading image from path: " + sketchPath("Data/HPfront.png"));
-    if (playerDown == null) {
-      System.out.println("Image is null after loading.");
-    } else {
-      System.out.println("Image successfully loaded.");
-    }
-
-
+    
     // initializes the objects
     this.initializeObjects();
   }
@@ -178,22 +161,22 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        player.setHarryPotterImage(playerLeft);
+        player.setHarryPotterImage(player.playerLeft);
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(playerRight);
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(playerUp);
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(playerDown);
+        player.setHarryPotterImage(player.playerDown);
         break;
     }
   }
