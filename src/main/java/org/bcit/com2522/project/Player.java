@@ -1,6 +1,5 @@
 package org.bcit.com2522.project;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -17,7 +16,7 @@ public class Player extends Sprite {
 
   public static final int PLAYER_WIDTH = 27;
 
-  private boolean alive;
+  private boolean alive = true;
   private float immunityTimer;
   private PImage harryPotterImage;
 

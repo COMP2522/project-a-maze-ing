@@ -25,7 +25,7 @@ import java.util.List;
 public class Window extends PApplet {
 
 
-  private static final int FPS = 144;
+  private static final int FPS = 60;
 
   /* Minim object for playing sound */
   Minim minim;
@@ -73,8 +73,6 @@ public class Window extends PApplet {
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
 
-  boolean gameover;
-
   PImage backgroundImage; //Background Image for the Window
 
   /* Number of Wraith enemy types in the maze. */
@@ -94,10 +92,17 @@ public class Window extends PApplet {
     MENU,
     LOAD,
     GAMEOVER,
-    PLAY
+    PLAY,
+    WIN
   }
 
+  String funFact;
+
   State state;
+
+  float timeElapsed;
+  float elpCount = 0;
+  int loadingTimer = 0;
 
   /**
    * Provides the size of the window
@@ -163,8 +168,6 @@ public class Window extends PApplet {
 
     //walls = new ArrayList<Wall>();  //List of all walls that make up the Labyrinth
 
-    timer = new Timer(this, new PVector(0,0));
-
     // blades
     blade1 = new Blade(new PVector(100, 100), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
     blade2 = new Blade(new PVector(200, 200), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
@@ -186,7 +189,7 @@ public class Window extends PApplet {
         new PVector(0, 0),
         new PVector(0,0),
         playerSize,
-        2,
+        5,
         new Color(0,255,0),
         this, "Data/HPfront.png");
 
@@ -287,12 +290,11 @@ public class Window extends PApplet {
         player.setDirection(new PVector(0, 0));
         break;
       case 'R':
-        if (gameover){
-          gameover = false;
+        if (state == State.GAMEOVER){
+          state = State.PLAY;
           player.setImmunityTimer(1);
           player.setAlive(true);
-          PVector newPos = new PVector(player.getPosition().x + 30, player.getPosition().y + 30);
-          player.setPosition(newPos);
+          player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
         }
         break;
       case 'T':
@@ -309,26 +311,36 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-    if (!(labManager.isGenerating())) {
-      if (state == State.LOAD){
-        player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-      }
+    if (!(labManager.isGenerating()) && (state == State.LOAD)) {
+      player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
       state = State.PLAY;
     }
-
-
 
     switch (state) {
       case LOAD:
         background(0);
         textSize(50);
-        text("Loading...", width / 3, height / 2);
-        text("Fun fact:", width / 3, height / 2 + 50);
+        if (funFact == null) {
+          funFact = QuoteGenerator.getQuote();
+        }
+        String loading = "Loading";
+        loadingTimer++;
+        if (loadingTimer % FPS == 0){
+          elpCount++;
+        }
+        for (int i = 0; i < elpCount; i++){
+          loading += ".";
+        }
+        text(loading, width / 3, height / 2);
+        textSize(30);
+        text("Fun fact: " + funFact, width / 4, height / 2 + 50);
         break;
+
       case PLAY:
+        if (timer == null){
+          timer = new Timer(this, new PVector(0, 0));
+        }
         image(backgroundImage, -1000, -1000, width*3, height*3);
-
-
         /**
          * This section will Zoom the camera in and follow the player around
          */
@@ -340,11 +352,13 @@ public class Window extends PApplet {
         // Translate the drawing surface to the camera position
         translate(-cameraPos.x, -cameraPos.y);
 
+
         labManager.renderTiles();
 
         //Updates timer time and position in the window
-        float timeElapsed = timer.getTime();
-        text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
+        timeElapsed = timer.getTime();
+        String currTime = String.format("%.1f", timeElapsed);
+        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
 
         //Just updates and draws all sprites in the list
         for (Sprite sprite : sprites) {
@@ -404,16 +418,34 @@ public class Window extends PApplet {
           }
         }
 
-        if (player.isAlive()) {
-          gameover = false;
-        } else {
-          background(0);
-          textSize(50);
-          text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
-          text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
-          gameover = true;
+        if (!(player.isAlive())){
+          state = State.GAMEOVER;
+        }
+        if (labManager.getEnd().collision(player)){
+          state = State.WIN;
         }
         break;
+
+      case GAMEOVER:
+        // Calculate the camera position based on the player's position
+        cameraPos = new PVector(
+            player.getPosition().x - width / 2,
+            player.getPosition().y - height / 2);
+        // Translate the drawing surface to the camera position
+        translate(-cameraPos.x, -cameraPos.y);
+        background(0);
+        textSize(50);
+        text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
+        text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+        break;
+
+      case WIN:
+        background(0);
+        textSize(50);
+        text("You Won!!!", width / 3, height / 2);
+        textSize(30);
+        String time = String.format("%.1f", timeElapsed);
+        text("Your time was " + time + " seconds!", width / 4, height / 2 + 70);
     }
   }
 
