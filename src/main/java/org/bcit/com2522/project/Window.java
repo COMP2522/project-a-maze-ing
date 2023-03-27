@@ -8,7 +8,6 @@ import org.bcit.com2522.project.enemy.Sporadic;
 import org.bcit.com2522.project.enemy.Wraith;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
-import org.bcit.com2522.project.labyrinth.Tiles.Wall;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -32,7 +31,7 @@ public class Window extends PApplet {
   Minim minim;
 
   /* Manager for the labyrinth */
-  private LabyrinthManager labManager;
+  LabyrinthManager labManager;
 
   private EnemyManager enemyManager;
 
@@ -86,8 +85,6 @@ public class Window extends PApplet {
 
   /* Hitbox size in pixels of sporadic enemy type.*/
   int playerSize = 10;
-
-  Wall testWall;
 
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 800;
@@ -227,7 +224,6 @@ public class Window extends PApplet {
     enemies.add(ghost);
     sprites.add(ghost);  //Adds ghost to list of sprites
 
-    testWall = new Wall(new PVector(-Tile.TILE_SIZE, -Tile.TILE_SIZE), this);
   }
 
   /**
@@ -365,7 +361,6 @@ public class Window extends PApplet {
         }
       }
 
-//      testWall.draw();
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed
