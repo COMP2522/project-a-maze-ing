@@ -137,10 +137,15 @@ public class Window extends PApplet {
 
     labManager = LabyrinthManager.getInstance(20, 20, this);
 
+    trapManager = TrapManager.getInstance();
+
+
     sprites = new ArrayList<Sprite>();  //List of all sprites
 
     //Initializes player object
     player = Player.getInstance(this);
+
+
 
 //    //Initializes ghost object
 //    ghost = new Ghost(
@@ -267,6 +272,7 @@ public class Window extends PApplet {
         break;
 
       case PLAY:
+
         if (timer == null){
           timer = new Timer(this, new PVector(0, 0));
         }
@@ -295,7 +301,9 @@ public class Window extends PApplet {
     trapManager.draw();
 
     enemyManager.collision(player);
-    //Just updates and draws all sprites in the list
+    trapManager.collision(player);
+
+        //Just updates and draws all sprites in the list
     for (Sprite sprite : sprites) {
       sprite.update();
       sprite.draw();
