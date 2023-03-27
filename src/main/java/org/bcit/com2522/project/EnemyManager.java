@@ -1,20 +1,44 @@
 package org.bcit.com2522.project;
 
 import org.bcit.com2522.project.enemy.Enemy;
+import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class EnemyManager{
-  ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-  Iterator iterator = enemies.iterator();
+
+  //List of total enemies.
+  private ArrayList<Enemy> enemies;
+  // List of enemy spawners.
+  private ArrayList<EnemySpawner> spawners;
+  private Iterator iterator;
+
+  private static EnemyManager instance;
+
+  private EnemyManager() {
+    enemies = new ArrayList<>();
+    spawners = new ArrayList<>();
+    iterator = enemies.iterator();
+  }
+
+  public static EnemyManager getInstance() {
+    if (instance == null) {
+      instance = new EnemyManager();
+    }
+    return instance;
+  }
 
   public void add(Enemy e){
     enemies.add(e);
   }
+  public void addSpawner(EnemySpawner s){
+    spawners.add(s);
+  }
 
   public void remove(Enemy e){
-    enemies.remove(e);
+        e.getSpawner().removeEnemy();
+        enemies.remove(e);
   }
 
   public Enemy get(){
@@ -26,9 +50,18 @@ public class EnemyManager{
   }
 
   public void draw(){
+    resetIterator();
     while (iterator.hasNext()){
       Enemy e = (Enemy) iterator.next();
       e.draw();
+    }
+  }
+
+  public void spawn() {
+    iterator = spawners.iterator();
+    while (iterator.hasNext()) {
+      EnemySpawner s = (EnemySpawner) iterator.next();
+      s.spawn();
     }
   }
 

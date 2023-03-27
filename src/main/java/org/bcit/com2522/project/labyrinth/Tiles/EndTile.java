@@ -12,6 +12,9 @@ public class EndTile extends Tile {
 
   @Override
   public void draw() {
-
+    window.pushStyle();
+    window.fill(0, 153, 76);
+    window.rect(position.x, position.y, TILE_SIZE, TILE_SIZE);
+    window.popStyle();
   }
 }

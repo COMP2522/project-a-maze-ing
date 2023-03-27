@@ -12,6 +12,9 @@ public class StartTile extends Tile{
 
   @Override
   public void draw() {
-
+    window.pushStyle();
+    window.fill(51, 153, 255);
+    window.rect(position.x, position.y, TILE_SIZE, TILE_SIZE);
+    window.popStyle();
   }
 }
