@@ -1,6 +1,4 @@
-package org.bcit.com2522.project;
-
-import org.bcit.com2522.project.traps.Trap;
+package org.bcit.com2522.project.traps;
 
 import java.util.ArrayList;
 import java.util.Iterator;

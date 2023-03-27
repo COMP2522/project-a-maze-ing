@@ -2,7 +2,7 @@ package org.bcit.com2522.project.labyrinth.Tiles;
 
 
 import org.bcit.com2522.project.traps.Hole;
-import org.bcit.com2522.project.TrapManager;
+import org.bcit.com2522.project.traps.TrapManager;
 import org.bcit.com2522.project.Window;
 import processing.core.PVector;
 

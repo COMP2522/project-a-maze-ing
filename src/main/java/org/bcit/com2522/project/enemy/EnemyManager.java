@@ -1,5 +1,6 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.enemy;
 
+import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.enemy.Enemy;
 
 import java.util.ArrayList;

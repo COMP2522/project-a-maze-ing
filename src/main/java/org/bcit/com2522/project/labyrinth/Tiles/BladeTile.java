@@ -1,6 +1,6 @@
 package org.bcit.com2522.project.labyrinth.Tiles;
 
-import org.bcit.com2522.project.TrapManager;
+import org.bcit.com2522.project.traps.TrapManager;
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.traps.Blade;
 import processing.core.PVector;
