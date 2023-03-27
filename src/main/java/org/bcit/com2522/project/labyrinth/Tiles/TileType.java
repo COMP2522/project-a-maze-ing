@@ -4,5 +4,7 @@ public enum TileType {
   WALL,
   PATH,
   START,
-  END
+  END,
+  BLADE_TILE,
+  HOLE_TILE
 }
