@@ -25,7 +25,7 @@ import java.util.List;
 public class Window extends PApplet {
 
 
-  private static final int FPS = 144;
+  private static final int FPS = 60;
 
   /* Minim object for playing sound */
   Minim minim;
@@ -76,8 +76,6 @@ public class Window extends PApplet {
   /* Number of Sporadic enemy types in the maze. */
   int numSporadics = 10;
 
-  boolean gameover;
-
   PImage backgroundImage; //Background Image for the Window
 
   /* Number of Wraith enemy types in the maze. */
@@ -91,6 +89,23 @@ public class Window extends PApplet {
 
   /* Height of window in pixels.*/
   public static final int WINDOW_Y = 600;
+
+  /* Captures the current state of the game. */
+  enum State{
+    MENU,
+    LOAD,
+    GAMEOVER,
+    PLAY,
+    WIN
+  }
+
+  String funFact;
+
+  State state;
+
+  float timeElapsed;
+  float elpCount = 0;
+  int loadingTimer = 0;
 
   /**
    * Provides the size of the window
@@ -140,11 +155,13 @@ public class Window extends PApplet {
    * be called and updated in the draw() method
    */
   public void initializeObjects() {
+    state = State.LOAD;
 
     enemyManager = EnemyManager.getInstance();
 
     labManager = LabyrinthManager.getInstance(20, 20, this);
-    System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
+
+    //System.out.println("lab start " + labManager.getStart().getPosition().x  + " " + labManager.getStart().getPosition().y);
 
 
     enemies = new ArrayList<Enemy>();  //List of enemies, except ghost
@@ -156,8 +173,6 @@ public class Window extends PApplet {
     sporadics = new ArrayList<Sporadic>();  //List of all sporadics
 
     //walls = new ArrayList<Wall>();  //List of all walls that make up the Labyrinth
-
-    timer = new Timer(this, new PVector(0,0));
 
     // blades
     blade1 = new Blade(new PVector(100, 100), new PVector(0, 0), 30, 0, Color.RED, this, 0.05f, 2);
@@ -177,13 +192,12 @@ public class Window extends PApplet {
     //Initializes player object
     player = new Player(
         //new PVector(this.width/2,this.height/2),
-        labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2),
+        new PVector(0, 0),
         new PVector(0,0),
         playerSize,
-        2,
+        5,
         new Color(0,255,0),
         this, "Data/HPfront.png");
-    System.out.println("player: " + player.getPosition().x  + " " + player.getPosition().y);
 
     //Initializes ghost object
     ghost = new Ghost(
@@ -281,12 +295,11 @@ public class Window extends PApplet {
         player.setDirection(new PVector(0, 0));
         break;
       case 'R':
-        if (gameover){
-          gameover = false;
+        if (state == State.GAMEOVER){
+          state = State.PLAY;
           player.setImmunityTimer(1);
           player.setAlive(true);
-          PVector newPos = new PVector(player.getPosition().x + 30, player.getPosition().y + 30);
-          player.setPosition(newPos);
+          player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
         }
         break;
       case 'T':
@@ -303,26 +316,54 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-    image(backgroundImage, -1000, -1000, width*3, height*3);
+    if (!(labManager.isGenerating()) && (state == State.LOAD)) {
+      player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+      state = State.PLAY;
+    }
+
+    switch (state) {
+      case LOAD:
+        background(0);
+        textSize(50);
+        if (funFact == null) {
+          funFact = QuoteGenerator.getQuote();
+        }
+        String loading = "Loading";
+        loadingTimer++;
+        if (loadingTimer % FPS == 0){
+          elpCount++;
+        }
+        for (int i = 0; i < elpCount; i++){
+          loading += ".";
+        }
+        text(loading, width / 3, height / 2);
+        textSize(30);
+        text("Fun fact: " + funFact, width / 4, height / 2 + 50);
+        break;
+
+      case PLAY:
+        if (timer == null){
+          timer = new Timer(this, new PVector(0, 0));
+        }
+        image(backgroundImage, -1000, -1000, width*3, height*3);
+        /**
+         * This section will Zoom the camera in and follow the player around
+         */
+        float zoomFactor = 2.0f; // Increase this value to zoom in more
+        // Calculate the camera position based on the player's position
+        PVector cameraPos = new PVector(
+            player.getPosition().x - width / 2,
+            player.getPosition().y - height / 2);
+        // Translate the drawing surface to the camera position
+        translate(-cameraPos.x, -cameraPos.y);
 
 
-    /**
-     * This section will Zoom the camera in and follow the player around
-     */
-    float zoomFactor = 2.0f; // Increase this value to zoom in more
+        labManager.renderTiles();
 
-    // Calculate the camera position based on the player's position
-    PVector cameraPos = new PVector(
-        player.getPosition().x - width / 2,
-        player.getPosition().y - height / 2);
-    // Translate the drawing surface to the camera position
-    translate(-cameraPos.x, -cameraPos.y);
-
-    labManager.renderTiles();
-
-    //Updates timer time and position in the window
-    float timeElapsed = timer.getTime();
-    text("Time elapsed: " + timeElapsed + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
+        //Updates timer time and position in the window
+        timeElapsed = timer.getTime();
+        String currTime = String.format("%.1f", timeElapsed);
+        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
 
     enemyManager.spawn();
     enemyManager.draw();
@@ -343,60 +384,77 @@ public class Window extends PApplet {
 //          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
 //    }
 
-    image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
-        player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
+        image(player.getHarryPotterImage(), player.getPosition().x - player.PLAYER_WIDTH/2,
+            player.getPosition().y - player.PLAYER_HEIGHT/2, player.PLAYER_WIDTH , player.PLAYER_HEIGHT);
 
 
-      // draw blades
-      blade1.draw();
-      blade2.draw();
-      blade3.draw();
+        // draw blades
+        blade1.draw();
+        blade2.draw();
+        blade3.draw();
 
-      // draw holes
-      for (Hole hole : holes) {
-        hole.draw();
-        if (hole.collision(player)) {
-          player.setFalling(true);
-          break;
+        // draw holes
+        for (Hole hole : holes) {
+          hole.draw();
+          if (hole.collision(player)) {
+            player.setFalling(true);
+            break;
+          }
         }
-      }
 
 
 //      if (player.isFalling()) {
 //        player.moveDown(.5F); // You need to define fallSpeed
 //      }
 
-      ghost.move(player); //This will follow the player everywhere they go
-      image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
-        ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
+        ghost.move(player); //This will follow the player everywhere they go
+        image(ghost.getImage(), ghost.getPosition().x - ghost.GHOST_LENGTH/2,
+            ghost.getPosition().y - ghost.GHOST_LENGTH/2 , ghost.GHOST_LENGTH , ghost.GHOST_LENGTH);
 
-      //Moves multiple enemy sporadic and wraith types
-      for (Enemy enemyList : enemies) {
-        enemyList.move(player);
-      }
+        //Moves multiple enemy sporadic and wraith types
+        for (Enemy enemyList : enemies) {
+          enemyList.move(player);
+        }
 
-    if (player.getImmunityTimer() > 0) {
-      player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
+        if (player.getImmunityTimer() > 0) {
+          player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
+        }
+
+        for (Enemy e : enemies) {
+          if (player.collision(e) && player.getImmunityTimer() <= 0) {
+            player.setAlive(false);
+          }
+        }
+
+        if (!(player.isAlive())){
+          state = State.GAMEOVER;
+        }
+        if (labManager.getEnd().collision(player)){
+          state = State.WIN;
+        }
+        break;
+
+      case GAMEOVER:
+        // Calculate the camera position based on the player's position
+        cameraPos = new PVector(
+            player.getPosition().x - width / 2,
+            player.getPosition().y - height / 2);
+        // Translate the drawing surface to the camera position
+        translate(-cameraPos.x, -cameraPos.y);
+        background(0);
+        textSize(50);
+        text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
+        text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
+        break;
+
+      case WIN:
+        background(0);
+        textSize(50);
+        text("You Won!!!", width / 3, height / 2);
+        textSize(30);
+        String time = String.format("%.1f", timeElapsed);
+        text("Your time was " + time + " seconds!", width / 4, height / 2 + 70);
     }
-
-    for (Enemy e : enemies) {
-      if (player.collision(e) && player.getImmunityTimer() <= 0) {
-        player.setAlive(false);
-      }
-    }
-
-    if (player.isAlive()) {
-      gameover = false;
-    } else {
-    background(0);
-    textSize(50);
-    text("Game Over!", cameraPos.x + width / 3, cameraPos.y + height / 2);
-    text("Press R to restart.", cameraPos.x + width / 3, cameraPos.y + height / 2 + 50);
-    gameover = true;
-  }
-
-
-
   }
 
   /**
