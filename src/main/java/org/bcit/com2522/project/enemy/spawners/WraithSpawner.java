@@ -29,9 +29,6 @@ public class WraithSpawner extends EnemySpawner {
       EnemyManager.getInstance()
           .add(en);
       currEnemies++;
-      System.out.println("Spawn called at tile" + position.x + ", " + position.y);
-      System.out.println("enemy spawned : " + en.getPosition().x + ", " + en.getPosition().y);
-
     }
   }
 }

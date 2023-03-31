@@ -5,7 +5,7 @@ import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.enemy.spawners.WraithSpawner;
 import processing.core.PVector;
 
-public class WraithTile extends EmptyPath{
+public class WraithTile extends EmptyPathTile {
 
   public WraithTile(PVector pos, Window w) {
     super(pos, w);

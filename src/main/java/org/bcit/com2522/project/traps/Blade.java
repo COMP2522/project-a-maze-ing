@@ -28,17 +28,8 @@ public class Blade extends Trap {
         this.startPosition = startPosition;
     }
 
-    public Blade(PVector pos, Window w) {
-        super();
-    }
-
 
     public void move() {
-//        getPosition().y += movementDirection * verticalSpeed;
-//
-//        if (getPosition().y <= 0 || getPosition().y >= getWindow().height - getSize()) {
-//            movementDirection *= -1;
-//        }
 
         PVector direction = endPosition.copy().sub(startPosition);
         direction.normalize();
