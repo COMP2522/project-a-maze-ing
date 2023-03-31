@@ -8,7 +8,6 @@ import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.traps.TrapManager;
 import processing.core.PApplet;
-import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -50,7 +49,7 @@ public class Window extends PApplet {
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
-  PImage backgroundImage; //Background Image for the Window
+  //PImage backgroundImage; //Background Image for the Window
 
 
   /* Length of window in pixels.*/
@@ -97,7 +96,7 @@ public class Window extends PApplet {
     frameRate(FPS);
 
     //sets up the background image
-    backgroundImage = loadImage("Data/dirt.png");
+    //backgroundImage = loadImage("Data/dirt.png");
 
     // initializes the objects
     this.initializeObjects();
@@ -270,7 +269,8 @@ public class Window extends PApplet {
         if (timer == null) {
           timer = new Timer(this, new PVector(0, 0));
         }
-        image(backgroundImage, -1000, -1000, width*3, height*3);
+        background(0);
+        //image(backgroundImage, -1000, -1000, width*3, height*3);
         /**
          * This section will Zoom the camera in and follow the player around
          */

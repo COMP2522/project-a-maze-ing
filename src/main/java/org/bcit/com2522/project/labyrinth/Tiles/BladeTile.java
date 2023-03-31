@@ -8,7 +8,7 @@ import processing.core.PVector;
 import java.awt.*;
 import java.util.Random;
 
-public class BladeTile extends Tile {
+public class BladeTile extends EmptyPath {
 
     public BladeTile(PVector pos, Window w) {
         super(pos, w);
@@ -28,10 +28,6 @@ public class BladeTile extends Tile {
               30f, 0, Color.red, w, 0.05f,
               2, pos.copy().add(startX, startY),
               pos.copy().add(endX, endY)));
-
-    }
-    @Override
-    public void draw() {
 
     }
 }

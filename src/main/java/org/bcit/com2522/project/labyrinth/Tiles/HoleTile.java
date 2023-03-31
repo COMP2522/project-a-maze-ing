@@ -8,7 +8,7 @@ import processing.core.PVector;
 import java.awt.*;
 import java.util.Random;
 
-public class HoleTile extends Tile {
+public class HoleTile extends EmptyPath {
 
     public HoleTile(PVector pos, Window w) {
         super(pos, w);
@@ -26,8 +26,4 @@ public class HoleTile extends Tile {
               new PVector(0, 0), 50, 0, Color.black, w));
     }
 
-    @Override
-    public void draw() {
-
-    }
 }
