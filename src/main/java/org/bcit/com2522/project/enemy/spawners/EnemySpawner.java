@@ -33,6 +33,8 @@ public abstract class EnemySpawner {
     window = w;
   }
 
+
+
   public void removeEnemy() {
     currEnemies--;
   }

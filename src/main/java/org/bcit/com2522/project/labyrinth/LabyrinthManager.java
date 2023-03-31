@@ -16,6 +16,7 @@ public class LabyrinthManager {
   private Labyrinth current;
 
   private ArrayList<Tile> tiles;
+  private ArrayList<EmptyPathTile> pathTiles;
 
   private StartTile start;
 
@@ -26,9 +27,16 @@ public class LabyrinthManager {
   private boolean generating = false;
 
   private LabyrinthManager(int width, int height, Window w) {
-    tiles = new ArrayList<Tile>();
     current = new Labyrinth(width, height);
     window = w;
+  }
+
+  /**
+   * Empties the tiles and pathTiles lists.
+   */
+  private void resetTiles() {
+    tiles = new ArrayList<Tile>();
+    pathTiles = new ArrayList<EmptyPathTile>();
   }
 
   /**
@@ -57,6 +65,7 @@ public class LabyrinthManager {
    * should only be called once per labyrinth.
    */
   public void generateTiles() {
+    resetTiles();
     TileType[][] tileList = current.getTiles();
 
     PVector location = new PVector(0, 0);
@@ -76,9 +85,10 @@ public class LabyrinthManager {
       addTile(location.copy(), TileType.WALL);
     }
 
-    location.set(0, (tileList.length) * Tile.TILE_SIZE);
 
     //bottom row
+    location.set(0, (tileList.length + 1) * Tile.TILE_SIZE);
+
     for (int j = 0; j < tileList[0].length + 2; j++) {
       addTile(location.copy(), TileType.WALL);
       location.add(Tile.TILE_SIZE, 0);
@@ -97,7 +107,7 @@ public class LabyrinthManager {
         location.add(Tile.TILE_SIZE, 0);
       }
       //set location to start of next row
-      location.set(Tile.TILE_SIZE, (i + 1) * Tile.TILE_SIZE);
+      location.set(Tile.TILE_SIZE, (i + 2) * Tile.TILE_SIZE);
     }
     System.out.println("generation done");
   }
@@ -115,7 +125,9 @@ public class LabyrinthManager {
         wm.add(w);
         break;
       case PATH:
-        tiles.add(new EmptyPath(pos, window));
+        EmptyPathTile path = new EmptyPathTile(pos, window);
+        tiles.add(path);
+        pathTiles.add(path);
         break;
       case END:
         end = new EndTile(pos, window);
@@ -126,12 +138,19 @@ public class LabyrinthManager {
         tiles.add(start);
         break;
       case WRAITH:
-        tiles.add(new WraithTile(pos, window));
+        WraithTile wraithPath = new WraithTile(pos, window);
+        tiles.add(wraithPath);
+        pathTiles.add(wraithPath);
         break;
       case BLADE_TILE:
-        tiles.add(new BladeTile(pos, window));
+        BladeTile bladePath = new BladeTile(pos, window);
+        tiles.add(bladePath);
+        pathTiles.add(bladePath);
+        break;
       case HOLE_TILE:
-        tiles.add(new HoleTile(pos, window));
+        HoleTile holePath = new HoleTile(pos, window);
+        tiles.add(holePath);
+        pathTiles.add(holePath);
       default:
         break;
     }

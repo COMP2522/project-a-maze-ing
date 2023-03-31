@@ -2,10 +2,12 @@ package org.bcit.com2522.project.labyrinth;
 
 import org.bcit.com2522.project.labyrinth.Tiles.TileType;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.*;
-import static java.lang.Math.pow;
 
 public class Labyrinth {
 
@@ -98,6 +100,9 @@ public class Labyrinth {
 
     QueueNode curr;
 
+    Directions[] dirVals = {Directions.DOWN, Directions.UP, Directions.LEFT, Directions.RIGHT};
+    List<Directions> order = Arrays.asList(dirVals);
+
     while (!endFound) {
       curr = queue.pop();
       //System.out.println("queue size: " + queue.size);
@@ -114,32 +119,47 @@ public class Labyrinth {
         newPath[curr.getPathSF().length][0] = curr.getX();
         newPath[curr.getPathSF().length][1] = curr.getY();
 
-        if (!outOfBounds(curr.getX() + 1, curr.getY()) && !seenTiles[curr.getY()][curr.getX() + 1]) {
-          queue.push(new QueueNode(curr.getX() + 1, curr.getY(), newPath));
-          seenTiles[curr.getY()][curr.getX() + 1] = true;
+        Collections.shuffle(order);
+
+        for (Directions i: order) {
+          switch (i) {
+            case UP:
+              checkTile(curr.getX(), curr.getY() - 1, queue, seenTiles, newPath);
+              break;
+            case RIGHT:
+              checkTile(curr.getX() + 1, curr.getY(), queue, seenTiles, newPath);
+              break;
+            case DOWN:
+              checkTile(curr.getX(), curr.getY() + 1, queue, seenTiles, newPath);
+              break;
+            case LEFT:
+              checkTile(curr.getX() - 1, curr.getY(), queue, seenTiles, newPath);
+              break;
+          }
+
         }
-
-        if (!outOfBounds(curr.getX() , curr.getY() - 1) && !seenTiles[curr.getY() - 1][curr.getX()]) {
-          queue.push(new QueueNode(curr.getX(), curr.getY() - 1, newPath));
-          seenTiles[curr.getY() - 1][curr.getX()] = true;
-        }
-
-        if (!outOfBounds(curr.getX() - 1, curr.getY()) && !seenTiles[curr.getY()][curr.getX() - 1]) {
-          queue.push(new QueueNode(curr.getX() - 1, curr.getY(), newPath));
-          seenTiles[curr.getY()][curr.getX() - 1] = true;
-        }
-
-        if (!outOfBounds(curr.getX() , curr.getY() + 1) && !seenTiles[curr.getY() + 1][curr.getX()]) {
-          queue.push(new QueueNode(curr.getX(), curr.getY() + 1, newPath));
-          seenTiles[curr.getY() + 1][curr.getX()] = true;
-        }
-
-
 
       }
 
     }
 
+  }
+
+  /**
+   * given a set of coordinates, checks if it has been seen so far in generation
+   * and if it is out of bounds. If both are false, adds a new node representing this coordinate
+   * in the provided queue.
+   * @param x the x coordinate
+   * @param y the y coordinate
+   * @param q the queue to add to
+   * @param seenTiles Boolean array of tiles seen so far, true if a tile seen
+   * @param newPath the path the give to the new node
+   */
+  private void checkTile(int x, int y, MazeGenerationQueue q, boolean[][] seenTiles, int[][] newPath) {
+    if (!outOfBounds(x , y) && !seenTiles[y][x]) {
+      q.push(new QueueNode(x, y, newPath));
+      seenTiles[y][x] = true;
+    }
   }
 
   /**
@@ -152,6 +172,10 @@ public class Labyrinth {
     }
   }
 
+  /**
+   * Generates a random type of path tile.
+   * @return a random path tile
+   */
   private TileType randPathTile() {
     int pick = randomizer.nextInt(100);
     if (pick <= 10) {

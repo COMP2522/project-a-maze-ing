@@ -45,9 +45,18 @@ public class EnemyManager{
     return instance;
   }
 
+  /**
+   * adds the given enemy to the manager.
+   * @param e the enemy to add.
+   */
   public void add(Enemy e){
     enemies.add(e);
   }
+
+  /**
+   * adds the given spawner to the manager.
+   * @param s the spawner to add
+   */
   public void addSpawner(EnemySpawner s){
     spawners.add(s);
   }
@@ -61,10 +70,16 @@ public class EnemyManager{
     return (Enemy) iterator.next();
   }
 
+  /**
+   * Generates a new iterator at start of enemies.
+   */
   public void resetIterator(){
     iterator = enemies.iterator();
   }
 
+  /**
+   * Draws and updates all enemies.
+   */
   public void draw(){
     resetIterator();
     while (iterator.hasNext()){
@@ -74,6 +89,9 @@ public class EnemyManager{
     }
   }
 
+  /**
+   * Iterates over all spawners and calls the spawn function on them.
+   */
   public void spawn() {
     iterator = spawners.iterator();
     while (iterator.hasNext()) {
@@ -82,6 +100,9 @@ public class EnemyManager{
     }
   }
 
+  /**
+   * spawns the ghost
+   */
   public void spawnGhost(){
     Player player = Player.getInstance();
     enemies.add(new Ghost(
@@ -105,6 +126,14 @@ public class EnemyManager{
         player.setAlive(false);
       }
     }
+  }
+
+  /**
+   * Removes all enemies and spawners from the manager.
+   */
+  public void clearEnemies() {
+    enemies = new ArrayList<>();
+    spawners = new ArrayList<>();
   }
 
   public Window getWindow() {

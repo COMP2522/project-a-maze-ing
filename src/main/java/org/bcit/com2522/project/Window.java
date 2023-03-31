@@ -308,10 +308,6 @@ public class Window extends PApplet {
 //          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
 //    }
 
-        //Moves multiple enemy sporadic and wraith types
-//        for (Enemy enemyList : enemies) {
-//          enemyList.move(player);
-//        }
 
         if (player.getImmunityTimer() > 0) {
           player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
