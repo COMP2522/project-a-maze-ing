@@ -12,7 +12,8 @@ public class QuoteGenerator {
       "(o_o)/",
       "We've been trying to reach \nyou about your car's extended warranty",
       "God is dead and we have killed",
-      "The Mitochondria is the powerhouse of the cell"
+      "The Mitochondria is the \npowerhouse of the cell",
+      "Are you finished with \nthose errands?"
   };
 
   private static Random rng = new Random();

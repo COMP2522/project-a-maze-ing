@@ -5,12 +5,13 @@ import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.interfaces.Drawable;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
-public class Sporadic extends Enemy implements Movable {
+public class Sporadic extends Enemy implements Movable, Drawable {
 //  private static Ghost ghostInstance = null;
 //
 
@@ -76,6 +77,12 @@ public class Sporadic extends Enemy implements Movable {
       sound.pause();
     }
 //Do nothing
+  }
+
+  @Override
+  public void draw() {
+    EnemyManager.getInstance().getWindow().image(sporadicImage, getPosition().x - SPORADIC_WIDTH / 2,
+        getPosition().y - SPORADIC_HEIGHT / 2 , SPORADIC_WIDTH , SPORADIC_HEIGHT);
   }
 
   public void update() {
