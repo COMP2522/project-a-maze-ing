@@ -142,6 +142,11 @@ public class LabyrinthManager {
         tiles.add(wraithPath);
         pathTiles.add(wraithPath);
         break;
+      case SPORADIC:
+        SporadicTile sporadicPath = new SporadicTile(pos, window);
+        tiles.add(sporadicPath);
+        pathTiles.add(sporadicPath);
+        break;
       case BLADE_TILE:
         BladeTile bladePath = new BladeTile(pos, window);
         tiles.add(bladePath);

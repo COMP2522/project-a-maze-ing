@@ -34,6 +34,12 @@ public class Sporadic extends Enemy implements Movable {
 
   public static final int SPORADIC_WIDTH = 43;
 
+  public static final int SPORADIC_SPEED = 10;
+
+  public static final Color SPORADIC_COLOR = new Color(255, 0, 0);
+
+  public static final String SPORADIC_IMAGE_PATH = "Data/sporadicSleep.png";
+
   public Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.sporadicImage = window.loadImage(imagePath);

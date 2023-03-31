@@ -295,6 +295,8 @@ public class Labyrinth {
       return TileType.BLADE_TILE;
     } else if (pick <= 35) {
       return TileType.HOLE_TILE;
+    } else if (pick <= 45) {
+      return TileType.SPORADIC;
     } else {
       return TileType.PATH;
     }
