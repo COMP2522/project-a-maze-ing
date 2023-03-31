@@ -5,7 +5,7 @@ import processing.core.PVector;
 
 import java.util.Random;
 
-public abstract class TrapTile extends EmptyPathTile{
+public abstract class TrapTile extends EmptyPathTile {
 
   protected static final Random TRAP_RANDOMIZER = new Random();
   public TrapTile(PVector pos, Window w) {

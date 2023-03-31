@@ -2,12 +2,11 @@ package org.bcit.com2522.project.labyrinth;
 
 import org.bcit.com2522.project.labyrinth.Tiles.TileType;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import static java.lang.Math.*;
+import static org.bcit.com2522.project.labyrinth.Directions.DIR_ORDER;
 
 public class Labyrinth {
 
@@ -37,6 +36,10 @@ public class Labyrinth {
    */
   private int eY;
 
+  /**
+   * List of coordinates that represents the tiles the player can walk on.
+   */
+  private int[][] path;
 
   private Random randomizer;
 
@@ -82,8 +85,7 @@ public class Labyrinth {
 
 
     generateCorrectPath();
-
-
+    generateRandomBranches();
   }
 
   /**
@@ -100,9 +102,6 @@ public class Labyrinth {
 
     QueueNode curr;
 
-    Directions[] dirVals = {Directions.DOWN, Directions.UP, Directions.LEFT, Directions.RIGHT};
-    List<Directions> order = Arrays.asList(dirVals);
-
     while (!endFound) {
       curr = queue.pop();
       //System.out.println("queue size: " + queue.size);
@@ -112,16 +111,16 @@ public class Labyrinth {
       if(curr.getX() == eX && curr.getY() == eY) {
         endFound = true;
         drawPath(curr.getPathSF());
+        path = curr.getPathSF();
       } else {
-
 
         int[][] newPath = copyPath(curr.getPathSF());
         newPath[curr.getPathSF().length][0] = curr.getX();
         newPath[curr.getPathSF().length][1] = curr.getY();
 
-        Collections.shuffle(order);
+        Collections.shuffle(DIR_ORDER);
 
-        for (Directions i: order) {
+        for (Directions i: DIR_ORDER) {
           switch (i) {
             case UP:
               checkTile(curr.getX(), curr.getY() - 1, queue, seenTiles, newPath);
@@ -144,6 +143,118 @@ public class Labyrinth {
     }
 
   }
+
+  /**
+   * Generates a random number of dead end branches to the labyrinth.
+   */
+  private void generateRandomBranches() {
+    int numPaths = randomizer.nextInt(path.length - (path.length / 4)) + path.length / 4;
+    System.out.format("num branches: %d\n", numPaths);
+    int branchLength;
+    int[] rootTile;
+    for (int i = 0; i < numPaths; i++) {
+      rootTile = path[randomizer.nextInt(path.length)];
+      branchLength = randomizer.nextInt((tiles.length + tiles[0].length)) + (tiles.length + tiles[0].length) / 4;
+      System.out.format("root: (%d,%d), length: %d\n", rootTile[0], rootTile[1], branchLength);
+
+      generateBranch(rootTile, branchLength);
+    }
+  }
+
+  /**
+   * generates a random branch to the labyrinth starting at root tile that is of given length.
+   * @param root
+   * @param length
+   */
+  private void generateBranch(int[] root, int length) {
+
+    int[][] pathSF = new int[length][2];
+
+    int cX = root[0];
+    int cY = root[1]; // current x and y val
+    boolean tileValid;
+    int dirInd;
+
+    for (int i = 0; i < length; i++) {
+      tileValid = false;
+      dirInd = 0;
+      Collections.shuffle(DIR_ORDER);
+
+
+        while (!tileValid) {
+
+          switch (DIR_ORDER.get(dirInd)) {
+            case UP:
+              if (!outOfBounds(cX, cY - 1) && tiles[cY - 1][cX] == TileType.WALL) {
+                System.out.println("up success");
+                cY = cY - 1;
+                tileValid = true;
+              } else {
+                dirInd++;
+              }
+              break;
+            case RIGHT:
+              if (!outOfBounds(cX + 1, cY) && tiles[cY][cX + 1] == TileType.WALL) {
+                System.out.println("right success");
+                cX = cX + 1;
+                tileValid = true;
+              } else {
+                dirInd++;
+              }
+              break;
+            case DOWN:
+              if (!outOfBounds(cX, cY + 1) && tiles[cY + 1][cX] == TileType.WALL) {
+                System.out.println("down success");
+
+                cY = cY + 1;
+                tileValid = true;
+              } else {
+                dirInd++;
+              }
+              break;
+            case LEFT:
+              if (!outOfBounds(cX - 1, cY) && tiles[cY][cX - 1] == TileType.WALL) {
+                System.out.println("left success");
+
+                cX = cX - 1;
+                tileValid = true;
+              } else {
+                dirInd++;
+              }
+              break;
+          }
+          if (dirInd > 3) {
+            concatPath(pathSF);
+            drawPath(pathSF);
+            return;
+          }
+
+        }
+        pathSF[i][0] = cX;
+        pathSF[i][1] = cY;
+    }
+    concatPath(pathSF);
+    drawPath(pathSF);
+
+  }
+
+  private void concatPath(int[][] addition) {
+    int[][] result = new int[path.length + addition.length][2];
+
+    for (int i = 0; i < path.length; i++) {
+      result[i][0] = path[i][0];
+      result[i][1] = path[i][1];
+    }
+
+    for (int j = 0; j < addition.length; j++) {
+      result[j + path.length][0] = addition[j][0];
+      result[j + path.length][1] = addition[j][1];
+    }
+
+    path = result;
+  }
+
+
 
   /**
    * given a set of coordinates, checks if it has been seen so far in generation
