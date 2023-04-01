@@ -11,7 +11,7 @@ public class QuoteGenerator {
       "I used to be an adventurer \nlike you, until I took CST.",
       "(o_o)/",
       "We've been trying to reach \nyou about your car's extended warranty",
-      "God is dead and we have killed",
+      "God is dead and we have \nkilled him",
       "The Mitochondria is the \npowerhouse of the cell",
       "Are you finished with \nthose errands?"
   };

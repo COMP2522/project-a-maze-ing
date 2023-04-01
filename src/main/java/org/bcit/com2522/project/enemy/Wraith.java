@@ -75,13 +75,11 @@ public class Wraith extends Enemy implements Movable, Drawable {
           this.setImage(player.getWindow().loadImage("Data/Wraithright.png"));
         }
       } else if (Math.abs(player.getPosition().x -getPosition().x) > tolerance
-          || Math.abs(player.getPosition().y - getPosition().y) > tolerance){
+          || Math.abs(player.getPosition().y - getPosition().y) > tolerance
+      || distance >= threshold/2){
         soundPlaying = false;
         sound.pause();
-
       }
-    } else {
-
     }
   }
 

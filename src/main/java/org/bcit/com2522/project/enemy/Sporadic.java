@@ -29,7 +29,7 @@ public class Sporadic extends Enemy implements Movable, Drawable {
   //SoundFile sporadicSound;
 
   /* Hitbox size in pixels of sporadic enemy type.*/
-  public static final int SPORADIC_SIZE = 25;
+  public static final int SPORADIC_SIZE = 35;
 
   public static final int SPORADIC_HEIGHT = 32;
 

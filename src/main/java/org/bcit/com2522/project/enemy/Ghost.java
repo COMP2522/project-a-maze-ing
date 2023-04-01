@@ -15,7 +15,7 @@ public class Ghost extends Enemy implements Movable {
   public static final int GHOST_SPEED = 2;
   public static final int GHOST_LENGTH = 35;
 
-  public static final int GHOST_START = 100;
+  public static final int GHOST_START = 300;
 
   private static Ghost ghostInstance = null;
 

@@ -92,7 +92,6 @@ public class Window extends PApplet {
 
     minim = new Minim(this);
     sound = minim.loadFile("sound/heroSong.mp3");
-    sound.play();
 
     frameRate(FPS);
 
@@ -290,6 +289,8 @@ public class Window extends PApplet {
         String currTime = String.format("%.1f", timeElapsed);
         text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
 
+        sound.play();
+
     enemyManager.spawn();
     enemyManager.draw();
     trapManager.draw();
@@ -327,9 +328,11 @@ public class Window extends PApplet {
         text("Game Over!", width / 3, height / 2);
         text("Press R to restart.", width / 3, height / 2 + 50);
         text("OR press M to return to menu", width / 3, height / 2 + 100);
+        sound.pause();
         break;
 
       case WIN:
+        sound.pause();
         background(0);
         textSize(50);
         text("You Won!!!", width / 3, height / 2);
