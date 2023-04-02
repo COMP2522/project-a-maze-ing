@@ -2,15 +2,15 @@ package org.bcit.com2522.project.enemy.spawners;
 
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.EnemyManager;
-import org.bcit.com2522.project.enemy.Wraith;
+import org.bcit.com2522.project.enemy.Sporadic;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import processing.core.PVector;
 
-public class WraithSpawner extends EnemySpawner {
-  private static final int MAX_WRAITH_SPAWNS = 3;
+public class SporadicSpawner extends EnemySpawner{
 
-  public WraithSpawner(PVector pos, Window w) {
-    super(MAX_WRAITH_SPAWNS, pos, w);
+  private static final int MAX_SPORADIC_SPAWNS = 2;
+  public SporadicSpawner(PVector pos, Window w) {
+    super(MAX_SPORADIC_SPAWNS, pos, w);
   }
 
   @Override
@@ -18,16 +18,16 @@ public class WraithSpawner extends EnemySpawner {
     if (currEnemies < maxEnemies) {
       float x = posRand.nextInt(Tile.TILE_SIZE);
       float y = posRand.nextInt(Tile.TILE_SIZE);
-      Wraith en = new Wraith(
+      Sporadic sporadic = new Sporadic(
           position.copy().add(x, y),
           new PVector(0, 0),
-          Wraith.WRAITH_SIZE,
-          Wraith.WRAITH_SPEED,
-          Wraith.WRAITH_COLOR,
+          Sporadic.SPORADIC_SIZE,
+          Sporadic.SPORADIC_SPEED,
+          Sporadic.SPORADIC_COLOR,
           window,
-          Wraith.WRAITH_IMAGE_PATH);
+          Sporadic.SPORADIC_IMAGE_PATH);
       EnemyManager.getInstance()
-          .add(en);
+          .add(sporadic);
       currEnemies++;
     }
   }

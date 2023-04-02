@@ -5,13 +5,14 @@ import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.interfaces.Drawable;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
 
-public class Wraith extends Enemy implements Movable {
+public class Wraith extends Enemy implements Movable, Drawable {
   public static final float WRAITH_SPEED = 11.5f;
 
   public static final Color WRAITH_COLOR = new Color(0, 0, 255);
@@ -74,13 +75,11 @@ public class Wraith extends Enemy implements Movable {
           this.setImage(player.getWindow().loadImage("Data/Wraithright.png"));
         }
       } else if (Math.abs(player.getPosition().x -getPosition().x) > tolerance
-          || Math.abs(player.getPosition().y - getPosition().y) > tolerance){
+          || Math.abs(player.getPosition().y - getPosition().y) > tolerance
+      || distance >= threshold/2){
         soundPlaying = false;
         sound.pause();
-
       }
-    } else {
-
     }
   }
 

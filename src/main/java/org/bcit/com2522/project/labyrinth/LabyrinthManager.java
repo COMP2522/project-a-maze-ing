@@ -1,8 +1,12 @@
 package org.bcit.com2522.project.labyrinth;
 
+import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.Tiles.*;
+import org.bcit.com2522.project.traps.TrapManager;
+import org.bson.Document;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ public class LabyrinthManager {
   private Labyrinth current;
 
   private ArrayList<Tile> tiles;
+  private ArrayList<EmptyPathTile> pathTiles;
 
   private StartTile start;
 
@@ -25,10 +30,16 @@ public class LabyrinthManager {
 
   private boolean generating = false;
 
-  private LabyrinthManager(int width, int height, Window w) {
-    tiles = new ArrayList<Tile>();
-    current = new Labyrinth(width, height);
+  private LabyrinthManager(Window w) {
     window = w;
+  }
+
+  /**
+   * Empties the tiles and pathTiles lists.
+   */
+  private void resetTiles() {
+    tiles = new ArrayList<Tile>();
+    pathTiles = new ArrayList<EmptyPathTile>();
   }
 
   /**
@@ -37,7 +48,7 @@ public class LabyrinthManager {
    */
   public static LabyrinthManager getInstance(int width, int height, Window w) {
     if(instance == null) {
-      instance = new LabyrinthManager(width, height, w);
+      instance = new LabyrinthManager(w);
       instance.newLabyrinth(width, height);
     }
     return instance;
@@ -57,6 +68,7 @@ public class LabyrinthManager {
    * should only be called once per labyrinth.
    */
   public void generateTiles() {
+    resetTiles();
     TileType[][] tileList = current.getTiles();
 
     PVector location = new PVector(0, 0);
@@ -76,9 +88,10 @@ public class LabyrinthManager {
       addTile(location.copy(), TileType.WALL);
     }
 
-    location.set(0, (tileList.length) * Tile.TILE_SIZE);
 
     //bottom row
+    location.set(0, (tileList.length + 1) * Tile.TILE_SIZE);
+
     for (int j = 0; j < tileList[0].length + 2; j++) {
       addTile(location.copy(), TileType.WALL);
       location.add(Tile.TILE_SIZE, 0);
@@ -97,7 +110,7 @@ public class LabyrinthManager {
         location.add(Tile.TILE_SIZE, 0);
       }
       //set location to start of next row
-      location.set(Tile.TILE_SIZE, (i + 1) * Tile.TILE_SIZE);
+      location.set(Tile.TILE_SIZE, (i + 2) * Tile.TILE_SIZE);
     }
     System.out.println("generation done");
   }
@@ -115,7 +128,9 @@ public class LabyrinthManager {
         wm.add(w);
         break;
       case PATH:
-        tiles.add(new EmptyPath(pos, window));
+        EmptyPathTile path = new EmptyPathTile(pos, window);
+        tiles.add(path);
+        pathTiles.add(path);
         break;
       case END:
         end = new EndTile(pos, window);
@@ -126,12 +141,24 @@ public class LabyrinthManager {
         tiles.add(start);
         break;
       case WRAITH:
-        tiles.add(new WraithTile(pos, window));
+        WraithTile wraithPath = new WraithTile(pos, window);
+        tiles.add(wraithPath);
+        pathTiles.add(wraithPath);
+        break;
+      case SPORADIC:
+        SporadicTile sporadicPath = new SporadicTile(pos, window);
+        tiles.add(sporadicPath);
+        pathTiles.add(sporadicPath);
         break;
       case BLADE_TILE:
-        tiles.add(new BladeTile(pos, window));
+        BladeTile bladePath = new BladeTile(pos, window);
+        tiles.add(bladePath);
+        pathTiles.add(bladePath);
+        break;
       case HOLE_TILE:
-        tiles.add(new HoleTile(pos, window));
+        HoleTile holePath = new HoleTile(pos, window);
+        tiles.add(holePath);
+        pathTiles.add(holePath);
       default:
         break;
     }
@@ -160,12 +187,33 @@ public class LabyrinthManager {
   }
 
   /**
-   * loads a existing labyrinth from the database.
+   * loads a existing labyrinth from the database into the manager.
    * todo: this is a placeholder, need to figure out how to search for a given labyrinth
+   * @param loadTarget the labyrinth bson object to load.
    */
-  public void loadLabyrinth() {
-    //todo
+  public void loadLabyrinth(Document loadTarget) {
+
+    // clear all managers
+    resetTiles();
+    EnemyManager.getInstance().clearEnemies();
+    TrapManager.getInstance().clearTraps();
+    wm.clearWalls();
+
+    ArrayList<ArrayList<String>> t = (ArrayList<ArrayList<String>>) loadTarget.get("tiles");
+    TileType[][] layout = new TileType[t.size()][t.get(0).size()];
+
+    for(int i = 0; i < t.size(); i++) {
+      for(int j = 0; j < t.get(0).size(); j++) {
+        layout[i][j] = TileType.valueOf(t.get(i).get(j));
+      }
+    }
+    current = new Labyrinth(layout);
+    generateTiles();
+    current.print();
+    Player.getInstance().setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
   }
+
+
 
   /**
    * Getter for tile list.
@@ -174,6 +222,12 @@ public class LabyrinthManager {
   public ArrayList<Tile> getTiles() {
     return tiles;
   }
+
+  /**
+   * returns the list of tiles from the current labyrinth.
+   * @return the list of tiles
+   */
+  public TileType[][] getTileList(){return current.getTiles();}
 
   /**
    * Getter for start tile.
