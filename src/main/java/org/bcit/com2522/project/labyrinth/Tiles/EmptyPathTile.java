@@ -12,7 +12,7 @@ public class EmptyPathTile extends Tile {
   public EmptyPathTile(PVector pos, Window w) {
     super(pos, w);
     dirtImage = new PImage(TILE_SIZE, TILE_SIZE);
-    dirtImage = window.loadImage("images/dort.png");
+    dirtImage = window.loadImage("Data/dirt2.png");
   }
 
   @Override

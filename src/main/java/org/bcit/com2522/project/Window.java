@@ -143,12 +143,20 @@ public class Window extends PApplet {
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(player.playerUp);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerRightWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerUp);
+        }
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(player.playerDown);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerRightWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerDown);
+        }
         break;
     }
   }
@@ -164,17 +172,21 @@ public class Window extends PApplet {
       case LEFT:
         // stop moving left
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerLeft);
       case RIGHT:
         // stop moving right
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // stop moving up
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // stop moving down
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerDown);
         break;
       case 'R':
         if (state == State.GAMEOVER){
