@@ -7,6 +7,7 @@ public enum TileType {
   END,
   WRAITH,
   BLADE_TILE,
-  HOLE_TILE
+  HOLE_TILE,
+  SPORADIC
 
 }

@@ -15,7 +15,7 @@ public class Player extends Sprite {
   public static final int PLAYER_HEIGHT = 44;
 
   public static final int PLAYER_WIDTH = 27;
-  private static final int PLAYER_SPEED = 5;
+  public static final int PLAYER_SPEED = 5;
 
   private static Player instance;
 

@@ -6,7 +6,7 @@ import org.bcit.com2522.project.interfaces.Collidable;
 import java.util.ArrayList;
 
 public class WallManager implements Collidable {
-  ArrayList<Wall> walls = new ArrayList<Wall>();
+  private ArrayList<Wall> walls = new ArrayList<Wall>();
 
   public void add(Wall w){
     walls.add(w);
@@ -22,6 +22,10 @@ public class WallManager implements Collidable {
       }
     }
     return false;
+  }
+
+  public void clearWalls() {
+    walls = new ArrayList<>();
   }
 
   public void draw(){
