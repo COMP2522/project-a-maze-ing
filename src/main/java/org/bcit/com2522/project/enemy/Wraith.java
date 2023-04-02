@@ -55,7 +55,7 @@ public class Wraith extends Enemy implements Movable, Drawable {
   @Override
   public void move() {
     int threshold = 700;
-    float tolerance = 10f;
+    float tolerance = 15f;
     Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
@@ -65,9 +65,12 @@ public class Wraith extends Enemy implements Movable, Drawable {
         direction.normalize();
         direction.mult(getSpeed());
         setPosition(PVector.add(getPosition(), direction));
-        if(!soundPlaying){
+        if(distance > player.PLAYER_HEIGHT){
           sound.play();
           soundPlaying = true;
+        } else {
+          soundPlaying = false;
+          sound.pause();
         }
         if (direction.x < 0){
           this.setImage(player.getWindow().loadImage("Data/Wraithleft.png"));
