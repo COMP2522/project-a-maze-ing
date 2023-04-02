@@ -1,8 +1,12 @@
 package org.bcit.com2522.project.labyrinth;
 
+import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.Tiles.*;
+import org.bcit.com2522.project.traps.TrapManager;
+import org.bson.Document;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -26,8 +30,7 @@ public class LabyrinthManager {
 
   private boolean generating = false;
 
-  private LabyrinthManager(int width, int height, Window w) {
-    current = new Labyrinth(width, height);
+  private LabyrinthManager(Window w) {
     window = w;
   }
 
@@ -45,7 +48,7 @@ public class LabyrinthManager {
    */
   public static LabyrinthManager getInstance(int width, int height, Window w) {
     if(instance == null) {
-      instance = new LabyrinthManager(width, height, w);
+      instance = new LabyrinthManager(w);
       instance.newLabyrinth(width, height);
     }
     return instance;
@@ -184,12 +187,33 @@ public class LabyrinthManager {
   }
 
   /**
-   * loads a existing labyrinth from the database.
+   * loads a existing labyrinth from the database into the manager.
    * todo: this is a placeholder, need to figure out how to search for a given labyrinth
+   * @param loadTarget the labyrinth bson object to load.
    */
-  public void loadLabyrinth() {
-    //todo
+  public void loadLabyrinth(Document loadTarget) {
+
+    // clear all managers
+    resetTiles();
+    EnemyManager.getInstance().clearEnemies();
+    TrapManager.getInstance().clearTraps();
+    wm.clearWalls();
+
+    ArrayList<ArrayList<String>> t = (ArrayList<ArrayList<String>>) loadTarget.get("tiles");
+    TileType[][] layout = new TileType[t.size()][t.get(0).size()];
+
+    for(int i = 0; i < t.size(); i++) {
+      for(int j = 0; j < t.get(0).size(); j++) {
+        layout[i][j] = TileType.valueOf(t.get(i).get(j));
+      }
+    }
+    current = new Labyrinth(layout);
+    generateTiles();
+    current.print();
+    Player.getInstance().setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
   }
+
+
 
   /**
    * Getter for tile list.
@@ -198,6 +222,12 @@ public class LabyrinthManager {
   public ArrayList<Tile> getTiles() {
     return tiles;
   }
+
+  /**
+   * returns the list of tiles from the current labyrinth.
+   * @return the list of tiles
+   */
+  public TileType[][] getTileList(){return current.getTiles();}
 
   /**
    * Getter for start tile.

@@ -54,4 +54,12 @@ public class TrapManager {
             }
         }
     }
+
+  /**
+   * Removes all traps from the manager.
+   */
+  public void clearTraps() {
+    traps = new ArrayList<>();
+
+  }
 }

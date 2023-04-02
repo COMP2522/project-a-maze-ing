@@ -2,7 +2,7 @@ package org.bcit.com2522.project;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
-import org.bcit.com2522.project.enemy.Enemy;
+import org.bcit.com2522.project.Database.Database;
 import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
@@ -12,8 +12,6 @@ import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-
-import java.util.ArrayList;
 
 
 /**
@@ -27,25 +25,12 @@ public class Window extends PApplet {
   /* Minim object for playing sound */
   Minim minim;
 
-  /* Manager for the labyrinth */
-  private LabyrinthManager labManager;
-
-  private EnemyManager enemyManager;
-  private TrapManager trapManager;
-
 
   /* AudioPlayer object for sound file */
   AudioPlayer sound;
 
   /* Timer object that shows how long it takes player to complete the maze.*/
   private Timer timer;
-
-
-  /* List of all in-game sprites to be loaded. */
-  ArrayList<Sprite> sprites;
-
-  /* List of all in-game enemies to be loaded. */
-  ArrayList<Enemy> enemies;
 
   /*Player that is controlled by user to navigate maze.*/
   Player player;
@@ -111,44 +96,19 @@ public class Window extends PApplet {
    */
   public void initializeObjects() {
     state = State.LOAD;
+    Database.getInstance();
 
-    enemyManager = EnemyManager.getInstance(this);
-    trapManager = TrapManager.getInstance();
-
-
-    labManager = LabyrinthManager.getInstance(20, 20, this);
-
-    trapManager = TrapManager.getInstance();
-
-
-    sprites = new ArrayList<Sprite>();  //List of all sprites
-
-    //Initializes player object
+    EnemyManager.getInstance(this);
+    TrapManager.getInstance();
     player = Player.getInstance(this);
 
 
+    LabyrinthManager.getInstance(20, 20, this);
+    //Database.getInstance().saveCurrent("second labyrinth");     testing call for saving, remove later
+    //Database.getInstance().loadLabyrinth("second labyrinth");
+    //Initializes player object
 
-//    //Initializes ghost object
-//    ghost = new Ghost(
-//        new PVector(this.width/3,this.height/3),
-//        new PVector(0,1),
-//        Ghost.GHOST_SIZE,
-//        0.3f,
-//        new Color(255,255,255),
-//        this, "Data/ghostRight.png");
 
-//    //Initializes all sporadic enemies and adds them to enemy array list
-//    for (int i = 0; i < numSporadics; i++) {
-//      sporadics.add(new Sporadic(
-//          new PVector(random(0, this.width), random(0, this.height)),
-//          new PVector(random(-1, 1), random(-1,1)),
-//          Sporadic.SPORADIC_SIZE,
-//          5,
-//          new Color(255, 0, 0),
-//          this, "Data/sporadicSleep.png"
-//      ));
-//    }
-    sprites.add(player);  //Adds player to list of sprites
   }
 
   /**
@@ -210,7 +170,7 @@ public class Window extends PApplet {
           state = State.PLAY;
           player.setImmunityTimer(1);
           player.setAlive(true);
-          player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+          player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
         }
         break;
       case 'M':
@@ -257,10 +217,10 @@ public class Window extends PApplet {
         text(loading, width / 3, height / 2);
         textSize(30);
         text("Fun fact: " + funFact, width / 4, height / 2 + 50);
-        if (!(labManager.isGenerating()) && (state == State.LOAD)) {
-          player.setPosition(labManager.getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+        if (!(LabyrinthManager.getInstance().isGenerating()) && (state == State.LOAD)) {
+          player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
           state = State.PLAY;
-          enemyManager.spawnGhost();
+          EnemyManager.getInstance().spawnGhost();
         }
         break;
 
@@ -282,7 +242,7 @@ public class Window extends PApplet {
         translate(-cameraPos.x, -cameraPos.y);
 
         // renders all tiles in labyrinth
-        labManager.renderTiles();
+        LabyrinthManager.getInstance().renderTiles();
 
         //Updates timer time and position in the window
         timeElapsed = timer.getTime();
@@ -291,18 +251,16 @@ public class Window extends PApplet {
 
         sound.play();
 
-    enemyManager.spawn();
-    enemyManager.draw();
-    trapManager.draw();
+    EnemyManager.getInstance().spawn();
+        EnemyManager.getInstance().draw();
+    TrapManager.getInstance().draw();
 
-    enemyManager.collision(player);
-    trapManager.collision(player);
+    EnemyManager.getInstance().collision(player);
+    TrapManager.getInstance().collision(player);
 
         //Just updates and draws all sprites in the list
-    for (Sprite sprite : sprites) {
-      sprite.update();
-      sprite.draw();
-    }
+    player.update();
+    player.draw();
 
 //    for (Sporadic sporadic : sporadics) {
 //      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
@@ -317,7 +275,7 @@ public class Window extends PApplet {
         if (!(player.isAlive())){
           state = State.GAMEOVER;
         }
-        if (labManager.getEnd().collision(player)){
+        if (LabyrinthManager.getInstance().getEnd().collision(player)){
           state = State.WIN;
         }
         break;
