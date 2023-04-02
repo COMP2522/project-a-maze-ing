@@ -92,9 +92,7 @@ public class Wraith extends Enemy implements Movable, Drawable {
 
 
   public void update() {
-
       move();
-
   }
 
 }
