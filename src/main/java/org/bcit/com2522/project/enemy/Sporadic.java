@@ -68,10 +68,13 @@ public class Sporadic extends Enemy implements Movable, Drawable {
       PVector randomDirection = PVector.random2D();
       randomDirection.mult(getSpeed());
       setPosition(PVector.add(getPosition(), randomDirection));
-      if(!soundPlaying){
+      if(distance > player.PLAYER_HEIGHT*3/2){
         sound.play();
         soundPlaying = true;
         this.setImage(player.getWindow().loadImage("Data/sporadicAwake.png"));
+      } else {
+        soundPlaying = false;
+        sound.pause();
       }
     } else if (distance >= threshold) {
       soundPlaying = false;
