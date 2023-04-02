@@ -8,7 +8,7 @@ public class EmptyPathTile extends Tile {
 
   private PImage dirtImage;
 
-  public EmptyPath(PVector pos, Window w) {
+
   public EmptyPathTile(PVector pos, Window w) {
     super(pos, w);
     dirtImage = new PImage(TILE_SIZE, TILE_SIZE);
@@ -20,3 +20,4 @@ public class EmptyPathTile extends Tile {
     window.image(dirtImage, position.x, position.y, TILE_SIZE, TILE_SIZE);
   }
 }
+
