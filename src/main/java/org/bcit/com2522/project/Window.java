@@ -125,7 +125,6 @@ public class Window extends PApplet {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        //player.setHarryPotterImage(player.playerLeft);
         if (Math.round(playerAnimationTime*5) % 2 == 0){
           player.setHarryPotterImage(player.playerLeftWalk1);
         } else {
@@ -135,7 +134,11 @@ public class Window extends PApplet {
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(player.playerRight);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerRightWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerRight);
+        }
         break;
       case UP:
         // handle left
