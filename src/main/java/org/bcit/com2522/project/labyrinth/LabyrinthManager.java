@@ -253,8 +253,8 @@ public class LabyrinthManager {
     return wm.collision(s);
   }
 
-  public void draw(){
-    wm.draw();
-  }
+  //public void draw(){
+    //wm.draw();
+  //}
 
 }

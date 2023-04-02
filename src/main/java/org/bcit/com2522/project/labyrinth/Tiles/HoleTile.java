@@ -24,6 +24,7 @@ public class HoleTile extends TrapTile {
           new Hole(pos.copy().add(x, y),
               new PVector(0, 0), 50, 0, Color.black, this.window));
     }
+
   }
 
 }

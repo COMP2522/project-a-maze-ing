@@ -9,7 +9,7 @@ public class QuoteGenerator {
       "Do you even read these?",
       "We've been trying to reach \nyou about your car's extended warranty",
       "I used to be an adventurer \nlike you, until I took CST",
-      "(o_o)/",
+      "\\(o_o)/",
       "We've been trying to reach \nyou about your car's extended warranty",
       "God is dead and we have \nkilled him",
       "The Mitochondria is the \npowerhouse of the cell",
