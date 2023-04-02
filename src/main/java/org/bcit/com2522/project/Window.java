@@ -144,7 +144,7 @@ public class Window extends PApplet {
         // handle left
         player.setDirection(new PVector(0, -2));
         if (Math.round(playerAnimationTime*5) % 2 == 0){
-          player.setHarryPotterImage(player.playerRightWalk1);
+          player.setHarryPotterImage(player.playerUp1);
         } else {
           player.setHarryPotterImage(player.playerUp);
         }
@@ -153,7 +153,7 @@ public class Window extends PApplet {
         // handle right
         player.setDirection(new PVector(0, 2));
         if (Math.round(playerAnimationTime*5) % 2 == 0){
-          player.setHarryPotterImage(player.playerRightWalk1);
+          player.setHarryPotterImage(player.playerDown1);
         } else {
           player.setHarryPotterImage(player.playerDown);
         }
