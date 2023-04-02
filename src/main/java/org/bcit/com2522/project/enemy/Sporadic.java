@@ -71,12 +71,12 @@ public class Sporadic extends Enemy implements Movable, Drawable {
       if(!soundPlaying){
         sound.play();
         soundPlaying = true;
+        this.setImage(player.getWindow().loadImage("Data/sporadicAwake.png"));
       }
     } else if (distance >= threshold) {
       soundPlaying = false;
       sound.pause();
     }
-//Do nothing
   }
 
   @Override
