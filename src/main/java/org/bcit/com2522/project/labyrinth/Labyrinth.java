@@ -37,11 +37,12 @@ public class Labyrinth {
   private int eY;
 
   /**
-   * List of coordinates that represents the tiles the player can walk on.
+   * List of coordinates that represents the tiles the player can walk on.form: int[pathIndex][0] = x
+   *                                                                                          [1] = y
    */
   private int[][] path;
 
-  private Random randomizer;
+  private static final Random randomizer = new Random();
 
   /**
    * Constructor
@@ -57,9 +58,15 @@ public class Labyrinth {
       }
     }
 
-    randomizer = new Random();
+    generate();
+  }
 
-    init();
+  /**
+   * Constructor for loading pre-existing layout.
+   * @param layout the layout of the tiles to load.
+   */
+  public Labyrinth(TileType[][] layout) {
+    tiles = layout;
   }
 
   /**
@@ -69,7 +76,7 @@ public class Labyrinth {
    * (i.e. if the maze is 50 x 20, if the start and end are less than 25 tiles away from each other
    * (50 / 2 = 25), generate a new end)
    */
-  public void init() {
+  private void generate() {
     sX = randomizer.nextInt(tiles[0].length);
     sY = randomizer.nextInt(tiles.length);
     int repeats = -1;                      // debugging variable, remove later
@@ -163,8 +170,8 @@ public class Labyrinth {
 
   /**
    * generates a random branch to the labyrinth starting at root tile that is of given length.
-   * @param root
-   * @param length
+   * @param root the coordinates of the path tile to build this branch off of.
+   * @param length the maximum length of this branch.
    */
   private void generateBranch(int[] root, int length) {
 
