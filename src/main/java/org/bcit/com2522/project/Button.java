@@ -26,13 +26,16 @@ public class Button {
     menu = m;
   }
 
+  public Button(String mazeName, float initX, float initY, float w, float h, Color c, Window space) {
+  }
+
   public void draw(){
     if (cursorInside(window.mouseX, window.mouseY)){
       window.fill(menu.hover.getRGB());
     } else {
       window.fill(bg.getRGB());
     }
-      window.rect(x, y, width, height);
+    window.rect(x, y, width, height);
     window.fill(0);
     window.textSize(50);
     window.text(label, x, y + 50);

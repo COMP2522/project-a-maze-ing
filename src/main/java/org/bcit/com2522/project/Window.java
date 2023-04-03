@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class Window extends PApplet {
 
-//// Instance var for Textbox class////
-TextBox nameInput;
+  //// Instance var for Textbox class////
+  TextBox nameInput;
   SaveButton saveButton;
   boolean isTyping = false;
 
@@ -290,8 +290,8 @@ TextBox nameInput;
         float zoomFactor = 2.0f; // Increase this value to zoom in more
         // Calculate the camera position based on the player's position
         PVector cameraPos = new PVector(
-            player.getPosition().x - width / 2,
-            player.getPosition().y - height / 2);
+                player.getPosition().x - width / 2,
+                player.getPosition().y - height / 2);
         // Translate the drawing surface to the camera position
         translate(-cameraPos.x, -cameraPos.y);
 
@@ -305,16 +305,16 @@ TextBox nameInput;
 
         sound.play();
 
-    EnemyManager.getInstance().spawn();
+        EnemyManager.getInstance().spawn();
         EnemyManager.getInstance().draw();
-    TrapManager.getInstance().draw();
+        TrapManager.getInstance().draw();
 
-    EnemyManager.getInstance().collision(player);
-    TrapManager.getInstance().collision(player);
+        EnemyManager.getInstance().collision(player);
+        TrapManager.getInstance().collision(player);
 
         //Just updates and draws all sprites in the list
-    player.update();
-    player.draw();
+        player.update();
+        player.draw();
 
 
         if (player.getImmunityTimer() > 0) {
@@ -472,7 +472,6 @@ TextBox nameInput;
     PApplet.runSketch(appletArgs, mazeRun);
   }
 }
-
 
 
 
