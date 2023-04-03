@@ -55,7 +55,7 @@ public class Blade extends Trap implements Drawable {
 
     @Override
     public void draw() {
-        
+
         //Blade image
         TrapManager.getInstance().getWindow().pushMatrix();
         TrapManager.getInstance().getWindow().translate(getPosition().x, getPosition().y);
