@@ -31,6 +31,8 @@ public class Window extends PApplet {
   /* Timer object that shows how long it takes player to complete the maze.*/
   private Timer timer;
 
+  private Timer animationTimer;
+
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
@@ -57,6 +59,7 @@ public class Window extends PApplet {
   State state;
 
   float timeElapsed;
+  float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
   AltMenu menu;
@@ -117,26 +120,43 @@ public class Window extends PApplet {
   @Override
   public void keyPressed(KeyEvent event) {
     int keyCode = event.getKeyCode();
+    playerAnimationTime = timer.getTime();
     switch( keyCode ) {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        player.setHarryPotterImage(player.playerLeft);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerLeftWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerLeft);
+        }
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(player.playerRight);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerRightWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerRight);
+        }
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(player.playerUp);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerUp1);
+        } else {
+          player.setHarryPotterImage(player.playerUp);
+        }
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(player.playerDown);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerDown1);
+        } else {
+          player.setHarryPotterImage(player.playerDown);
+        }
         break;
     }
   }
@@ -152,17 +172,21 @@ public class Window extends PApplet {
       case LEFT:
         // stop moving left
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerLeft);
       case RIGHT:
         // stop moving right
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // stop moving up
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // stop moving down
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerDown);
         break;
       case 'R':
         if (state == State.GAMEOVER){
