@@ -1,5 +1,7 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.notinuse;
 
+import org.bcit.com2522.project.Sprite;
+import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.interfaces.Graphic;
 
 import java.awt.*;

@@ -1,7 +1,5 @@
 package org.bcit.com2522.project;
 
-import processing.core.PVector;
-
 import java.awt.*;
 
 public class Button {
@@ -9,12 +7,13 @@ public class Button {
   float y;
   float width;
   float height;
-  PVector position;
   Color bg;
   String label;
   Window window;
+  Menu menu;
+  private Executable function;
 
-  public Button(String s, float initX, float initY, float w, float h, Color c, Window space){
+  public Button(String s, float initX, float initY, float w, float h, Color c, Window space, Menu m){
     width = w;
     height = h;
     x = initX;
@@ -22,21 +21,35 @@ public class Button {
     bg = c;
     label = s;
     window = space;
+    menu = m;
+  }
+
+  public void config(Executable ex){
+    function = ex;
   }
 
   public void draw(){
-    window.fill(bg.getRGB());
-    window.rect(x, y, width, height);
+    if (cursorInside(window.mouseX, window.mouseY)){
+      window.fill(menu.hover.getRGB());
+    } else {
+      window.fill(bg.getRGB());
+    }
+      window.rect(x, y, width, height);
     window.fill(0);
     window.textSize(50);
     window.text(label, x, y + 50);
   }
 
   public boolean cursorInside(float mX, float mY){
-    return (mX >= x && mX <= x + width && mY >= y && mY <= y + width);
+    return (mX >= x && mX <= x + width && mY >= y && mY <= y + height);
   }
 
   public void execute() {
-    window.initializeObjects();
+    function.execute();
+    menu.hideMenu();
   }
+}
+
+interface Executable{
+  void execute();
 }

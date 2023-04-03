@@ -360,8 +360,12 @@ public class Labyrinth {
           System.out.print(" B \t");
         } else if (tiles[i][j] == TileType.HOLE_TILE) {
           System.out.print(" H \t");
-        } else {
+        } else if (tiles[i][j] == TileType.SPORADIC) {
+          System.out.print(" S \t");
+        }else if (tiles[i][j] == TileType.WALL) {
           System.out.print("[-]\t");
+        } else {
+          System.out.print("???\t");
         }
       }
     }
