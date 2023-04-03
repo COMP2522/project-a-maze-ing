@@ -65,7 +65,7 @@ public class Wraith extends Enemy implements Movable, Drawable {
         direction.normalize();
         direction.mult(getSpeed());
         setPosition(PVector.add(getPosition(), direction));
-        if(distance > player.PLAYER_HEIGHT){
+        if(distance > player.PLAYER_HEIGHT*2){
           sound.play();
           soundPlaying = true;
         } else {

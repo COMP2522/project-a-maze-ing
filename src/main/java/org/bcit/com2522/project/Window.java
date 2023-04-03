@@ -12,6 +12,8 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.util.ArrayList;
+
 
 /**
  * The window class runs the display that initializes and displays all
@@ -51,7 +53,8 @@ public class Window extends PApplet {
     LOAD,
     GAMEOVER,
     PLAY,
-    WIN
+    WIN,
+    PAUSE
   }
 
   String funFact;
@@ -62,7 +65,9 @@ public class Window extends PApplet {
   float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
-  AltMenu menu;
+  MainMenu menu = new MainMenu(this);
+  PauseMenu pauseMenu = new PauseMenu(this);
+  ArrayList<Menu> menus = new ArrayList<Menu>();
 
   /**
    * Provides the size of the window
@@ -80,6 +85,9 @@ public class Window extends PApplet {
     minim = new Minim(this);
     sound = minim.loadFile("sound/heroSong.mp3");
 
+    menus.add(menu);
+    menus.add(pauseMenu);
+
     frameRate(FPS);
 
     //sets up the background image
@@ -88,7 +96,7 @@ public class Window extends PApplet {
     // initializes the objects
     this.initializeObjects();
     state = State.MENU;
-    menu = new AltMenu(this);
+    menu.loadMenu();
   }
 
 
@@ -101,7 +109,7 @@ public class Window extends PApplet {
     Database.getInstance();
 
     EnemyManager.getInstance(this);
-    TrapManager.getInstance();
+    TrapManager.getInstance(this);
     player = Player.getInstance(this);
 
 
@@ -123,10 +131,12 @@ public class Window extends PApplet {
     playerAnimationTime = timer.getTime();
     switch( keyCode ) {
       case LEFT:
+
         // handle left
         //player.setDirection(new PVector(-1, 0));
         player.getDirection().x = -1;
         player.getDirection().normalize();
+
         if (Math.round(playerAnimationTime*5) % 2 == 0){
           player.setHarryPotterImage(player.playerLeftWalk1);
         } else {
@@ -134,6 +144,7 @@ public class Window extends PApplet {
         }
         break;
       case RIGHT:
+
         // handle right
 //        player.setDirection(new PVector(1, 0));
         player.getDirection().x = 1;
@@ -146,6 +157,7 @@ public class Window extends PApplet {
         }
         break;
       case UP:
+
         // handle left
 //        player.setDirection(new PVector(0, -1));
         player.getDirection().y = -1;
@@ -159,10 +171,12 @@ public class Window extends PApplet {
         }
         break;
       case DOWN:
+
         // handle down
 //        player.setDirection(new PVector(0, 1));
         player.getDirection().y = 1;
         player.getDirection().normalize();
+
 
 
         if (Math.round(playerAnimationTime*5) % 2 == 0){
@@ -221,13 +235,17 @@ public class Window extends PApplet {
       case 'M':
         if (state == State.WIN || state == State.GAMEOVER);
         state = state.MENU;
+        menu.loadMenu();
         break;
-
+      case 'P':
+        if (state == State.PLAY){
+          state = state.PAUSE;
+        }
     }
   }
 
   public void mouseClicked(MouseEvent m){
-    if (state == State.MENU){
+    for (Menu menu : menus){
       menu.click(m);
     }
   }
@@ -241,6 +259,7 @@ public class Window extends PApplet {
 
     switch (state) {
       case MENU:
+        menu.loadMenu();
         menu.draw();
         break;
       case LOAD:
@@ -270,7 +289,6 @@ public class Window extends PApplet {
         break;
 
       case PLAY:
-
         if (timer == null) {
           timer = new Timer(this, new PVector(0, 0));
         }
@@ -328,6 +346,7 @@ public class Window extends PApplet {
 
       case GAMEOVER:
         background(0);
+        fill(255);
         textSize(50);
         text("Game Over!", width / 3, height / 2);
         text("Press R to restart.", width / 3, height / 2 + 50);
@@ -339,11 +358,19 @@ public class Window extends PApplet {
         sound.pause();
         background(0);
         textSize(50);
+        fill(255);
         text("You Won!!!", width / 3, height / 2);
         textSize(30);
         String time = String.format("%.1f", timeElapsed);
         text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
         text("Press M to return to menu", width / 3, height / 2 + 100);
+        break;
+
+      case PAUSE:
+        sound.pause();
+        pauseMenu.loadMenu();
+        pauseMenu.draw();
+        break;
     }
   }
 

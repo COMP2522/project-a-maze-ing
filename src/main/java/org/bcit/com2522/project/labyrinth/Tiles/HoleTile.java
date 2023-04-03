@@ -22,7 +22,7 @@ public class HoleTile extends TrapTile {
       y = TRAP_RANDOMIZER.nextInt(Tile.TILE_SIZE);
       TrapManager.getInstance().addTrap(
           new Hole(pos.copy().add(x, y),
-              new PVector(0, 0), 50, 0, Color.black, this.window));
+              new PVector(0, 0), 50, 0, Color.black, this.window, Hole.HOLE_PATH));
     }
 
   }

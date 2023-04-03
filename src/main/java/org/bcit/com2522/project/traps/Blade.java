@@ -1,24 +1,32 @@
 package org.bcit.com2522.project.traps;
 
 import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.interfaces.Drawable;
+import processing.core.PConstants;
+import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
 
-public class Blade extends Trap {
+public class Blade extends Trap implements Drawable {
 
+    public static final String BLADE_PATH = "Data/blade.png";
+    public static final int BLADE_SIZE = 50;
     private float oscillationSpeed;
     private float oscillationAngle;
     private float verticalSpeed;
     private float movementDirection;
 
+
     private PVector startPosition;
     private PVector endPosition;
+
+    PImage bladeImage;
 
     public Blade(PVector position, PVector direction, float size,
                  float speed, Color color, Window window,
                  float oscillationSpeed, float verticalSpeed,
-                 PVector startPosition, PVector endPosition) {
+                 PVector startPosition, PVector endPosition, String imagePath) {
         super(position, direction, size, speed, color, window);
         this.oscillationSpeed = oscillationSpeed;
         this.oscillationAngle = 0;
@@ -26,6 +34,7 @@ public class Blade extends Trap {
         this.movementDirection = 1;
         this.endPosition = endPosition;
         this.startPosition = startPosition;
+        this.bladeImage = window.loadImage(imagePath);
     }
 
 
@@ -46,32 +55,19 @@ public class Blade extends Trap {
 
     @Override
     public void draw() {
+
+        //Blade image
+        TrapManager.getInstance().getWindow().pushMatrix();
+        TrapManager.getInstance().getWindow().translate(getPosition().x, getPosition().y);
+        TrapManager.getInstance().getWindow().rotate(oscillationAngle);
+        TrapManager.getInstance().getWindow().imageMode(PConstants.CORNER);
+        TrapManager.getInstance().getWindow().image(bladeImage, -BLADE_SIZE/2, -BLADE_SIZE/2, BLADE_SIZE , BLADE_SIZE);
+        TrapManager.getInstance().getWindow().popMatrix();
         move();
 
-        getWindow().pushMatrix();
-        getWindow().pushStyle();
-
-        getWindow().translate(getPosition().x, getPosition().y);
-        getWindow().rotate(oscillationAngle);
-
-        getWindow().fill(getColor().getRed(), getColor().getGreen(), getColor().getBlue());
-        getWindow().beginShape();
-
-        // Create jagged shape (feel free to modify the points to get the desired shape)
-        getWindow().vertex(0, 0);
-        getWindow().vertex(getSize() / 2, -getSize() / 3);
-        getWindow().vertex(getSize(), 0);
-        getWindow().vertex(getSize() / 2, getSize() / 3);
-        getWindow().vertex(0, 0);
-
-        getWindow().endShape();
-
-        getWindow().popStyle();
-        getWindow().popMatrix();
-
         oscillationAngle += oscillationSpeed;
-    }
 
+    }
 
 }
 
