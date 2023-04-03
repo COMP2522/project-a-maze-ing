@@ -42,7 +42,7 @@ public class Database {
   /**
    * Saves the current labyrinth's tile layout and given name into the database.
    */
-  public void saveCurrent(String name) {
+  public void saveCurrent(String name, LabyrinthManager instance) {
     Document doc = new Document();
     TileType[][] layout = LabyrinthManager.getInstance().getTileList();
 

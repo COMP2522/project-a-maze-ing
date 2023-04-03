@@ -1,5 +1,6 @@
 package org.bcit.com2522.project;
 
+
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
@@ -13,11 +14,20 @@ import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 
+
+
 /**
  * The window class runs the display that initializes and displays all
  * other classes represented in the front-end of the maze game
  */
 public class Window extends PApplet {
+
+//// Instance var for Textbox class////
+TextBox nameInput;
+  SaveButton saveButton;
+  boolean isTyping = false;
+
+
 
   private static final int FPS = 144;
 
@@ -35,9 +45,6 @@ public class Window extends PApplet {
 
   /*Player that is controlled by user to navigate maze.*/
   Player player;
-
-  //PImage backgroundImage; //Background Image for the Window
-
 
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 800;
@@ -82,9 +89,6 @@ public class Window extends PApplet {
 
     frameRate(FPS);
 
-    //sets up the background image
-    //backgroundImage = loadImage("Data/dirt.png");
-
     // initializes the objects
     this.initializeObjects();
     state = State.MENU;
@@ -106,10 +110,6 @@ public class Window extends PApplet {
 
 
     LabyrinthManager.getInstance(20, 20, this);
-    //Database.getInstance().saveCurrent("second labyrinth");     testing call for saving, remove later
-    //Database.getInstance().loadLabyrinth("second labyrinth");
-    //Initializes player object
-
 
   }
 
@@ -119,6 +119,13 @@ public class Window extends PApplet {
    */
   @Override
   public void keyPressed(KeyEvent event) {
+    if (state == State.WIN && isTyping) {
+      if (event.getKey() == BACKSPACE) {
+        nameInput.removeChar();
+      } else if (event.getKey() != ENTER && event.getKey() != RETURN) {
+        nameInput.addChar(event.getKey());
+      }
+    }
     int keyCode = event.getKeyCode();
     playerAnimationTime = timer.getTime();
     switch( keyCode ) {
@@ -204,11 +211,21 @@ public class Window extends PApplet {
     }
   }
 
-  public void mouseClicked(MouseEvent m){
-    if (state == State.MENU){
+  public void mouseClicked(MouseEvent m) {
+    if (state == State.MENU) {
       menu.click(m);
+    } else if (state == State.WIN) {
+      if (nameInput.contains(m.getX(), m.getY())) {
+        isTyping = true;
+      } else if (saveButton.contains(m.getX(), m.getY())) {
+        Database.getInstance().saveCurrent(nameInput.getText(), LabyrinthManager.getInstance());
+        isTyping = false;
+      } else {
+        isTyping = false;
+      }
     }
   }
+
 
 
   /**
@@ -286,11 +303,6 @@ public class Window extends PApplet {
     player.update();
     player.draw();
 
-//    for (Sporadic sporadic : sporadics) {
-//      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
-//          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
-//    }
-
 
         if (player.getImmunityTimer() > 0) {
           player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
@@ -322,8 +334,90 @@ public class Window extends PApplet {
         String time = String.format("%.1f", timeElapsed);
         text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
         text("Press M to return to menu", width / 3, height / 2 + 100);
+
+        if (nameInput == null) {
+          nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
+        }
+        nameInput.draw();
+
+        if (saveButton == null) {
+          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 100, 30, "Save Maze");
+        }
+        saveButton.draw();
+        break;
+
     }
   }
+
+
+  ////////////// Text Box class //////////////
+  class TextBox {
+    PApplet parent;
+    PVector position;
+    int width, height;
+    String text = "";
+
+    TextBox(PApplet parent, PVector position, int width, int height) {
+      this.parent = parent;
+      this.position = position;
+      this.width = width;
+      this.height = height;
+    }
+
+    void draw() {
+      parent.fill(255);
+      parent.rect(position.x, position.y, width, height);
+      parent.fill(0);
+      parent.text(text, position.x + 5, position.y + height - 5);
+    }
+
+    boolean contains(int x, int y) {
+      return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
+    }
+
+    void addChar(char c) {
+      text += c;
+    }
+
+    void removeChar() {
+      if (text.length() > 0) {
+        text = text.substring(0, text.length() - 1);
+      }
+    }
+
+    String getText() {
+      return text;
+    }
+  }
+
+  class SaveButton {
+    PApplet parent;
+    PVector position;
+    int width, height;
+    String label;
+
+    SaveButton(PApplet parent, PVector position, int width, int height, String label) {
+      this.parent = parent;
+      this.position = position;
+      this.width = width;
+      this.height = height;
+      this.label = label;
+    }
+
+    void draw() {
+      parent.fill(0, 255, 0);
+      parent.rect(position.x, position.y, width, height);
+      parent.fill(255);
+      parent.text(label, position.x + 5, position.y + height - 5);
+    }
+
+    boolean contains(int x, int y) {
+      return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
+    }
+  }
+
+
+
 
   /**
    * Main function to run the entire game.
