@@ -17,6 +17,7 @@ public class WallManager implements Collidable {
   public boolean collision(Sprite s) {
     for (Wall w : walls){
       if (w.collision(s)){
+        w.walkIntoWall(s);
         return true;
       }
     }
