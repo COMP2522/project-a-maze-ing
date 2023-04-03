@@ -1,9 +1,7 @@
 package org.bcit.com2522.project.Database;
 
 import com.mongodb.*;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.TileType;
 import org.bson.Document;
@@ -67,6 +65,11 @@ public class Database {
     Document target = database.getCollection("labyrinths").find(
         eq("name", name)).first();
     LabyrinthManager.getInstance().loadLabyrinth(target);
+  }
+
+  public FindIterable<Document> loadAll() {
+    FindIterable<Document> labyrinths = database.getCollection("labyrinths").find();
+    return labyrinths;
   }
 
 
