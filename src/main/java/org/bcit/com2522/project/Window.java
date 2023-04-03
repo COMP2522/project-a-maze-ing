@@ -124,7 +124,9 @@ public class Window extends PApplet {
     switch( keyCode ) {
       case LEFT:
         // handle left
-        player.setDirection(new PVector(-2, 0));
+        //player.setDirection(new PVector(-1, 0));
+        player.getDirection().x = -1;
+        player.getDirection().normalize();
         if (Math.round(playerAnimationTime*5) % 2 == 0){
           player.setHarryPotterImage(player.playerLeftWalk1);
         } else {
@@ -133,7 +135,10 @@ public class Window extends PApplet {
         break;
       case RIGHT:
         // handle right
-        player.setDirection(new PVector(2, 0));
+//        player.setDirection(new PVector(1, 0));
+        player.getDirection().x = 1;
+        player.getDirection().normalize();
+
         if (Math.round(playerAnimationTime*5) % 2 == 0){
           player.setHarryPotterImage(player.playerRightWalk1);
         } else {
@@ -142,16 +147,24 @@ public class Window extends PApplet {
         break;
       case UP:
         // handle left
-        player.setDirection(new PVector(0, -2));
+//        player.setDirection(new PVector(0, -1));
+        player.getDirection().y = -1;
+        player.getDirection().normalize();
+
         if (Math.round(playerAnimationTime*5) % 2 == 0){
+
           player.setHarryPotterImage(player.playerUp1);
         } else {
           player.setHarryPotterImage(player.playerUp);
         }
         break;
       case DOWN:
-        // handle right
-        player.setDirection(new PVector(0, 2));
+        // handle down
+//        player.setDirection(new PVector(0, 1));
+        player.getDirection().y = 1;
+        player.getDirection().normalize();
+
+
         if (Math.round(playerAnimationTime*5) % 2 == 0){
           player.setHarryPotterImage(player.playerDown1);
         } else {
@@ -171,21 +184,30 @@ public class Window extends PApplet {
     switch (keyCode) {
       case LEFT:
         // stop moving left
-        player.setDirection(new PVector(0, 0));
+        player.getDirection().x = 0;
+        player.getDirection().normalize();
+
         player.setHarryPotterImage(player.playerLeft);
+        break;
       case RIGHT:
         // stop moving right
-        player.setDirection(new PVector(0, 0));
+        player.getDirection().x = 0;
+        player.getDirection().normalize();
+
         player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // stop moving up
-        player.setDirection(new PVector(0, 0));
+        player.getDirection().y = 0;
+        player.getDirection().normalize();
+
         player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // stop moving down
-        player.setDirection(new PVector(0, 0));
+        player.getDirection().y = 0;
+        player.getDirection().normalize();
+
         player.setHarryPotterImage(player.playerDown);
         break;
       case 'R':
