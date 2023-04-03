@@ -1,13 +1,12 @@
 package org.bcit.com2522.project.Database;
 
 import com.mongodb.*;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.TileType;
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -61,7 +60,7 @@ public class Database {
   }
 
   /**
-   * loads the first labyrinth found in the database with the given name.
+   * Loads the first labyrinth found in the database with the given name.
    */
   public void loadLabyrinth(String name) {
     Document target = database.getCollection("labyrinths").find(
@@ -69,5 +68,25 @@ public class Database {
     LabyrinthManager.getInstance().loadLabyrinth(target);
   }
 
+  /**
+   * Returns a list of saved labyrinth names.
+   * Note to self: getCollection method is called on the database variable within the Database class,
+   * and the MongoDB code stays within the Database class.
+   * I can then use this method in other classes to retrieve the list of saved labyrinth names.
+   */
+  public ArrayList<String> getSavedLabyrinths() {
+    ArrayList<String> labyrinthNames = new ArrayList<>();
+    MongoCollection<Document> collection = database.getCollection("labyrinths");
+    FindIterable<Document> documents = collection.find();
+
+    for (Document doc : documents) {
+      String name = doc.getString("name");
+      if (name != null) {
+        labyrinthNames.add(name);
+      }
+    }
+
+    return labyrinthNames;
+  }
 
 }
