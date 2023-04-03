@@ -13,8 +13,9 @@ public class Button {
   Color bg;
   String label;
   Window window;
+  AltMenu menu;
 
-  public Button(String s, float initX, float initY, float w, float h, Color c, Window space){
+  public Button(String s, float initX, float initY, float w, float h, Color c, Window space, AltMenu m){
     width = w;
     height = h;
     x = initX;
@@ -22,18 +23,23 @@ public class Button {
     bg = c;
     label = s;
     window = space;
+    menu = m;
   }
 
   public void draw(){
-    window.fill(bg.getRGB());
-    window.rect(x, y, width, height);
+    if (cursorInside(window.mouseX, window.mouseY)){
+      window.fill(menu.hover.getRGB());
+    } else {
+      window.fill(bg.getRGB());
+    }
+      window.rect(x, y, width, height);
     window.fill(0);
     window.textSize(50);
     window.text(label, x, y + 50);
   }
 
   public boolean cursorInside(float mX, float mY){
-    return (mX >= x && mX <= x + width && mY >= y && mY <= y + width);
+    return (mX >= x && mX <= x + width && mY >= y && mY <= y + height);
   }
 
   public void execute() {
