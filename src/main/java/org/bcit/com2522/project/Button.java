@@ -42,6 +42,16 @@ public class Button {
     return (mX >= x && mX <= x + width && mY >= y && mY <= y + height);
   }
 
+  public String getLabel() {
+    return label;
+  }
+
+  public void loadMaze() {
+    // Load the maze with the given name
+    // Implement the functionality here
+  }
+
+
   public void execute() {
     window.initializeObjects();
   }

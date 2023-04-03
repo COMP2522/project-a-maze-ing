@@ -1,6 +1,7 @@
 package org.bcit.com2522.project;
 
 
+import com.mongodb.client.FindIterable;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
@@ -8,12 +9,14 @@ import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.traps.TrapManager;
+import org.bson.Document;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-
+import java.awt.*;
+import java.util.ArrayList;
 
 
 /**
@@ -27,6 +30,7 @@ TextBox nameInput;
   SaveButton saveButton;
   boolean isTyping = false;
 
+  ArrayList<Button> savedMazeButtons;
 
 
   private static final int FPS = 144;
@@ -58,7 +62,8 @@ TextBox nameInput;
     LOAD,
     GAMEOVER,
     PLAY,
-    WIN
+    WIN,
+    LOAD_ALL
   }
 
   String funFact;
@@ -218,14 +223,22 @@ TextBox nameInput;
       if (nameInput.contains(m.getX(), m.getY())) {
         isTyping = true;
       } else if (saveButton.contains(m.getX(), m.getY())) {
-        Database.getInstance().saveCurrent(nameInput.getText(), LabyrinthManager.getInstance());
+        Database.getInstance().saveCurrent(nameInput.getText());
         isTyping = false;
       } else {
         isTyping = false;
       }
+    } else if (state == State.LOAD_ALL) {
+      for (Button button : savedMazeButtons) {
+        if (button.cursorInside(m.getX(), m.getY())) {
+          button.loadMaze();
+          break;
+        }
+      }
+    } else {
+      isTyping = false;
     }
   }
-
 
 
   /**
@@ -346,6 +359,26 @@ TextBox nameInput;
         saveButton.draw();
         break;
 
+      case LOAD_ALL:
+        background(0);
+        textSize(30);
+        text("Load All Saved Mazes", width / 4, height / 8);
+        int buttonIndex = 0;
+        FindIterable<Document> savedMazes = Database.getInstance().loadAll();
+        savedMazeButtons = new ArrayList<>();
+        for (Document maze : savedMazes) {
+          String mazeName = maze.getString("name");
+          // You can customize the button layout (e.g., the position, size, and style) here
+          float buttonX = width / 4;
+          float buttonY = height / 4 + buttonIndex * 50;
+          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 40, Color.BLUE, this, menu);
+          mazeButton.draw();
+          savedMazeButtons.add(mazeButton);
+          buttonIndex++;
+        }
+        break;
+
+
     }
   }
 
@@ -369,6 +402,15 @@ TextBox nameInput;
       parent.rect(position.x, position.y, width, height);
       parent.fill(0);
       parent.text(text, position.x + 5, position.y + height - 5);
+    }
+
+    public void mouseClicked(MouseEvent m) {
+      if (saveButton.contains(m.getX(), m.getY())) {
+        if (!text.trim().isEmpty()) { // This ensures that the text isn't empty or only spaces
+          Database.getInstance().saveCurrent(text);
+          isTyping = false;
+        }
+      }
     }
 
     boolean contains(int x, int y) {
