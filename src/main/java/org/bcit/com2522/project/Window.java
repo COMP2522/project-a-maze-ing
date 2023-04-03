@@ -100,7 +100,7 @@ public class Window extends PApplet {
     Database.getInstance();
 
     EnemyManager.getInstance(this);
-    TrapManager.getInstance();
+    TrapManager.getInstance(this);
     player = Player.getInstance(this);
 
 

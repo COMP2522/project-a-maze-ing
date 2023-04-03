@@ -2,6 +2,7 @@ package org.bcit.com2522.project.traps;
 
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
+import org.bcit.com2522.project.Window;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,14 +12,23 @@ public class TrapManager {
     private ArrayList<Trap> traps;
     private Iterator<Trap> iterator;
 
-    private TrapManager() {
+    private Window window;
+
+    private TrapManager(Window scene) {
+
         traps = new ArrayList<>();
+        window = scene;
+    }
+
+    public static TrapManager getInstance(Window scene) {
+        if (instance == null) {
+            instance = new TrapManager(scene);
+        }
+        return instance;
     }
 
     public static TrapManager getInstance() {
-        if (instance == null) {
-            instance = new TrapManager();
-        }
+
         return instance;
     }
 
@@ -62,4 +72,8 @@ public class TrapManager {
     traps = new ArrayList<>();
 
   }
+
+    public Window getWindow() {
+        return window;
+    }
 }
