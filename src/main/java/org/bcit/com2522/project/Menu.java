@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Menu {
   ArrayList<Button> buttons = new ArrayList<Button>();
   Window window;
-  Button play;
   int rgb = 0;
   Color hover = Color.YELLOW;
   boolean clickable = false;

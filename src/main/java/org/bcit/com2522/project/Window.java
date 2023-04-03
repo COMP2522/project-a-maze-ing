@@ -1,5 +1,7 @@
 package org.bcit.com2522.project;
 
+
+import com.mongodb.client.FindIterable;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
@@ -7,11 +9,13 @@ import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.traps.TrapManager;
+import org.bson.Document;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -20,6 +24,14 @@ import java.util.ArrayList;
  * other classes represented in the front-end of the maze game
  */
 public class Window extends PApplet {
+
+  //// Instance var for Textbox class////
+  TextBox nameInput;
+  SaveButton saveButton;
+  boolean isTyping = false;
+
+  ArrayList<Button> savedMazeButtons = new ArrayList<Button>();
+
 
   private static final int FPS = 144;
 
@@ -38,9 +50,6 @@ public class Window extends PApplet {
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
-  //PImage backgroundImage; //Background Image for the Window
-
-
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 800;
 
@@ -54,7 +63,8 @@ public class Window extends PApplet {
     GAMEOVER,
     PLAY,
     WIN,
-    PAUSE
+    PAUSE,
+    LOAD_ALL
   }
 
   String funFact;
@@ -90,9 +100,6 @@ public class Window extends PApplet {
 
     frameRate(FPS);
 
-    //sets up the background image
-    //backgroundImage = loadImage("Data/dirt.png");
-
     // initializes the objects
     this.initializeObjects();
     state = State.MENU;
@@ -114,10 +121,6 @@ public class Window extends PApplet {
 
 
     LabyrinthManager.getInstance(20, 20, this);
-    //Database.getInstance().saveCurrent("second labyrinth");     testing call for saving, remove later
-    //Database.getInstance().loadLabyrinth("second labyrinth");
-    //Initializes player object
-
 
   }
 
@@ -127,6 +130,13 @@ public class Window extends PApplet {
    */
   @Override
   public void keyPressed(KeyEvent event) {
+    if (state == State.WIN && isTyping) {
+      if (event.getKey() == BACKSPACE) {
+        nameInput.removeChar();
+      } else if (event.getKey() != ENTER && event.getKey() != RETURN) {
+        nameInput.addChar(event.getKey());
+      }
+    }
     int keyCode = event.getKeyCode();
     playerAnimationTime = timer.getTime();
     switch( keyCode ) {
@@ -248,6 +258,27 @@ public class Window extends PApplet {
     for (Menu menu : menus){
       menu.click(m);
     }
+    if (state == State.MENU) {
+      menu.click(m);
+    } else if (state == State.WIN) {
+      if (nameInput.contains(m.getX(), m.getY())) {
+        isTyping = true;
+      } else if (saveButton.contains(m.getX(), m.getY())) {
+        Database.getInstance().saveCurrent(nameInput.getText());
+        isTyping = false;
+      } else {
+        isTyping = false;
+      }
+    } else if (state == State.LOAD_ALL) {
+      for (Button button : savedMazeButtons) {
+        if (button.cursorInside(m.getX(), m.getY())) {
+          button.loadMaze();
+          break;
+        }
+      }
+    } else {
+      isTyping = false;
+    }
   }
 
 
@@ -300,8 +331,8 @@ public class Window extends PApplet {
         float zoomFactor = 2.0f; // Increase this value to zoom in more
         // Calculate the camera position based on the player's position
         PVector cameraPos = new PVector(
-            player.getPosition().x - width / 2,
-            player.getPosition().y - height / 2);
+                player.getPosition().x - width / 2,
+                player.getPosition().y - height / 2);
         // Translate the drawing surface to the camera position
         translate(-cameraPos.x, -cameraPos.y);
 
@@ -315,21 +346,16 @@ public class Window extends PApplet {
 
         sound.play();
 
-    EnemyManager.getInstance().spawn();
+        EnemyManager.getInstance().spawn();
         EnemyManager.getInstance().draw();
-    TrapManager.getInstance().draw();
+        TrapManager.getInstance().draw();
 
-    EnemyManager.getInstance().collision(player);
-    TrapManager.getInstance().collision(player);
+        EnemyManager.getInstance().collision(player);
+        TrapManager.getInstance().collision(player);
 
         //Just updates and draws all sprites in the list
-    player.update();
-    player.draw();
-
-//    for (Sporadic sporadic : sporadics) {
-//      image(sporadic.getImage(), sporadic.getPosition().x - sporadic.SPORADIC_WIDTH/2,
-//          sporadic.getPosition().y - sporadic.SPORADIC_HEIGHT/3 , sporadic.SPORADIC_WIDTH , sporadic.SPORADIC_HEIGHT);
-//    }
+        player.update();
+        player.draw();
 
 
         if (player.getImmunityTimer() > 0) {
@@ -364,6 +390,15 @@ public class Window extends PApplet {
         String time = String.format("%.1f", timeElapsed);
         text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
         text("Press M to return to menu", width / 3, height / 2 + 100);
+        if (nameInput == null) {
+          nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
+        }
+        nameInput.draw();
+
+        if (saveButton == null) {
+          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 100, 30, "Save Maze");
+        }
+        saveButton.draw();
         break;
 
       case PAUSE:
@@ -371,8 +406,109 @@ public class Window extends PApplet {
         pauseMenu.loadMenu();
         pauseMenu.draw();
         break;
+
+
+
+      case LOAD_ALL:
+        background(0);
+        textSize(30);
+        text("Load All Saved Mazes", width / 4, height / 8);
+        int buttonIndex = 0;
+        FindIterable<Document> savedMazes = Database.getInstance().loadAll();
+        savedMazeButtons = new ArrayList<>();
+        for (Document maze : savedMazes) {
+          String mazeName = maze.getString("name");
+          // You can customize the button layout (e.g., the position, size, and style) here
+          float buttonX = width / 4;
+          float buttonY = height / 4 + buttonIndex * 50;
+          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 40, Color.BLUE, this, menu);
+          mazeButton.draw();
+          savedMazeButtons.add(mazeButton);
+          buttonIndex++;
+        }
+        break;
+
     }
   }
+
+
+  ////////////// Text Box class //////////////
+   class TextBox {
+    PApplet parent;
+    PVector position;
+    int width, height;
+    String text = "";
+
+    TextBox(PApplet parent, PVector position, int width, int height) {
+      this.parent = parent;
+      this.position = position;
+      this.width = width;
+      this.height = height;
+    }
+
+    void draw() {
+      parent.fill(255);
+      parent.rect(position.x, position.y, width, height);
+      parent.fill(0);
+      parent.text(text, position.x + 5, position.y + height - 5);
+    }
+
+    public void mouseClicked(MouseEvent m) {
+      if (saveButton.contains(m.getX(), m.getY())) {
+        if (!text.trim().isEmpty()) { // This ensures that the text isn't empty or only spaces
+          Database.getInstance().saveCurrent(text);
+          isTyping = false;
+        }
+      }
+    }
+
+    boolean contains(int x, int y) {
+      return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
+    }
+
+    void addChar(char c) {
+      text += c;
+    }
+
+    void removeChar() {
+      if (text.length() > 0) {
+        text = text.substring(0, text.length() - 1);
+      }
+    }
+
+    String getText() {
+      return text;
+    }
+  }
+
+  class SaveButton {
+    PApplet parent;
+    PVector position;
+    int width, height;
+    String label;
+
+    SaveButton(PApplet parent, PVector position, int width, int height, String label) {
+      this.parent = parent;
+      this.position = position;
+      this.width = width;
+      this.height = height;
+      this.label = label;
+    }
+
+    void draw() {
+      parent.fill(0, 255, 0);
+      parent.rect(position.x, position.y, width, height);
+      parent.fill(255);
+      parent.text(label, position.x + 5, position.y + height - 5);
+    }
+
+    boolean contains(int x, int y) {
+      return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
+    }
+  }
+
+
+
 
   /**
    * Main function to run the entire game.
@@ -385,7 +521,6 @@ public class Window extends PApplet {
     PApplet.runSketch(appletArgs, mazeRun);
   }
 }
-
 
 
 
