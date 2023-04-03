@@ -12,7 +12,6 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-
 /**
  * The window class runs the display that initializes and displays all
  * other classes represented in the front-end of the maze game
