@@ -31,9 +31,9 @@ public class BladeTile extends TrapTile {
       TrapManager.getInstance()
           .addTrap(new Blade(pos.copy().add(x, y),
               new PVector(0, 0),
-              30f, 0, Color.red, this.window, 0.05f,
+              50f, 0, Color.red, this.window, 0.08f,
               2, pos.copy().add(startX, startY),
-              pos.copy().add(endX, endY)));
+              pos.copy().add(endX, endY), Blade.BLADE_PATH));
 
     }
     }
