@@ -50,11 +50,6 @@ public class Button {
     return label;
   }
 
-  public void loadMaze() {
-    // Load the maze with the given name
-    // Implement the functionality here
-  }
-
 
   public void execute() {
     function.execute();

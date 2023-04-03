@@ -272,7 +272,7 @@ public class Window extends PApplet {
     } else if (state == State.LOAD_ALL) {
       for (Button button : savedMazeButtons) {
         if (button.cursorInside(m.getX(), m.getY())) {
-          button.loadMaze();
+          button.execute();
           break;
         }
       }
@@ -422,6 +422,8 @@ public class Window extends PApplet {
           float buttonX = width / 4;
           float buttonY = height / 4 + buttonIndex * 50;
           Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 40, Color.BLUE, this, menu);
+          mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
+          this.state = State.LOAD;});
           mazeButton.draw();
           savedMazeButtons.add(mazeButton);
           buttonIndex++;

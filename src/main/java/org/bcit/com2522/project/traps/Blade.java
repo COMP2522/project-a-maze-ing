@@ -2,7 +2,6 @@ package org.bcit.com2522.project.traps;
 
 import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.interfaces.Drawable;
-import processing.core.PConstants;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -57,15 +56,15 @@ public class Blade extends Trap implements Drawable {
     public void draw() {
 
         //Blade image
-        TrapManager.getInstance().getWindow().pushMatrix();
-        TrapManager.getInstance().getWindow().translate(getPosition().x, getPosition().y);
-        TrapManager.getInstance().getWindow().rotate(oscillationAngle);
-        TrapManager.getInstance().getWindow().imageMode(PConstants.CORNER);
-        TrapManager.getInstance().getWindow().image(bladeImage, -BLADE_SIZE/2, -BLADE_SIZE/2, BLADE_SIZE , BLADE_SIZE);
-        TrapManager.getInstance().getWindow().popMatrix();
-        move();
-
-        oscillationAngle += oscillationSpeed;
+//        TrapManager.getInstance().getWindow().pushMatrix();
+//        TrapManager.getInstance().getWindow().translate(getPosition().x, getPosition().y);
+//        TrapManager.getInstance().getWindow().rotate(oscillationAngle);
+//        TrapManager.getInstance().getWindow().imageMode(PConstants.CORNER);
+//        TrapManager.getInstance().getWindow().image(bladeImage, -BLADE_SIZE/2, -BLADE_SIZE/2, BLADE_SIZE , BLADE_SIZE);
+//        TrapManager.getInstance().getWindow().popMatrix();
+//        move();
+//
+//        oscillationAngle += oscillationSpeed;
 
     }
 
