@@ -34,7 +34,7 @@ public class BladeTile extends TrapTile {
               30f, 0, Color.red, this.window, 0.05f,
               2, pos.copy().add(startX, startY),
               pos.copy().add(endX, endY)));
+
+    }
     }
   }
-
-}

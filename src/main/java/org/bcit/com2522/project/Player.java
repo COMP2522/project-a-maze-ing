@@ -29,6 +29,17 @@ public class Player extends Sprite {
   PImage playerRight;
   PImage playerUp;
 
+  PImage playerLeftWalk1;
+
+  PImage playerRightWalk1;
+
+  PImage playerUp1;
+
+  PImage playerDown1;
+
+  PImage playerDown2;
+
+  PImage playerUp2;
   private boolean falling;
 
   public PImage getHarryPotterImage() {
@@ -59,6 +70,10 @@ public class Player extends Sprite {
     this.playerLeft = window.loadImage("Data/HPleft.png");
     this.playerRight = window.loadImage("Data/HPright.png");
     this.playerUp = window.loadImage("Data/HPup.png");
+    this.playerLeftWalk1 = window.loadImage("Data/HPleft1.png");
+    this.playerRightWalk1 = window.loadImage("Data/Hpright1.png");
+    this.playerDown1 = window.loadImage("Data/HPfront1.png");
+    this.playerUp1 = window.loadImage("Data/HPup1.png");
 
     alive = true;
     immunityTimer = 0;

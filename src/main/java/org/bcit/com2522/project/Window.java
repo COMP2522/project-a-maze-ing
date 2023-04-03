@@ -8,7 +8,6 @@ import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.traps.TrapManager;
 import processing.core.PApplet;
-import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -32,10 +31,12 @@ public class Window extends PApplet {
   /* Timer object that shows how long it takes player to complete the maze.*/
   private Timer timer;
 
+  private Timer animationTimer;
+
   /*Player that is controlled by user to navigate maze.*/
   Player player;
 
-  PImage backgroundImage; //Background Image for the Window
+  //PImage backgroundImage; //Background Image for the Window
 
 
   /* Length of window in pixels.*/
@@ -58,6 +59,7 @@ public class Window extends PApplet {
   State state;
 
   float timeElapsed;
+  float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
   AltMenu menu;
@@ -81,7 +83,7 @@ public class Window extends PApplet {
     frameRate(FPS);
 
     //sets up the background image
-    backgroundImage = loadImage("Data/dirt.png");
+    //backgroundImage = loadImage("Data/dirt.png");
 
     // initializes the objects
     this.initializeObjects();
@@ -118,26 +120,43 @@ public class Window extends PApplet {
   @Override
   public void keyPressed(KeyEvent event) {
     int keyCode = event.getKeyCode();
+    playerAnimationTime = timer.getTime();
     switch( keyCode ) {
       case LEFT:
         // handle left
         player.setDirection(new PVector(-2, 0));
-        player.setHarryPotterImage(player.playerLeft);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerLeftWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerLeft);
+        }
         break;
       case RIGHT:
         // handle right
         player.setDirection(new PVector(2, 0));
-        player.setHarryPotterImage(player.playerRight);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerRightWalk1);
+        } else {
+          player.setHarryPotterImage(player.playerRight);
+        }
         break;
       case UP:
         // handle left
         player.setDirection(new PVector(0, -2));
-        player.setHarryPotterImage(player.playerUp);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerUp1);
+        } else {
+          player.setHarryPotterImage(player.playerUp);
+        }
         break;
       case DOWN:
         // handle right
         player.setDirection(new PVector(0, 2));
-        player.setHarryPotterImage(player.playerDown);
+        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          player.setHarryPotterImage(player.playerDown1);
+        } else {
+          player.setHarryPotterImage(player.playerDown);
+        }
         break;
     }
   }
@@ -153,17 +172,21 @@ public class Window extends PApplet {
       case LEFT:
         // stop moving left
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerLeft);
       case RIGHT:
         // stop moving right
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerRight);
         break;
       case UP:
         // stop moving up
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerUp);
         break;
       case DOWN:
         // stop moving down
         player.setDirection(new PVector(0, 0));
+        player.setHarryPotterImage(player.playerDown);
         break;
       case 'R':
         if (state == State.GAMEOVER){
@@ -229,7 +252,8 @@ public class Window extends PApplet {
         if (timer == null) {
           timer = new Timer(this, new PVector(0, 0));
         }
-        image(backgroundImage, -1000, -1000, width*3, height*3);
+        background(0);
+        //image(backgroundImage, -1000, -1000, width*3, height*3);
         /**
          * This section will Zoom the camera in and follow the player around
          */

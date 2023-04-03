@@ -24,11 +24,11 @@ public class EnemyManager{
 
   private static EnemyManager instance;
 
-  private EnemyManager(Window w) {
+  private EnemyManager(Window scene) {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
     iterator = enemies.iterator();
-    window = w;
+    window = scene;
 
   }
 

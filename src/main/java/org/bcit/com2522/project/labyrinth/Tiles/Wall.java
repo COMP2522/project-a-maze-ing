@@ -6,14 +6,21 @@ import org.bcit.com2522.project.interfaces.Collidable;
 import processing.core.PImage;
 import processing.core.PVector;
 
+import java.util.Random;
+
 public class Wall extends Tile implements Collidable{
 
   PImage wallImage;
+  String[] wallImageVariants = {
+      "wall1.png",
+      "wall2.png"
+  };
 
   public Wall(PVector pos, Window w) {
     super(pos, w);
-    wallImage = new PImage(TILE_SIZE, TILE_SIZE);
-    wallImage = window.loadImage("images/wall.png");
+    Random rng = new Random();
+    String path = "images/" + wallImageVariants[rng.nextInt(wallImageVariants.length)];
+    wallImage = window.loadImage(path);
   }
 
   public void walkIntoWall(Sprite s) {
