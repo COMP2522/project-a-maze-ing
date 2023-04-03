@@ -10,10 +10,11 @@ public class AltMenu {
   Window window;
   Button play;
   int rgb = 0;
+  Color hover = Color.YELLOW;
 
   public AltMenu(Window w){
     window = w;
-    play = new Button("Play", 100, 100, 200, 100, Color.BLUE, w);
+    play = new Button("Play", 100, 100, 200, 100, Color.BLUE, w, this);
     buttons.add(play);
   }
 
