@@ -3,7 +3,6 @@ package org.bcit.com2522.project.labyrinth;
 import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.labyrinth.Tiles.*;
 import org.bson.Document;
 import processing.core.PVector;
@@ -13,8 +12,6 @@ import java.util.ArrayList;
 public class LabyrinthManager {
 
   private static LabyrinthManager instance;
-
-  private Window window;
 
   private Labyrinth current;
 
@@ -108,40 +105,40 @@ public class LabyrinthManager {
   private void addTile(PVector pos, TileType type) {
     switch (type) {
       case WALL:
-        Wall w = new Wall(pos, window);
+        Wall w = new Wall(pos);
         tiles.add(w);
         WallManager.getInstance().add(w);
         break;
       case PATH:
-        EmptyPathTile path = new EmptyPathTile(pos, window);
+        EmptyPathTile path = new EmptyPathTile(pos);
         tiles.add(path);
         pathTiles.add(path);
         break;
       case END:
-        end = new EndTile(pos, window);
+        end = new EndTile(pos);
         tiles.add(end);
         break;
       case START:
-        start = new StartTile(pos, window);
+        start = new StartTile(pos);
         tiles.add(start);
         break;
       case WRAITH:
-        WraithTile wraithPath = new WraithTile(pos, window);
+        WraithTile wraithPath = new WraithTile(pos);
         tiles.add(wraithPath);
         pathTiles.add(wraithPath);
         break;
       case SPORADIC:
-        SporadicTile sporadicPath = new SporadicTile(pos, window);
+        SporadicTile sporadicPath = new SporadicTile(pos);
         tiles.add(sporadicPath);
         pathTiles.add(sporadicPath);
         break;
       case BLADE_TILE:
-        BladeTile bladePath = new BladeTile(pos, window);
+        BladeTile bladePath = new BladeTile(pos);
         tiles.add(bladePath);
         pathTiles.add(bladePath);
         break;
       case HOLE_TILE:
-        HoleTile holePath = new HoleTile(pos, window);
+        HoleTile holePath = new HoleTile(pos);
         tiles.add(holePath);
         pathTiles.add(holePath);
       default:

@@ -64,8 +64,8 @@ public class Window extends PApplet {
   float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
-  MainMenu menu = new MainMenu(this);
-  PauseMenu pauseMenu = new PauseMenu(this);
+  MainMenu menu = new MainMenu();
+  PauseMenu pauseMenu = new PauseMenu();
   ArrayList<Menu> menus = new ArrayList<Menu>();
 
   /**
@@ -93,7 +93,7 @@ public class Window extends PApplet {
     //this.initializeObjects();
     menu.loadMenu();
 
-    player = Player.getInstance(this);
+    player = Player.getInstance();
 
 
   }
@@ -412,7 +412,7 @@ public class Window extends PApplet {
           // You can customize the button layout (e.g., the position, size, and style) here
           float buttonX = width / 4;
           float buttonY = height / 4 + buttonIndex * 80;
-          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, this, menu);
+          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, menu);
           mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
           GameManager.getInstance().setState(GameState.LOAD);});
           mazeButton.draw();

@@ -1,6 +1,5 @@
 package org.bcit.com2522.project.enemy.spawners;
 
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.enemy.Wraith;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
@@ -9,8 +8,8 @@ import processing.core.PVector;
 public class WraithSpawner extends EnemySpawner {
   private static final int MAX_WRAITH_SPAWNS = 3;
 
-  public WraithSpawner(PVector pos, Window w) {
-    super(MAX_WRAITH_SPAWNS, pos, w);
+  public WraithSpawner(PVector pos) {
+    super(MAX_WRAITH_SPAWNS, pos);
   }
 
   @Override
@@ -24,7 +23,6 @@ public class WraithSpawner extends EnemySpawner {
           Wraith.WRAITH_SIZE,
           Wraith.WRAITH_SPEED,
           Wraith.WRAITH_COLOR,
-          window,
           Wraith.WRAITH_IMAGE_PATH);
       EnemyManager.getInstance()
           .add(en);

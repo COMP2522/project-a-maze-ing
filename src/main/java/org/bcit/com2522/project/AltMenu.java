@@ -15,10 +15,9 @@ public class AltMenu {
 
   private Rectangle loadAllButton;
 
-  public AltMenu(Window w){
-    window = w;
-    play = new Button("Play", 100, 100, 200, 100, Color.BLUE, w, new Menu(w));
-    loadAll = new Button("Load All", 100, 250, 200, 100, Color.BLUE, w, new Menu(w));
+  public AltMenu(){
+    play = new Button("Play", 100, 100, 200, 100, Color.BLUE, new Menu());
+    loadAll = new Button("Load All", 100, 250, 200, 100, Color.BLUE, new Menu());
     buttons.add(play);
     buttons.add(loadAll);
   }
@@ -35,7 +34,7 @@ public class AltMenu {
     for (Button b : buttons) {
       if (b.cursorInside(m.getX(), m.getY())) {
         if (b == play) {
-          window.initializeObjects();
+          GameManager.getInstance().window.initializeObjects();
         } else if (b == loadAll) {
           window.state = GameState.LOAD_ALL;
         }

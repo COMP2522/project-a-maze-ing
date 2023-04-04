@@ -111,8 +111,7 @@ public class EnemyManager{
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
-        new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png"));
+        new Color(255,255,255), "Data/ghostRight.png"));
   }
 
   public void makeHyperGhost(Player player){
@@ -121,8 +120,7 @@ public class EnemyManager{
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
-        new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png");
+        new Color(255,255,255), "Data/ghostRight.png");
       ghost.becomeHyper();
   }
 

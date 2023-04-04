@@ -17,10 +17,8 @@ public abstract class Tile implements Drawable {
 
   protected Window window;
 
-  public Tile(PVector pos, Window w) {
-
+  public Tile(PVector pos) {
     position = pos;
-    window = w;
   }
 
   /**

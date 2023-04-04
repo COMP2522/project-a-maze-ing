@@ -1,6 +1,6 @@
 package org.bcit.com2522.project.traps;
 
-import org.bcit.com2522.project.Window;
+import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.interfaces.Drawable;
 import processing.core.PConstants;
 import processing.core.PImage;
@@ -24,17 +24,17 @@ public class Blade extends Trap implements Drawable {
     PImage bladeImage;
 
     public Blade(PVector position, PVector direction, float size,
-                 float speed, Color color, Window window,
+                 float speed, Color color,
                  float oscillationSpeed, float verticalSpeed,
                  PVector startPosition, PVector endPosition, String imagePath) {
-        super(position, direction, size, speed, color, window);
+        super(position, direction, size, speed, color);
         this.oscillationSpeed = oscillationSpeed;
         this.oscillationAngle = 0;
         this.verticalSpeed = verticalSpeed;
         this.movementDirection = 1;
         this.endPosition = endPosition;
         this.startPosition = startPosition;
-        this.bladeImage = window.loadImage(imagePath);
+        this.bladeImage = GameManager.getInstance().window.loadImage(imagePath);
     }
 
 
@@ -57,12 +57,12 @@ public class Blade extends Trap implements Drawable {
     public void draw() {
 
         //Blade image
-        TrapManager.getInstance().getWindow().pushMatrix();
-        TrapManager.getInstance().getWindow().translate(getPosition().x, getPosition().y);
-        TrapManager.getInstance().getWindow().rotate(oscillationAngle);
-        TrapManager.getInstance().getWindow().imageMode(PConstants.CORNER);
-        TrapManager.getInstance().getWindow().image(bladeImage, -BLADE_SIZE/2, -BLADE_SIZE/2, BLADE_SIZE , BLADE_SIZE);
-        TrapManager.getInstance().getWindow().popMatrix();
+        GameManager.getInstance().window.pushMatrix();
+        GameManager.getInstance().window.translate(getPosition().x, getPosition().y);
+        GameManager.getInstance().window.rotate(oscillationAngle);
+        GameManager.getInstance().window.imageMode(PConstants.CORNER);
+        GameManager.getInstance().window.image(bladeImage, -BLADE_SIZE/2, -BLADE_SIZE/2, BLADE_SIZE , BLADE_SIZE);
+        GameManager.getInstance().window.popMatrix();
         move();
 
         oscillationAngle += oscillationSpeed;
