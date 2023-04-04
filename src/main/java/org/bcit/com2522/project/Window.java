@@ -11,6 +11,7 @@ import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.traps.TrapManager;
 import org.bson.Document;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -29,7 +30,7 @@ public class Window extends PApplet {
   TextBox nameInput;
   SaveButton saveButton;
   boolean isTyping = false;
-
+  PImage backgroundMainMenu;
   ArrayList<Button> savedMazeButtons = new ArrayList<Button>();
 
 
@@ -94,6 +95,7 @@ public class Window extends PApplet {
 
     minim = new Minim(this);
     sound = minim.loadFile("sound/heroSong.mp3");
+    backgroundMainMenu = loadImage("Data/labyrinth.jpeg");
 
     menus.add(menu);
     menus.add(pauseMenu);

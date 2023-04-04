@@ -25,8 +25,9 @@ public class Menu {
   }
 
   public void draw(){
-    window.fill(rgb);
-    window.rect(0, 0, window.width, window.height);
+//    window.fill(rgb);
+//    window.rect(0, 0, window.width, window.height);
+    window.image(window.backgroundMainMenu, 0, 0, window.width, window.height);
     for (Button b : buttons){
       b.draw();
     }
