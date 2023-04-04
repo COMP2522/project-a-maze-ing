@@ -37,7 +37,7 @@ public class AltMenu {
         if (b == play) {
           window.initializeObjects();
         } else if (b == loadAll) {
-          window.state = Window.State.LOAD_ALL;
+          window.state = GameState.LOAD_ALL;
         }
       }
     }

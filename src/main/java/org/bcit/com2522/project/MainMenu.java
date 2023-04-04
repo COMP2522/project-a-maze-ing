@@ -15,6 +15,6 @@ public class MainMenu extends Menu {
     buttons.add(play);
     loadAll = new Button("Load", 100, 250, 200, 100, Color.BLUE, w, this);
     buttons.add(loadAll);
-    loadAll.config(() -> window.state = Window.State.LOAD_ALL);
+    loadAll.config(() -> window.state = GameState.LOAD_ALL);
   }
 }

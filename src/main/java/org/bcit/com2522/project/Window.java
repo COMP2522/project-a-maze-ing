@@ -57,19 +57,8 @@ public class Window extends PApplet {
   public static final int WINDOW_Y = 700;
 
   /* Captures the current state of the game. */
-  enum State{
-    MENU,
-    LOAD,
-    GAMEOVER,
-    PLAY,
-    WIN,
-    PAUSE,
-    LOAD_ALL
-  }
 
   String funFact;
-
-  State state;
 
   float timeElapsed;
   float playerAnimationTime;
@@ -102,13 +91,7 @@ public class Window extends PApplet {
 
     // initializes the objects
     //this.initializeObjects();
-    state = State.MENU;
     menu.loadMenu();
-    EnemyManager.getInstance(this);
-    TrapManager.getInstance(this);
-    LabyrinthManager.getInstance(this);
-    Database.getInstance();
-
 
     player = Player.getInstance(this);
 
@@ -121,7 +104,7 @@ public class Window extends PApplet {
    * be called and updated in the draw() method
    */
   public void initializeObjects() {
-    state = State.LOAD;
+    GameManager.getInstance().setState(GameState.LOAD);
 
     LabyrinthManager.getInstance().newLabyrinth(20,20);
   }
@@ -132,7 +115,7 @@ public class Window extends PApplet {
    */
   @Override
   public void keyPressed(KeyEvent event) {
-    if (state == State.WIN && isTyping) {
+    if (GameManager.getInstance().getState() == GameState.WIN && isTyping) {
       if (event.getKey() == BACKSPACE) {
         nameInput.removeChar();
       } else if (event.getKey() != ENTER && event.getKey() != RETURN) {
@@ -237,8 +220,8 @@ public class Window extends PApplet {
         player.setHarryPotterImage(player.playerDown);
         break;
       case 'R':
-        if (state == State.GAMEOVER){
-          state = State.PLAY;
+        if (GameManager.getInstance().getState() == GameState.GAMEOVER){
+          GameManager.getInstance().setState(GameState.PLAY);
           player.setImmunityTimer(1);
           player.setAlive(true);
           player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
@@ -246,13 +229,13 @@ public class Window extends PApplet {
         }
         break;
       case 'M':
-        if (state == State.WIN || state == State.GAMEOVER);
-        state = state.MENU;
+        if (GameManager.getInstance().getState() == GameState.WIN || GameManager.getInstance().getState() == GameState.GAMEOVER);
+        GameManager.getInstance().setState(GameState.MENU);
         menu.loadMenu();
         break;
       case 'P':
-        if (state == State.PLAY){
-          state = state.PAUSE;
+        if (GameManager.getInstance().getState() == GameState.PLAY){
+          GameManager.getInstance().setState(GameState.PAUSE);
         }
     }
   }
@@ -261,9 +244,9 @@ public class Window extends PApplet {
     for (Menu menu : menus){
       menu.click(m);
     }
-    if (state == State.MENU) {
+    if (GameManager.getInstance().getState() == GameState.MENU) {
       menu.click(m);
-    } else if (state == State.WIN) {
+    } else if (GameManager.getInstance().getState() == GameState.WIN) {
       if (nameInput.contains(m.getX(), m.getY())) {
         isTyping = true;
       } else if (saveButton.contains(m.getX(), m.getY())) {
@@ -272,7 +255,7 @@ public class Window extends PApplet {
       } else {
         isTyping = false;
       }
-    } else if (state == State.LOAD_ALL) {
+    } else if (GameManager.getInstance().getState() == GameState.LOAD_ALL) {
       for (Button button : savedMazeButtons) {
         if (button.cursorInside(m.getX(), m.getY())) {
           button.execute();
@@ -291,7 +274,7 @@ public class Window extends PApplet {
    */
   public void draw() {
 
-    switch (state) {
+    switch (GameManager.getInstance().getState()) {
       case MENU:
         menu.loadMenu();
         menu.draw();
@@ -315,9 +298,9 @@ public class Window extends PApplet {
         text(loading, width / 3, height / 2);
         textSize(30);
         text("Fun fact: " + funFact, width / 4, height / 2 + 50);
-        if (!(LabyrinthManager.getInstance().isGenerating()) && (state == State.LOAD)) {
+        if (!(LabyrinthManager.getInstance().isGenerating()) && (GameManager.getInstance().getState() == GameState.LOAD)) {
           player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-          state = State.PLAY;
+          GameManager.getInstance().setState(GameState.PLAY);
           EnemyManager.getInstance().spawnGhost();
         }
         break;
@@ -371,10 +354,10 @@ public class Window extends PApplet {
         }
 
         if (!(player.isAlive())){
-          state = State.GAMEOVER;
+          GameManager.getInstance().setState(GameState.GAMEOVER);
         }
         if (LabyrinthManager.getInstance().getEnd().collision(player)){
-          state = State.WIN;
+          GameManager.getInstance().setState(GameState.WIN);
         }
         break;
 
@@ -431,7 +414,7 @@ public class Window extends PApplet {
           float buttonY = height / 4 + buttonIndex * 80;
           Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, this, menu);
           mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
-          this.state = State.LOAD;});
+          GameManager.getInstance().setState(GameState.LOAD);});
           mazeButton.draw();
           savedMazeButtons.add(mazeButton);
           buttonIndex++;

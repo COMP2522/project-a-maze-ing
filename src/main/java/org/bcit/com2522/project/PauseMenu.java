@@ -16,7 +16,7 @@ public class PauseMenu extends Menu{
     buttonWidth = w.WINDOW_X / 2;
     resume = new Button("Resume", w.width / 4, buttonHeight, buttonWidth, buttonHeight,
         Color.BLUE, w, this);
-    resume.config(() -> window.state = Window.State.PLAY);
+    resume.config(() -> window.state = GameState.PLAY);
     buttons.add(resume);
     save = new Button("Save", w.width / 4, buttonHeight * 3 , buttonWidth, buttonHeight,
         Color.BLUE, w, this);
@@ -24,6 +24,6 @@ public class PauseMenu extends Menu{
     exit = new Button("Exit", w.width / 4, buttonHeight * 5, buttonWidth, buttonHeight,
         Color.BLUE, w, this);
     buttons.add(exit);
-    exit.config(() -> window.state = Window.State.MENU);
+    exit.config(() -> window.state = GameState.MENU);
   }
 }

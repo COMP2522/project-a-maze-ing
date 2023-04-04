@@ -1,11 +1,10 @@
 package org.bcit.com2522.project.labyrinth;
 
+import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.Window;
-import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.Tiles.*;
-import org.bcit.com2522.project.traps.TrapManager;
 import org.bson.Document;
 import processing.core.PVector;
 
@@ -26,18 +25,14 @@ public class LabyrinthManager {
 
   private EndTile end;
 
-  private WallManager wm = new WallManager();
-
   private boolean generating = false;
 
-  private LabyrinthManager(Window w) {
-    window = w;
-  }
+  private LabyrinthManager() {}
 
   /**
    * Empties the tiles and pathTiles lists.
    */
-  private void resetTiles() {
+  public void resetTiles() {
     tiles = new ArrayList<Tile>();
     pathTiles = new ArrayList<EmptyPathTile>();
   }
@@ -46,19 +41,10 @@ public class LabyrinthManager {
    * returns the labyrinth manager if one exists, creates a new one with given size and returns if one doesn't exist.
    * @return the labyrinthManager instance.
    */
-  public static LabyrinthManager getInstance( Window w) {
-    if(instance == null) {
-      instance = new LabyrinthManager(w);
-    }
-    return instance;
-  }
-
-  /**
-   * returns the labyrinth manager if one exists, creates a new one with default size and returns if one doesn't exist.
-   * @return the labyrinthManager instance.
-   */
   public static LabyrinthManager getInstance() {
-
+    if(instance == null) {
+      instance = new LabyrinthManager();
+    }
     return instance;
   }
 
@@ -124,7 +110,7 @@ public class LabyrinthManager {
       case WALL:
         Wall w = new Wall(pos, window);
         tiles.add(w);
-        wm.add(w);
+        WallManager.getInstance().add(w);
         break;
       case PATH:
         EmptyPathTile path = new EmptyPathTile(pos, window);
@@ -179,10 +165,7 @@ public class LabyrinthManager {
    * @param height - the height of the new labyrinth
    */
   public void newLabyrinth(int width, int height) {
-    resetTiles();
-    wm.clearWalls();
-    EnemyManager.getInstance().clearEnemies();
-    TrapManager.getInstance().clearTraps();
+    GameManager.clearAll();
 
     current = new Labyrinth(width, height);
     current.print();
@@ -198,10 +181,7 @@ public class LabyrinthManager {
   public void loadLabyrinth(Document loadTarget) {
 
     // clear all managers
-    resetTiles();
-    EnemyManager.getInstance().clearEnemies();
-    TrapManager.getInstance().clearTraps();
-    wm.clearWalls();
+    GameManager.clearAll();
 
     ArrayList<ArrayList<String>> t = (ArrayList<ArrayList<String>>) loadTarget.get("tiles");
     TileType[][] layout = new TileType[t.size()][t.get(0).size()];
@@ -254,7 +234,7 @@ public class LabyrinthManager {
   }
 
   public boolean collision(Sprite s){
-    return wm.collision(s);
+    return WallManager.getInstance().collision(s);
   }
 
 
