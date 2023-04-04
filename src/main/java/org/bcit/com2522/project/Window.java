@@ -343,7 +343,9 @@ public class Window extends PApplet {
         timeElapsed = timer.getTime();
         String currTime = String.format("%.1f", timeElapsed);
         text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
-
+        if (timeElapsed >= 30){
+          EnemyManager.getInstance().makeHyperGhost(player);
+        }
         sound.play();
 
         EnemyManager.getInstance().spawn();

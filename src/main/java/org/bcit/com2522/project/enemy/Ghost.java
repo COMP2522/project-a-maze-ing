@@ -12,7 +12,9 @@ public class Ghost extends Enemy implements Movable {
   /* Hitbox size in pixels of ghost enemy type.*/
   public static final int GHOST_SIZE = 30;
 
-  public static final int GHOST_SPEED = 2;
+  public static int ghostSpeed = 2;
+
+
   public static final int GHOST_LENGTH = 35;
 
   public static final int GHOST_START = 300;
@@ -20,6 +22,8 @@ public class Ghost extends Enemy implements Movable {
   private static Ghost ghostInstance = null;
 
   PImage ghostImage;
+
+  private static boolean isHyper = false;
 
 
   public Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
@@ -42,6 +46,11 @@ public class Ghost extends Enemy implements Movable {
     this.ghostImage = image;
   }
 
+  public static void becomeHyper(){
+    ghostSpeed = 8;
+    isHyper = true;
+  }
+
   /**
    * Update ghost position by checking the position of the player and moving
    * the ghost towards the player.
@@ -51,18 +60,25 @@ public class Ghost extends Enemy implements Movable {
     Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     direction.normalize();
-    direction.mult(getSpeed());
+    direction.mult(ghostSpeed);
     setPosition(PVector.add(getPosition(), direction));
     if (direction.x < 0){
-      this.setImage(player.getWindow().loadImage("Data/ghostLeft.png"));
+      if (isHyper){
+        this.setImage(player.getWindow().loadImage("Data/redghostleft.png"));
+      } else {
+        this.setImage(player.getWindow().loadImage("Data/ghostLeft.png"));
+      }
     } else if (direction.x > 0){
-      this.setImage(player.getWindow().loadImage("Data/ghostRight.png"));
+      if (isHyper){
+        this.setImage(player.getWindow().loadImage("Data/redghostright.png"));
+      } else {
+        this.setImage(player.getWindow().loadImage("Data/ghostRight.png"));
+      }
     }
   }
 
   public void update() {
       move();
-
   }
 
 @Override
