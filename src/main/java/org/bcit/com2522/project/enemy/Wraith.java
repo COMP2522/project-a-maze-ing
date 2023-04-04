@@ -12,13 +12,24 @@ import processing.core.PVector;
 
 import java.awt.*;
 
+/**
+ * The Wraith class is an enemy type with a specific movement
+ * and look. The wraith will rapidly move towards the player
+ * and growl when the player is on the same x-axis or y-axis
+ * within a specific tolerence thershold of their hitboxes.
+ *
+ * @Author Nelson Peterson-Hui
+ */
 public class Wraith extends Enemy implements Movable, Drawable {
+
+  /* Speed of the wraith when locked onto the player.*/
   public static final float WRAITH_SPEED = 11.5f;
 
+  /* Colour of the hitbox of the wraith to distinguish during testing.*/
   public static final Color WRAITH_COLOR = new Color(0, 0, 255);
 
+  /*Directory of the wraith image in files. */
   public static final String WRAITH_IMAGE_PATH = "Data/Wraithright.png";
-  //  private static Ghost ghostInstance = null;
 
   /* Minim object for playing sound */
   Minim minim;
@@ -26,7 +37,6 @@ public class Wraith extends Enemy implements Movable, Drawable {
   /* AudioPlayer object for sound file */
   AudioPlayer sound;
 
-  private boolean soundPlaying = false;
   PImage wraithImage;
   //SoundFile sporadicSound;
 
@@ -67,9 +77,7 @@ public class Wraith extends Enemy implements Movable, Drawable {
         setPosition(PVector.add(getPosition(), direction));
         if(distance > player.PLAYER_HEIGHT*2){
           sound.play();
-          soundPlaying = true;
         } else {
-          soundPlaying = false;
           sound.pause();
         }
         if (direction.x < 0){
@@ -80,7 +88,6 @@ public class Wraith extends Enemy implements Movable, Drawable {
       } else if (Math.abs(player.getPosition().x -getPosition().x) > tolerance
           || Math.abs(player.getPosition().y - getPosition().y) > tolerance
       || distance >= threshold/2){
-        soundPlaying = false;
         sound.pause();
       }
     }
