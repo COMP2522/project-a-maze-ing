@@ -115,9 +115,9 @@ public class EnemyManager{
         EnemyManager.getInstance().getWindow(), "Data/ghostRight.png"));
   }
 
-  public void makeHyperGhost(Player player){
-    Ghost ghost = Ghost.getInstance(new PVector(player.getPosition().x + Ghost.GHOST_START,
-            player.getPosition().y + Ghost.GHOST_START),
+  public void makeHyperGhost(){
+    Ghost ghost = Ghost.getInstance(new PVector(Player.getInstance().getPosition().x + Ghost.GHOST_START,
+            Player.getInstance().getPosition().y + Ghost.GHOST_START),
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,

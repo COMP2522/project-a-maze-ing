@@ -11,6 +11,8 @@ public abstract class Tile implements Drawable {
 
   public static final int TILE_SIZE = 250; // placeholder value, adjust as needed
 
+  public static final int TILE_HALF_LENGTH = TILE_SIZE / 2;
+
 
   /* The position of the tile's top-left corner. */
   protected PVector position;
@@ -18,7 +20,6 @@ public abstract class Tile implements Drawable {
   protected Window window;
 
   public Tile(PVector pos, Window w) {
-
     position = pos;
     window = w;
   }

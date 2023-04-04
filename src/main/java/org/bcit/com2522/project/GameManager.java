@@ -1,10 +1,14 @@
 package org.bcit.com2522.project;
 
+import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
 import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
+import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.labyrinth.Tiles.WallManager;
 import org.bcit.com2522.project.traps.TrapManager;
+import processing.core.PVector;
 
 public class GameManager {
 
@@ -13,15 +17,41 @@ public class GameManager {
 
   public Window window;
 
+
+
+  private Timer timer;
+
+  /* AudioPlayer object for sound file */
+  private AudioPlayer sound;
+
+  /* Minim object for playing sound */
+  Minim minim;
+  private float timeElapsed;
+
   private GameManager() {
     window = new Window();
     EnemyManager.getInstance();
     TrapManager.getInstance();
     LabyrinthManager.getInstance();
     Database.getInstance();
+    MenuManager.getInstance();
     Player.getInstance();
+
+    minim = new Minim(this);
+
+
+    sound = minim.loadFile("sound/heroSong.mp3");
+
   }
 
+  private void initMenus() {
+
+  }
+
+  /**
+   * gets the gameManager instance.
+   * @return the gameManager.
+   */
   public static GameManager getInstance() {
     if (instance == null) {
       instance = new GameManager();
@@ -29,6 +59,9 @@ public class GameManager {
     return instance;
   }
 
+  /**
+   * clears all enemies, tiles, traps and walls from the game.
+   */
   public static void clearAll() {
     TrapManager.getInstance().clearTraps();
     EnemyManager.getInstance().clearEnemies();
@@ -36,12 +69,171 @@ public class GameManager {
     WallManager.getInstance().clearWalls();
   }
 
+  /**
+   * checks the game state and runs the code of the current state.
+   */
+  public void runGame() {
+    switch(state) {
+      case MENU:
+        loadMainMenu();
+        break;
+      case LOAD:
+        loadLoadScreen();
+        break;
+      case PLAY:
+        play();
+        break;
+      case GAMEOVER:
+        loadGameOverMenu();
+        break;
+      case WIN:
+        loadWinMenu();
+        break;
+      case PAUSE:
+        loadPauseMenu();
+        break;
+      case LOAD_ALL:
+        loadSaved();
+        break;
+    }
+  }
+
+  /**
+   * gets the current state of the game.
+   * @return the current game state.
+   */
   public GameState getState() {
     return state;
   }
 
+  /**
+   * sets the game state to given state;
+   * @param state the new state.
+   */
   public void setState(GameState state) {
     this.state = state;
   }
+
+  /**
+   * returns the timer.
+   * @return the timer.
+   */
+  public Timer getTimer() {
+    return timer;
+  }
+
+
+  /**
+   * loads the main menu onto the screen.
+   */
+  public void loadMainMenu(){
+    MenuManager.getInstance().loadMainMenu();
+  }
+
+  /**
+   * draws the loading screen.
+   */
+  public void loadLoadScreen() {
+    timer = null;
+    window.background(0);
+    window.textSize(50);
+    if (window.funFact == null) {
+      window.funFact = QuoteGenerator.getQuote();
+    }
+
+    window.load();
+
+    if (!(LabyrinthManager.getInstance().isGenerating()) && (GameManager.getInstance().getState() == GameState.LOAD)) {
+        Player.getInstance().setPosition(
+          LabyrinthManager.getInstance().
+              getStart().getPosition()
+              .add(Tile.TILE_HALF_LENGTH, Tile.TILE_HALF_LENGTH)
+      );
+        GameManager.getInstance().setState(GameState.PLAY);
+        EnemyManager.getInstance().spawnGhost();
+    }
+  }
+
+  public void play() {
+    Player player = Player.getInstance();
+
+    if (timer == null) {
+      timer = new Timer(window, new PVector(0, 0));
+    }
+    window.background(0);
+    PVector cameraPos = new PVector(
+        player.getPosition().x - window.width / 2,
+        player.getPosition().y - window.height / 2);
+    // Translate the drawing surface to the camera position
+    window.translate(-cameraPos.x, -cameraPos.y);
+
+    // renders all tiles in labyrinth
+    LabyrinthManager.getInstance().renderTiles();
+
+
+    sound.play();
+
+    EnemyManager.getInstance().spawn();
+    EnemyManager.getInstance().draw();
+    TrapManager.getInstance().draw();
+
+    //Updates timer time and position in the window
+    timeElapsed = timer.getTime();
+    String currTime = String.format("%.1f", timeElapsed);
+    window.textSize(40);
+    window.text("Time elapsed: " + currTime + " seconds",
+        player.getPosition().x - window.width/2,player.getPosition().y - window.width/3);
+    if (timeElapsed >= 30){
+      EnemyManager.getInstance().makeHyperGhost();
+    }
+
+    EnemyManager.getInstance().collision(player);
+    TrapManager.getInstance().collision(player);
+
+    //Just updates and draws all sprites in the list
+    player.update();
+    player.draw();
+
+
+    if (player.getImmunityTimer() > 0) {
+      player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / window.FPS));
+    }
+
+    if (!(player.isAlive())){
+      GameManager.getInstance().setState(GameState.GAMEOVER);
+    }
+    if (LabyrinthManager.getInstance().getEnd().collision(player)){
+      GameManager.getInstance().setState(GameState.WIN);
+    }
+  }
+
+  /**
+   * Runs game over code.
+   */
+  public void loadGameOverMenu() {
+    sound.pause();
+    window.loadGameOver();
+  }
+
+  public void loadWinMenu() {
+    sound.pause();
+    window.loadWin();
+  }
+
+  public void loadPauseMenu() {
+    sound.pause();
+    MenuManager.getInstance().loadPauseMenu();
+  }
+
+  public void loadSaved() {
+    window.loadSavedMazes();
+    MenuManager.getInstance().loadSavedMazeButtons();
+  }
+
+
+
+
+
+
 
 }

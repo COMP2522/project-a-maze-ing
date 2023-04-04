@@ -1,21 +1,14 @@
 package org.bcit.com2522.project;
 
 
-import com.mongodb.client.FindIterable;
-import ddf.minim.AudioPlayer;
-import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
-import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
-import org.bcit.com2522.project.traps.TrapManager;
-import org.bson.Document;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -33,17 +26,13 @@ public class Window extends PApplet {
   ArrayList<Button> savedMazeButtons = new ArrayList<Button>();
 
 
-  private static final int FPS = 144;
-
-  /* Minim object for playing sound */
-  Minim minim;
+  public static final int FPS = 144;
 
 
-  /* AudioPlayer object for sound file */
-  AudioPlayer sound;
 
-  /* Timer object that shows how long it takes player to complete the maze.*/
-  private Timer timer;
+
+
+
 
   private Timer animationTimer;
 
@@ -81,8 +70,6 @@ public class Window extends PApplet {
    */
   public void setup(){
 
-    minim = new Minim(this);
-    sound = minim.loadFile("sound/heroSong.mp3");
 
     menus.add(menu);
     menus.add(pauseMenu);
@@ -123,7 +110,7 @@ public class Window extends PApplet {
       }
     }
     int keyCode = event.getKeyCode();
-    playerAnimationTime = timer.getTime();
+    playerAnimationTime = GameManager.getInstance().getTimer().getTime();
     switch( keyCode ) {
       case LEFT:
 
@@ -225,7 +212,7 @@ public class Window extends PApplet {
           player.setImmunityTimer(1);
           player.setAlive(true);
           player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-          timer.resetTime();
+          GameManager.getInstance().getTimer().resetTime();
         }
         break;
       case 'M':
@@ -256,7 +243,7 @@ public class Window extends PApplet {
         isTyping = false;
       }
     } else if (GameManager.getInstance().getState() == GameState.LOAD_ALL) {
-      for (Button button : savedMazeButtons) {
+      for (Button button : MenuManager.getInstance().getSavedButtons()) {
         if (button.cursorInside(m.getX(), m.getY())) {
           button.execute();
           break;
@@ -276,153 +263,161 @@ public class Window extends PApplet {
 
     switch (GameManager.getInstance().getState()) {
       case MENU:
-        menu.loadMenu();
-        menu.draw();
+        MenuManager.getInstance().loadMainMenu();
         break;
       case LOAD:
-        timer = null;
-        background(0);
-        textSize(50);
-        if (funFact == null) {
-          funFact = QuoteGenerator.getQuote();
-        }
-        String loading = "Loading";
-        loadingTimer++;
-        if (loadingTimer % FPS == 0){
-          elpCount++;
-        }
-        for (int i = 0; i < elpCount; i++){
-          loading += ".";
-        }
-        fill(255);
-        text(loading, width / 3, height / 2);
-        textSize(30);
-        text("Fun fact: " + funFact, width / 4, height / 2 + 50);
-        if (!(LabyrinthManager.getInstance().isGenerating()) && (GameManager.getInstance().getState() == GameState.LOAD)) {
-          player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-          GameManager.getInstance().setState(GameState.PLAY);
-          EnemyManager.getInstance().spawnGhost();
-        }
+        GameManager.getInstance().loadLoadScreen();
+//        timer = null;
+//        background(0);
+//        textSize(50);
+//        if (funFact == null) {
+//          funFact = QuoteGenerator.getQuote();
+//        }
+//        String loading = "Loading";
+//        loadingTimer++;
+//        if (loadingTimer % FPS == 0){
+//          elpCount++;
+//        }
+//        for (int i = 0; i < elpCount; i++){
+//          loading += ".";
+//        }
+//        fill(255);
+//        text(loading, width / 3, height / 2);
+//        textSize(30);
+//        text("Fun fact: " + funFact, width / 4, height / 2 + 50);
+//        if (!(LabyrinthManager.getInstance().isGenerating()) && (GameManager.getInstance().getState() == GameState.LOAD)) {
+//          player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_HALF_LENGTH, Tile.TILE_HALF_LENGTH));
+//          GameManager.getInstance().setState(GameState.PLAY);
+//          EnemyManager.getInstance().spawnGhost();
+//        }
         break;
 
       case PLAY:
-        if (timer == null) {
-          timer = new Timer(this, new PVector(0, 0));
-        }
-        background(0);
-        //image(backgroundImage, -1000, -1000, width*3, height*3);
-        /**
-         * This section will Zoom the camera in and follow the player around
-         */
-        float zoomFactor = 2.0f; // Increase this value to zoom in more
-        // Calculate the camera position based on the player's position
-        PVector cameraPos = new PVector(
-                player.getPosition().x - width / 2,
-                player.getPosition().y - height / 2);
-        // Translate the drawing surface to the camera position
-        translate(-cameraPos.x, -cameraPos.y);
-
-        // renders all tiles in labyrinth
-        LabyrinthManager.getInstance().renderTiles();
-
-
-        sound.play();
-
-        EnemyManager.getInstance().spawn();
-        EnemyManager.getInstance().draw();
-        TrapManager.getInstance().draw();
-
-        //Updates timer time and position in the window
-        timeElapsed = timer.getTime();
-        String currTime = String.format("%.1f", timeElapsed);
-        textSize(40);
-        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
-        if (timeElapsed >= 30){
-          EnemyManager.getInstance().makeHyperGhost(player);
-        }
-
-        EnemyManager.getInstance().collision(player);
-        TrapManager.getInstance().collision(player);
-
-        //Just updates and draws all sprites in the list
-        player.update();
-        player.draw();
-
-
-        if (player.getImmunityTimer() > 0) {
-          player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
-        }
-
-        if (!(player.isAlive())){
-          GameManager.getInstance().setState(GameState.GAMEOVER);
-        }
-        if (LabyrinthManager.getInstance().getEnd().collision(player)){
-          GameManager.getInstance().setState(GameState.WIN);
-        }
+//        if (timer == null) {
+//          timer = new Timer(this, new PVector(0, 0));
+//        }
+//        background(0);
+//        //image(backgroundImage, -1000, -1000, width*3, height*3);
+//        /**
+//         * This section will Zoom the camera in and follow the player around
+//         */
+//        float zoomFactor = 2.0f; // Increase this value to zoom in more
+//        // Calculate the camera position based on the player's position
+//        PVector cameraPos = new PVector(
+//                player.getPosition().x - width / 2,
+//                player.getPosition().y - height / 2);
+//        // Translate the drawing surface to the camera position
+//        translate(-cameraPos.x, -cameraPos.y);
+//
+//        // renders all tiles in labyrinth
+//        LabyrinthManager.getInstance().renderTiles();
+//
+//
+//        sound.play();
+//
+//        EnemyManager.getInstance().spawn();
+//        EnemyManager.getInstance().draw();
+//        TrapManager.getInstance().draw();
+//
+//        //Updates timer time and position in the window
+//        timeElapsed = timer.getTime();
+//        String currTime = String.format("%.1f", timeElapsed);
+//        textSize(40);
+//        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
+//        if (timeElapsed >= 30){
+//          EnemyManager.getInstance().makeHyperGhost();
+//        }
+//
+//        EnemyManager.getInstance().collision(player);
+//        TrapManager.getInstance().collision(player);
+//
+//        //Just updates and draws all sprites in the list
+//        player.update();
+//        player.draw();
+//
+//
+//        if (player.getImmunityTimer() > 0) {
+//          player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
+//        }
+//
+//        if (!(player.isAlive())){
+//          GameManager.getInstance().setState(GameState.GAMEOVER);
+//        }
+//        if (LabyrinthManager.getInstance().getEnd().collision(player)){
+//          GameManager.getInstance().setState(GameState.WIN);
+//        }
         break;
 
       case GAMEOVER:
-        background(0);
-        fill(255);
-        textSize(50);
-        text("Game Over!", width / 3, height / 2);
-        text("Press R to restart.", width / 3, height / 2 + 50);
-        text("OR press M to return to menu", width / 3, height / 2 + 100);
-        sound.pause();
+//        background(0);
+//        fill(255);
+//        textSize(50);
+//        text("Game Over!", width / 3, height / 2);
+//        text("Press R to restart.", width / 3, height / 2 + 50);
+//        text("OR press M to return to menu", width / 3, height / 2 + 100);
+//        sound.pause();
         break;
 
       case WIN:
-        sound.pause();
-        background(0);
-        textSize(50);
-        fill(255);
-        text("You Won!!!", width / 3, height / 2);
-        textSize(30);
-        String time = String.format("%.1f", timeElapsed);
-        text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
-        text("Press M to return to menu", width / 3, height / 2 + 100);
-        if (nameInput == null) {
-          nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
-        }
-        nameInput.draw();
-
-        if (saveButton == null) {
-          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
-        }
-        saveButton.draw();
+//        sound.pause();
+//        background(0);
+//        textSize(50);
+//        fill(255);
+//        text("You Won!!!", width / 3, height / 2);
+//        textSize(30);
+//        String time = String.format("%.1f", timeElapsed);
+//        text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
+//        text("Press M to return to menu", width / 3, height / 2 + 100);
+//        if (nameInput == null) {
+//          nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
+//        }
+//        nameInput.draw();
+//
+//        if (saveButton == null) {
+//          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
+//        }
+//        saveButton.draw();
         break;
 
       case PAUSE:
-        sound.pause();
-        pauseMenu.loadMenu();
-        pauseMenu.draw();
+//        sound.pause();
+//        pauseMenu.loadMenu();
+//        pauseMenu.draw();
         break;
 
 
 
       case LOAD_ALL:
-        background(0);
-        textSize(30);
-        text("Load All Saved Mazes", width / 4, height / 8);
-        int buttonIndex = 0;
-        FindIterable<Document> savedMazes = Database.getInstance().loadAll();
-        savedMazeButtons = new ArrayList<>();
-        for (Document maze : savedMazes) {
-          String mazeName = maze.getString("name");
-          // You can customize the button layout (e.g., the position, size, and style) here
-          float buttonX = width / 4;
-          float buttonY = height / 4 + buttonIndex * 80;
-          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, this, menu);
-          mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
-          GameManager.getInstance().setState(GameState.LOAD);});
-          mazeButton.draw();
-          savedMazeButtons.add(mazeButton);
-          buttonIndex++;
-        }
+//        background(0);
+//        textSize(30);
+//        text("Load All Saved Mazes", width / 4, height / 8);
+//        int buttonIndex = 0;
+//        FindIterable<Document> savedMazes = Database.getInstance().loadAll();
+//        savedMazeButtons = new ArrayList<>();
+//        for (Document maze : savedMazes) {
+//          String mazeName = maze.getString("name");
+//          // You can customize the button layout (e.g., the position, size, and style) here
+//          float buttonX = width / 4;
+//          float buttonY = height / 4 + buttonIndex * 80;
+//          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, this, menu);
+//          mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
+//          GameManager.getInstance().setState(GameState.LOAD);});
+//          mazeButton.draw();
+//          savedMazeButtons.add(mazeButton);
+//          buttonIndex++;
+//        }
         break;
 
     }
   }
+
+  public void loadSavedMazes() {
+    background(0);
+    textSize(30);
+    text("Load All Saved Mazes", width / 4, height / 8);
+  }
+
+  public
 
 
   ////////////// Text Box class //////////////
@@ -498,6 +493,59 @@ public class Window extends PApplet {
     boolean contains(int x, int y) {
       return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
     }
+  }
+
+  /**
+   * Updates the loading screen during loading.
+   */
+  public void load() {
+    String loading = "Loading";
+    loadingTimer++;
+    if (loadingTimer % FPS == 0){
+      elpCount++;
+    }
+    for (int i = 0; i < elpCount; i++){
+      loading += ".";
+    }
+    fill(255);
+    text(loading, width / 3, height / 2);
+    textSize(30);
+    text("Fun fact: " + funFact, width / 4, height / 2 + 50);
+  }
+
+  /**
+   * Loads the game over screen.
+   */
+  public void loadGameOver() {
+    background(0);
+    fill(255);
+    textSize(50);
+    text("Game Over!", width / 3, height / 2);
+    text("Press R to restart.", width / 3, height / 2 + 50);
+    text("OR press M to return to menu", width / 3, height / 2 + 100);
+  }
+
+  /**
+   * Loads win screen.
+   */
+  public void loadWin() {
+    background(0);
+    textSize(50);
+    fill(255);
+    text("You Won!!!", width / 3, height / 2);
+    textSize(30);
+    String time = String.format("%.1f", timeElapsed);
+    text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
+    text("Press M to return to menu", width / 3, height / 2 + 100);
+    if (nameInput == null) {
+      nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
+    }
+    nameInput.draw();
+
+    if (saveButton == null) {
+      saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
+    }
+    saveButton.draw();
   }
 
 
