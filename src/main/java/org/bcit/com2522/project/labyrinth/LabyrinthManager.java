@@ -46,10 +46,9 @@ public class LabyrinthManager {
    * returns the labyrinth manager if one exists, creates a new one with given size and returns if one doesn't exist.
    * @return the labyrinthManager instance.
    */
-  public static LabyrinthManager getInstance(int width, int height, Window w) {
+  public static LabyrinthManager getInstance( Window w) {
     if(instance == null) {
       instance = new LabyrinthManager(w);
-      instance.newLabyrinth(width, height);
     }
     return instance;
   }
@@ -180,6 +179,11 @@ public class LabyrinthManager {
    * @param height - the height of the new labyrinth
    */
   public void newLabyrinth(int width, int height) {
+    resetTiles();
+    wm.clearWalls();
+    EnemyManager.getInstance().clearEnemies();
+    TrapManager.getInstance().clearTraps();
+
     current = new Labyrinth(width, height);
     current.print();
     generating = true;

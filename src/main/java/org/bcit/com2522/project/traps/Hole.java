@@ -26,10 +26,7 @@ public class Hole extends Trap implements Drawable {
 
     @Override
     public void draw() {
-//        getWindow().pushStyle();
-//        getWindow().fill(getColor().getRed(), getColor().getGreen(), getColor().getBlue());
-//        getWindow().ellipse(getPosition().x, getPosition().y, getSize(), getSize());
-//        getWindow().popStyle();
+
         TrapManager.getInstance().getWindow().image(holeImage, getPosition().x - HOLE_SIZE / 2,
             getPosition().y - HOLE_SIZE / 2 , HOLE_SIZE , HOLE_SIZE);
     }

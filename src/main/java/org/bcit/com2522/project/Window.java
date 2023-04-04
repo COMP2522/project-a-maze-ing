@@ -51,10 +51,10 @@ public class Window extends PApplet {
   Player player;
 
   /* Length of window in pixels.*/
-  public static final int WINDOW_X = 800;
+  public static final int WINDOW_X = 1000;
 
   /* Height of window in pixels.*/
-  public static final int WINDOW_Y = 600;
+  public static final int WINDOW_Y = 700;
 
   /* Captures the current state of the game. */
   enum State{
@@ -101,9 +101,18 @@ public class Window extends PApplet {
     frameRate(FPS);
 
     // initializes the objects
-    this.initializeObjects();
+    //this.initializeObjects();
     state = State.MENU;
     menu.loadMenu();
+    EnemyManager.getInstance(this);
+    TrapManager.getInstance(this);
+    LabyrinthManager.getInstance(this);
+    Database.getInstance();
+
+
+    player = Player.getInstance(this);
+
+
   }
 
 
@@ -113,15 +122,8 @@ public class Window extends PApplet {
    */
   public void initializeObjects() {
     state = State.LOAD;
-    Database.getInstance();
 
-    EnemyManager.getInstance(this);
-    TrapManager.getInstance(this);
-    player = Player.getInstance(this);
-
-
-    LabyrinthManager.getInstance(20, 20, this);
-
+    LabyrinthManager.getInstance().newLabyrinth(20,20);
   }
 
   /**
@@ -396,7 +398,7 @@ public class Window extends PApplet {
         nameInput.draw();
 
         if (saveButton == null) {
-          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 100, 30, "Save Maze");
+          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
         }
         saveButton.draw();
         break;
@@ -420,8 +422,8 @@ public class Window extends PApplet {
           String mazeName = maze.getString("name");
           // You can customize the button layout (e.g., the position, size, and style) here
           float buttonX = width / 4;
-          float buttonY = height / 4 + buttonIndex * 50;
-          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 40, Color.BLUE, this, menu);
+          float buttonY = height / 4 + buttonIndex * 80;
+          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, this, menu);
           mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
           this.state = State.LOAD;});
           mazeButton.draw();
