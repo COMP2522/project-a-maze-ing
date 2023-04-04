@@ -15,6 +15,10 @@ public class Timer {
   public float getTime() {
     return (sketch.millis() - startTime) / 1000.0f;
   }
+  
+  public void resetTime(){
+    startTime = sketch.millis();
+  }
 
   public void setPosition(PVector position) {
   }

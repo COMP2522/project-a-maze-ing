@@ -242,6 +242,7 @@ public class Window extends PApplet {
           player.setImmunityTimer(1);
           player.setAlive(true);
           player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
+          timer.resetTime();
         }
         break;
       case 'M':
@@ -341,16 +342,21 @@ public class Window extends PApplet {
         // renders all tiles in labyrinth
         LabyrinthManager.getInstance().renderTiles();
 
-        //Updates timer time and position in the window
-        timeElapsed = timer.getTime();
-        String currTime = String.format("%.1f", timeElapsed);
-        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
 
         sound.play();
 
         EnemyManager.getInstance().spawn();
         EnemyManager.getInstance().draw();
         TrapManager.getInstance().draw();
+
+        //Updates timer time and position in the window
+        timeElapsed = timer.getTime();
+        String currTime = String.format("%.1f", timeElapsed);
+        textSize(40);
+        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
+        if (timeElapsed >= 30){
+          EnemyManager.getInstance().makeHyperGhost(player);
+        }
 
         EnemyManager.getInstance().collision(player);
         TrapManager.getInstance().collision(player);
