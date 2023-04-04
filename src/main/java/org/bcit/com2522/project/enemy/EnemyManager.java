@@ -30,8 +30,14 @@ public class EnemyManager{
 
   private Window window;
 
+  /*Instance of the EnemyManager class since it's a singleton.*/
   private static EnemyManager instance;
 
+  /**
+   * The EnemyManager class constructs a series of lists that manages all the
+   * enemy types and spawners to iterate through
+   * @param scene
+   */
   private EnemyManager(Window scene) {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
@@ -40,6 +46,12 @@ public class EnemyManager{
 
   }
 
+  /**
+   * Creates a single instance of the enemy manager class if
+   * there is no instance in the first place
+   * @param w
+   * @return
+   */
   public static EnemyManager getInstance(Window w) {
     if (instance == null) {
       instance = new EnemyManager(w);
@@ -48,6 +60,10 @@ public class EnemyManager{
   }
 
 
+  /**
+   * gets the enemy manager instance
+   * @return
+   */
   public static EnemyManager getInstance() {
 
     return instance;
@@ -69,6 +85,10 @@ public class EnemyManager{
     spawners.add(s);
   }
 
+  /**
+   * Removes an enemy from a spawner if needed
+   * @param e
+   */
   public void remove(Enemy e){
         e.getSpawner().removeEnemy();
         enemies.remove(e);
@@ -109,7 +129,7 @@ public class EnemyManager{
   }
 
   /**
-   * spawns the ghost
+   * spawns the ghost singleton at a specific distance away from a player
    */
   public void spawnGhost(){
     Player player = Player.getInstance();
@@ -124,6 +144,10 @@ public class EnemyManager{
     enemies.add(ghost);
   }
 
+  /**
+   * Makes the ghost faster and more terrifying after a time threshold
+   * @param player
+   */
   public void makeHyperGhost(Player player){
     Ghost ghost = Ghost.getInstance(new PVector(player.getPosition().x + Ghost.GHOST_START,
             player.getPosition().y + Ghost.GHOST_START),
@@ -136,6 +160,10 @@ public class EnemyManager{
   }
 
 
+  /**
+   * Sets the collision between enemy and player
+   * @param s
+   */
   public void collision(Sprite s){
     Player player = Player.getInstance();
     resetIterator();

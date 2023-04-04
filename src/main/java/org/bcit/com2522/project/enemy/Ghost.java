@@ -10,9 +10,10 @@ import processing.core.PVector;
 import java.awt.*;
 public class Ghost extends Enemy implements Movable, Drawable {
 
-  /* Hitbox size in pixels of ghost enemy type.*/
+  /* Hitbox size of ghost enemy type.*/
   public static final int GHOST_SIZE = 30;
 
+  /* Sets the speed of the ghost. */
   public static int ghostSpeed = 2;
 
 
@@ -54,7 +55,7 @@ public class Ghost extends Enemy implements Movable, Drawable {
 
   /**
    * Update ghost position by checking the position of the player and moving
-   * the ghost towards the player.
+   * the ghost towards the player. Updates hyper mode of ghost too
    */
   @Override
   public void move() {
@@ -78,15 +79,21 @@ public class Ghost extends Enemy implements Movable, Drawable {
     }
   }
 
+  /**
+   * Updates the position of the ghost
+   */
   public void update() {
       move();
   }
 
-@Override
+  /**
+   * Draws the ghost image and sets the ghost size (not the hitbox)
+   */
+  @Override
   public void draw() {
     EnemyManager.getInstance().getWindow().image(getImage(), getPosition().x - GHOST_LENGTH/2,
         getPosition().y - GHOST_LENGTH/2 , GHOST_LENGTH , GHOST_LENGTH);
-}
+    }
 
 
 
