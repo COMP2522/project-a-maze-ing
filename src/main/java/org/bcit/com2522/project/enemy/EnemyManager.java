@@ -10,12 +10,20 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * The EnemyManager class manages all the enemy types and their spawners
+ * in lists and iterates through them. Ghost spawn methods are unique in this
+ * class since the ghost is a singleton.
+ */
 public class EnemyManager{
 
-  //List of total enemies.
+  /*List of total enemies.*/
   private ArrayList<Enemy> enemies;
-  // List of enemy spawners.
+
+  /* List of enemy spawners.*/
   private ArrayList<EnemySpawner> spawners;
+
+  /* Iterator object to iterate over existing enemies.*/
   private Iterator iterator;
 
 
@@ -105,14 +113,15 @@ public class EnemyManager{
    */
   public void spawnGhost(){
     Player player = Player.getInstance();
-    enemies.add(new Ghost(
+    Ghost ghost = Ghost.getInstance(
         new PVector(player.getPosition().x + Ghost.GHOST_START,
             player.getPosition().y + Ghost.GHOST_START),
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
         new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png"));
+        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png");
+    enemies.add(ghost);
   }
 
   public void makeHyperGhost(Player player){

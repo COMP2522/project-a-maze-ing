@@ -335,7 +335,7 @@ public class Window extends PApplet {
         // Calculate the camera position based on the player's position
         PVector cameraPos = new PVector(
                 player.getPosition().x - width / 2,
-                player.getPosition().y - height / 2);
+                player.getPosition().y - 20 - height / 2);
         // Translate the drawing surface to the camera position
         translate(-cameraPos.x, -cameraPos.y);
 
