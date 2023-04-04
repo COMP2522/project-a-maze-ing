@@ -12,8 +12,6 @@ import processing.core.PVector;
 
 import java.awt.*;
 public class Sporadic extends Enemy implements Movable, Drawable {
-//  private static Ghost ghostInstance = null;
-//
 
   /* Minim object for playing sound */
   Minim minim;
@@ -21,26 +19,37 @@ public class Sporadic extends Enemy implements Movable, Drawable {
   /* AudioPlayer object for sound file */
   AudioPlayer sound;
 
-  private boolean soundPlaying = false;
-
+  /* Image to represent sporadic enemy type. */
   PImage sporadicImage;
 
-  private Player player; //Reference to the player object
-  //SoundFile sporadicSound;
-
-  /* Hitbox size in pixels of sporadic enemy type.*/
+  /* Hitbox size of sporadic enemy type. */
   public static final int SPORADIC_SIZE = 35;
 
+  /* Height of sporadic image. */
   public static final int SPORADIC_HEIGHT = 32;
 
+  /* Width of sporadic image. */
   public static final int SPORADIC_WIDTH = 43;
 
+  /* Speed of sporadic when player gets close. */
   public static final int SPORADIC_SPEED = 10;
 
+  /* Colour of hitbox to distinguish from other enemies during testing. */
   public static final Color SPORADIC_COLOR = new Color(255, 0, 0);
 
+  /* Directory for the sporadic image that represents the sporadic. */
   public static final String SPORADIC_IMAGE_PATH = "Data/sporadicSleep.png";
 
+  /**
+   * Constructs a sporadic enemy type, sets sounds, and images
+   * @param position
+   * @param direction
+   * @param size
+   * @param speed
+   * @param color
+   * @param window
+   * @param imagePath
+   */
   public Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.sporadicImage = window.loadImage(imagePath);
@@ -48,15 +57,18 @@ public class Sporadic extends Enemy implements Movable, Drawable {
     sound = minim.loadFile("sound/sporadicSound.mp3");
   }
 
-  public PImage getImage(){
-    return sporadicImage;
-  }
-
+  /**
+   * sets the image of the sporadic enemy type
+   * @param image
+   */
   public void setImage(PImage image){
     this.sporadicImage = image;
   }
 
-
+  /**
+   * Sets the movement of the sporadic enemy type based on player
+   * position. If player gets close, sporadic movement becomes random.
+   */
   @Override
   public void move() {
     int threshold = 200;
@@ -70,24 +82,27 @@ public class Sporadic extends Enemy implements Movable, Drawable {
       setPosition(PVector.add(getPosition(), randomDirection));
       if(distance > player.PLAYER_HEIGHT*3/2){
         sound.play();
-        soundPlaying = true;
         this.setImage(player.getWindow().loadImage("Data/sporadicAwake.png"));
       } else {
-        soundPlaying = false;
         sound.pause();
       }
     } else if (distance >= threshold) {
-      soundPlaying = false;
       sound.pause();
     }
   }
 
+  /**
+   * Draws the image that represents the sporadic enemy type.
+   */
   @Override
   public void draw() {
     EnemyManager.getInstance().getWindow().image(sporadicImage, getPosition().x - SPORADIC_WIDTH / 2,
         getPosition().y - SPORADIC_HEIGHT / 2 , SPORADIC_WIDTH , SPORADIC_HEIGHT);
   }
 
+  /**
+   * Updates enemy sporadic movement.
+   */
   public void update() {
     move();
   }

@@ -18,7 +18,6 @@ import java.awt.*;
  * and growl when the player is on the same x-axis or y-axis
  * within a specific tolerence thershold of their hitboxes.
  *
- * @Author Nelson Peterson-Hui
  */
 public class Wraith extends Enemy implements Movable, Drawable {
 

@@ -8,6 +8,12 @@ import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
+
+/**
+ * The ghost class will load as a single instance in the window.
+ * The ghost follows the player around and emulates similar
+ * properties to other enemy types.
+ */
 public class Ghost extends Enemy implements Movable, Drawable {
 
   /* Hitbox size of ghost enemy type.*/
@@ -16,23 +22,48 @@ public class Ghost extends Enemy implements Movable, Drawable {
   /* Sets the speed of the ghost. */
   public static int ghostSpeed = 2;
 
-
+  /* Sets the dimensions of the ghost image (is a square).*/
   public static final int GHOST_LENGTH = 35;
 
+  /* Sets the starting distance of the ghost away from the player. */
   public static final int GHOST_START = 300;
 
+  /* Single instance of the ghost. */
   private static Ghost ghostInstance = null;
 
+  /*Image to represent ghost. */
   PImage ghostImage;
 
+  /*Condition to check if ghost is in hyper mode. */
   private static boolean isHyper = false;
 
-
+  /**
+   * Singleton ghost constructor that haunts the player and follows the player around
+   * @param position
+   * @param direction
+   * @param size
+   * @param speed
+   * @param color
+   * @param window
+   * @param imagePath
+   */
   private Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
     super(position, direction, size, speed, color, window);
     this.ghostImage = window.loadImage(imagePath);
   }
 
+  /**
+   * Checks to see if there is a single instance of ghost. If no instance,
+   * a new one is made.
+   * @param position
+   * @param direction
+   * @param size
+   * @param speed
+   * @param color
+   * @param window
+   * @param imagePath
+   * @return ghostInstance
+   */
   public static Ghost getInstance(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath) {
     if (ghostInstance == null) {
       ghostInstance = new Ghost(position, direction, size, speed, color, window, imagePath);
@@ -40,14 +71,25 @@ public class Ghost extends Enemy implements Movable, Drawable {
     return ghostInstance;
   }
 
+  /**
+   * Gets the image that represents the ghost
+   * @return
+   */
   public PImage getImage(){
     return ghostImage;
   }
 
+  /**
+   * Sets the image to represent the ghost
+   * @param image
+   */
   public void setImage(PImage image){
     this.ghostImage = image;
   }
 
+  /**
+   * Puts the ghost in hyper mode and increases speed
+   */
   public static void becomeHyper(){
     ghostSpeed = 8;
     isHyper = true;
@@ -94,7 +136,4 @@ public class Ghost extends Enemy implements Movable, Drawable {
     EnemyManager.getInstance().getWindow().image(getImage(), getPosition().x - GHOST_LENGTH/2,
         getPosition().y - GHOST_LENGTH/2 , GHOST_LENGTH , GHOST_LENGTH);
     }
-
-
-
 }
