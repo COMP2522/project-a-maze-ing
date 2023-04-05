@@ -1,6 +1,5 @@
 package org.bcit.com2522.project.labyrinth.Tiles;
 
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.traps.Hole;
 import org.bcit.com2522.project.traps.TrapManager;
 import processing.core.PVector;
@@ -9,8 +8,8 @@ import java.awt.*;
 
 public class HoleTile extends TrapTile {
 
-    public HoleTile(PVector pos, Window w) {
-        super(pos, w);
+    public HoleTile(PVector pos) {
+        super(pos);
         spawnTraps(TRAP_RANDOMIZER.nextInt(3) + 1, pos);
     }
 
@@ -22,7 +21,7 @@ public class HoleTile extends TrapTile {
       y = TRAP_RANDOMIZER.nextInt(Tile.TILE_SIZE);
       TrapManager.getInstance().addTrap(
           new Hole(pos.copy().add(x, y),
-              new PVector(0, 0), 50, 0, Color.black, this.window, Hole.HOLE_PATH));
+              new PVector(0, 0), 50, 0, Color.black, Hole.HOLE_PATH));
     }
 
   }

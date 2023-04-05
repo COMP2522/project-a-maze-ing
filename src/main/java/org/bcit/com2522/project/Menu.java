@@ -7,13 +7,11 @@ import java.util.ArrayList;
 
 public class Menu {
   ArrayList<Button> buttons = new ArrayList<Button>();
-  Window window;
   int rgb = 0;
   Color hover = Color.YELLOW;
   boolean clickable = false;
 
-  public Menu(Window w){
-    window = w;
+  public Menu(){
   }
 
   public void loadMenu(){
@@ -25,9 +23,13 @@ public class Menu {
   }
 
   public void draw(){
-//    window.fill(rgb);
-//    window.rect(0, 0, window.width, window.height);
-    window.image(window.backgroundMainMenu, 0, 0, window.width, window.height);
+
+    GameManager.getInstance().window.image(
+        GameManager.getInstance().window.backgroundMainMenu, 0, 0,
+        GameManager.getInstance().window.width,
+        GameManager.getInstance().window.height);
+//    GameManager.getInstance().window.fill(rgb);
+//    GameManager.getInstance().window.rect(0, 0, GameManager.getInstance().window.width, GameManager.getInstance().window.height);
     for (Button b : buttons){
       b.draw();
     }

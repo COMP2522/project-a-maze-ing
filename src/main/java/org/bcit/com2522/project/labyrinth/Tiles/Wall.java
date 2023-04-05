@@ -1,7 +1,7 @@
 package org.bcit.com2522.project.labyrinth.Tiles;
 
+import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Sprite;
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.interfaces.Collidable;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -16,11 +16,11 @@ public class Wall extends Tile implements Collidable{
       "wall2.png"
   };
 
-  public Wall(PVector pos, Window w) {
-    super(pos, w);
+  public Wall(PVector pos) {
+    super(pos);
     Random rng = new Random();
     String path = "images/" + wallImageVariants[rng.nextInt(wallImageVariants.length)];
-    wallImage = window.loadImage(path);
+    wallImage = GameManager.getInstance().window.loadImage(path);
   }
 
   public void walkIntoWall(Sprite s) {
@@ -38,6 +38,6 @@ public class Wall extends Tile implements Collidable{
   }
 
   public void draw(){
-    window.image(wallImage, position.x, position.y, TILE_SIZE, TILE_SIZE);
+    GameManager.getInstance().window.image(wallImage, position.x, position.y, TILE_SIZE, TILE_SIZE);
   }
 }

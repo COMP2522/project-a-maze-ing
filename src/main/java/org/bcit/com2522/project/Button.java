@@ -9,18 +9,16 @@ public class Button {
   float height;
   Color bg;
   String label;
-  Window window;
   Menu menu;
   private Executable function;
 
-  public Button(String s, float initX, float initY, float w, float h, Color c, Window space, Menu m){
+  public Button(String s, float initX, float initY, float w, float h, Color c, Menu m){
     width = w;
     height = h;
     x = initX;
     y = initY;
     bg = c;
     label = s;
-    window = space;
     menu = m;
   }
 
@@ -31,15 +29,15 @@ public class Button {
   }
 
   public void draw(){
-    if (cursorInside(window.mouseX, window.mouseY)){
-      window.fill(menu.hover.getRGB());
+    if (cursorInside(GameManager.getInstance().window.mouseX, GameManager.getInstance().window.mouseY)){
+      GameManager.getInstance().window.fill(menu.hover.getRGB());
     } else {
-      window.fill(bg.getRGB());
+      GameManager.getInstance().window.fill(bg.getRGB());
     }
-    window.rect(x, y, width, height);
-    window.fill(0);
-    window.textSize(50);
-    window.text(label, x, y + 50);
+    GameManager.getInstance().window.rect(x, y, width, height);
+    GameManager.getInstance().window.fill(0);
+    GameManager.getInstance().window.textSize(50);
+    GameManager.getInstance().window.text(label, x, y + 50);
   }
 
   public boolean cursorInside(float mX, float mY){
