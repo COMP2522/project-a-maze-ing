@@ -1,13 +1,12 @@
 package org.bcit.com2522.project;
 
-import ddf.minim.AudioPlayer;
-import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
 import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
 import org.bcit.com2522.project.labyrinth.Tiles.WallManager;
 import org.bcit.com2522.project.traps.TrapManager;
+import processing.core.PApplet;
 import processing.core.PVector;
 
 public class GameManager {
@@ -21,30 +20,26 @@ public class GameManager {
 
   private Timer timer;
 
-  /* AudioPlayer object for sound file */
-  private AudioPlayer sound;
 
-  /* Minim object for playing sound */
-  Minim minim;
+
+
   private float timeElapsed;
 
   private GameManager() {
     window = new Window();
+
+
+  }
+
+  private static void initMenus() {
+    MenuManager.getInstance();
     EnemyManager.getInstance();
     TrapManager.getInstance();
     LabyrinthManager.getInstance();
     Database.getInstance();
-    MenuManager.getInstance();
-    Player.getInstance();
-
-    minim = new Minim(this);
 
 
-    sound = minim.loadFile("sound/heroSong.mp3");
-
-  }
-
-  private void initMenus() {
+    GameManager.getInstance().setState(GameState.MENU);
 
   }
 
@@ -55,6 +50,7 @@ public class GameManager {
   public static GameManager getInstance() {
     if (instance == null) {
       instance = new GameManager();
+      initMenus();
     }
     return instance;
   }
@@ -122,6 +118,10 @@ public class GameManager {
     return timer;
   }
 
+  public float getTimeElapsed() {
+    return timeElapsed;
+  }
+
 
   /**
    * loads the main menu onto the screen.
@@ -171,7 +171,7 @@ public class GameManager {
     LabyrinthManager.getInstance().renderTiles();
 
 
-    sound.play();
+    window.getSound().play();
 
     EnemyManager.getInstance().spawn();
     EnemyManager.getInstance().draw();
@@ -190,7 +190,7 @@ public class GameManager {
     EnemyManager.getInstance().collision(player);
     TrapManager.getInstance().collision(player);
 
-    //Just updates and draws all sprites in the list
+    //Just updates and draws player
     player.update();
     player.draw();
 
@@ -211,17 +211,17 @@ public class GameManager {
    * Runs game over code.
    */
   public void loadGameOverMenu() {
-    sound.pause();
+    window.getSound().pause();
     window.loadGameOver();
   }
 
   public void loadWinMenu() {
-    sound.pause();
+    window.getSound().pause();
     window.loadWin();
   }
 
   public void loadPauseMenu() {
-    sound.pause();
+    window.getSound().pause();
     MenuManager.getInstance().loadPauseMenu();
   }
 
@@ -231,9 +231,14 @@ public class GameManager {
   }
 
 
-
-
-
-
-
+  /**
+   * Main function to run the entire game.
+   *
+   * @param passedArgs arguments from command line
+   */
+  public static void main(String[] passedArgs) {
+    String[] appletArgs = new String[]{"find the End"};
+    GameManager.getInstance();
+    PApplet.runSketch(appletArgs, GameManager.getInstance().window);
+  }
 }

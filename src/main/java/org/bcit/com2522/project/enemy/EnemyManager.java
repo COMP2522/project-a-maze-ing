@@ -2,7 +2,6 @@ package org.bcit.com2522.project.enemy;
 
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
 import processing.core.PVector;
 
@@ -20,30 +19,23 @@ public class EnemyManager{
 
 
 
-  private Window window;
 
   private static EnemyManager instance;
 
-  private EnemyManager(Window scene) {
+  private EnemyManager() {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
     iterator = enemies.iterator();
-    window = scene;
 
   }
 
-  public static EnemyManager getInstance(Window w) {
+  public static EnemyManager getInstance() {
     if (instance == null) {
-      instance = new EnemyManager(w);
+      instance = new EnemyManager();
     }
     return instance;
   }
 
-
-  public static EnemyManager getInstance() {
-
-    return instance;
-  }
 
   /**
    * adds the given enemy to the manager.
@@ -111,8 +103,7 @@ public class EnemyManager{
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
-        new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png"));
+        new Color(255,255,255), "Data/ghostRight.png"));
   }
 
   public void makeHyperGhost(){
@@ -121,8 +112,7 @@ public class EnemyManager{
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
-        new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png");
+        new Color(255,255,255), "Data/ghostRight.png");
       ghost.becomeHyper();
   }
 
@@ -145,10 +135,6 @@ public class EnemyManager{
   public void clearEnemies() {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
-  }
-
-  public Window getWindow() {
-    return window;
   }
 
 }

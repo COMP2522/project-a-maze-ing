@@ -11,19 +11,18 @@ public class PauseMenu extends Menu{
   float buttonWidth;
   float buttonHeight = 100;
 
-  public PauseMenu(Window w) {
-    super(w);
-    buttonWidth = w.WINDOW_X / 2;
-    resume = new Button("Resume", w.width / 4, buttonHeight, buttonWidth, buttonHeight,
-        Color.BLUE, w, this);
-    resume.config(() -> window.state = GameState.PLAY);
+  public PauseMenu() {
+    buttonWidth = GameManager.getInstance().window.WINDOW_X / 2;
+    resume = new Button("Resume", GameManager.getInstance().window.width / 4, buttonHeight, buttonWidth, buttonHeight,
+        Color.BLUE, this);
+    resume.config(() -> GameManager.getInstance().setState(GameState.PLAY));
     buttons.add(resume);
-    save = new Button("Save", w.width / 4, buttonHeight * 3 , buttonWidth, buttonHeight,
-        Color.BLUE, w, this);
+    save = new Button("Save", GameManager.getInstance().window.width / 4, buttonHeight * 3 , buttonWidth, buttonHeight,
+        Color.BLUE, this);
     buttons.add(save);
-    exit = new Button("Exit", w.width / 4, buttonHeight * 5, buttonWidth, buttonHeight,
-        Color.BLUE, w, this);
+    exit = new Button("Exit", GameManager.getInstance().window.width / 4, buttonHeight * 5, buttonWidth, buttonHeight,
+        Color.BLUE, this);
     buttons.add(exit);
-    exit.config(() -> window.state = GameState.MENU);
+    exit.config(() -> GameManager.getInstance().setState(GameState.MENU));
   }
 }

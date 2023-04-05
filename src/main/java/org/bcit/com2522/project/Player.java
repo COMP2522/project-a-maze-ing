@@ -16,6 +16,7 @@ public class Player extends Sprite {
 
   public static final int PLAYER_WIDTH = 27;
   public static final int PLAYER_SPEED = 10;
+  private static final int PLAYER_SIZE = 10;
 
   private static Player instance;
 
@@ -62,36 +63,31 @@ public class Player extends Sprite {
     this.falling = falling;
   }
 
-  private Player(PVector position, PVector direction, float size, float speed, Color color, Window window) {
-    super(position, direction, size, speed, color, window);
-    this.harryPotterImage = window.loadImage("Data/HPfront.png");
+  private Player(PVector position, PVector direction, float size, float speed, Color color) {
+    super(position, direction, size, speed, color);
 
-    this.playerDown = window.loadImage("Data/HPfront.png");
-    this.playerLeft = window.loadImage("Data/HPleft.png");
-    this.playerRight = window.loadImage("Data/HPright.png");
-    this.playerUp = window.loadImage("Data/HPup.png");
-    this.playerLeftWalk1 = window.loadImage("Data/HPleft1.png");
-    this.playerRightWalk1 = window.loadImage("Data/Hpright1.png");
-    this.playerDown1 = window.loadImage("Data/HPfront1.png");
-    this.playerUp1 = window.loadImage("Data/HPup1.png");
+    this.harryPotterImage = GameManager.getInstance().window.loadImage("Data/HPfront.png");
+    this.playerDown       = GameManager.getInstance().window.loadImage("Data/HPfront.png");
+    this.playerLeft       = GameManager.getInstance().window.loadImage("Data/HPleft.png");
+    this.playerRight      = GameManager.getInstance().window.loadImage("Data/HPright.png");
+    this.playerUp         = GameManager.getInstance().window.loadImage("Data/HPup.png");
+    this.playerLeftWalk1  = GameManager.getInstance().window.loadImage("Data/HPleft1.png");
+    this.playerRightWalk1 = GameManager.getInstance().window.loadImage("Data/Hpright1.png");
+    this.playerDown1      = GameManager.getInstance().window.loadImage("Data/HPfront1.png");
+    this.playerUp1        = GameManager.getInstance().window.loadImage("Data/HPup1.png");
 
     alive = true;
     immunityTimer = 0;
   }
 
-  public static Player getInstance(Window w) {
-    if (instance == null) {
-      instance = new Player(
-          new PVector(0, 0),
-          new PVector(0, 0),
-          10,
-          PLAYER_SPEED,
-          new Color(0, 255, 0), w);
-    }
-    return instance;
-  }
-
   public static Player getInstance() {
+    if (instance == null) {
+      instance = new Player(new PVector(0, 0),
+          new PVector(0, 0),
+          PLAYER_SIZE,
+          PLAYER_SPEED,
+          new Color(0, 255, 0));
+    }
     return instance;
   }
 
@@ -108,9 +104,9 @@ public class Player extends Sprite {
   }
 
   @Override
-  public boolean collision(Sprite s){
-    float dist = PVector.dist(s.getPosition(), getPosition());
-    if (dist <= (s.getSize() / 2) + (getSize() / 2)){
+  public boolean collision(Sprite sprite){
+    float dist = PVector.dist(sprite.getPosition(), getPosition());
+    if (dist <= (sprite.getSize() / 2) + (getSize() / 2)){
       return true;
     }
     return false;
@@ -118,7 +114,7 @@ public class Player extends Sprite {
 
   @Override
   public void draw() {
-    getWindow().image(getHarryPotterImage(), getPosition().x - PLAYER_WIDTH/2,
+    GameManager.getInstance().window.image(getHarryPotterImage(), getPosition().x - PLAYER_WIDTH/2,
         getPosition().y - PLAYER_HEIGHT/2, PLAYER_WIDTH , PLAYER_HEIGHT);
 
   }

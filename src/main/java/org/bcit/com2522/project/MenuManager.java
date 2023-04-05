@@ -11,9 +11,13 @@ public class MenuManager {
 
   private static MenuManager instance;
 
+
+
   private MainMenu mainMenu;
   private PauseMenu pauseMenu;
   private ArrayList<Button> savedMazeButtons = new ArrayList<>();
+
+
   private ArrayList<Menu> menus;
 
   private MenuManager(){
@@ -40,6 +44,13 @@ public class MenuManager {
     return savedMazeButtons;
   }
 
+  public ArrayList<Menu> getMenus() {
+    return menus;
+  }
+
+  public MainMenu getMainMenu() {
+    return mainMenu;
+  }
 
   public void loadMainMenu() {
     mainMenu.loadMenu();
@@ -69,4 +80,6 @@ public class MenuManager {
       buttonIndex++;
     }
   }
+
+
 }
