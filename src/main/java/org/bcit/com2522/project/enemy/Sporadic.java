@@ -3,8 +3,8 @@ package org.bcit.com2522.project.enemy;
 
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
+import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Player;
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.interfaces.Drawable;
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
@@ -47,13 +47,12 @@ public class Sporadic extends Enemy implements Movable, Drawable {
    * @param size
    * @param speed
    * @param color
-   * @param window
    * @param imagePath
    */
-  public Sporadic(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
-    super(position, direction, size, speed, color, window);
-    this.sporadicImage = window.loadImage(imagePath);
-    minim = new Minim(getWindow());
+  public Sporadic(PVector position, PVector direction, float size, float speed, Color color, String imagePath){
+    super(position, direction, size, speed, color);
+    this.sporadicImage = GameManager.getInstance().window.loadImage(imagePath);
+    minim = new Minim(GameManager.getInstance().window);
     sound = minim.loadFile("sound/sporadicSound.mp3");
   }
 
@@ -82,7 +81,7 @@ public class Sporadic extends Enemy implements Movable, Drawable {
       setPosition(PVector.add(getPosition(), randomDirection));
       if(distance > player.PLAYER_HEIGHT*3/2){
         sound.play();
-        this.setImage(player.getWindow().loadImage("Data/sporadicAwake.png"));
+        this.setImage(GameManager.getInstance().window.loadImage("Data/sporadicAwake.png"));
       } else {
         sound.pause();
       }
@@ -96,7 +95,7 @@ public class Sporadic extends Enemy implements Movable, Drawable {
    */
   @Override
   public void draw() {
-    EnemyManager.getInstance().getWindow().image(sporadicImage, getPosition().x - SPORADIC_WIDTH / 2,
+    GameManager.getInstance().window.image(sporadicImage, getPosition().x - SPORADIC_WIDTH / 2,
         getPosition().y - SPORADIC_HEIGHT / 2 , SPORADIC_WIDTH , SPORADIC_HEIGHT);
   }
 

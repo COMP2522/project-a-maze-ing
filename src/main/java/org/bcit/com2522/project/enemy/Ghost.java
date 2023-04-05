@@ -1,8 +1,10 @@
 package org.bcit.com2522.project.enemy;
 
+import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Player;
-import org.bcit.com2522.project.Window;
+
 import org.bcit.com2522.project.interfaces.Drawable;
+
 import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -44,12 +46,11 @@ public class Ghost extends Enemy implements Movable, Drawable {
    * @param size
    * @param speed
    * @param color
-   * @param window
    * @param imagePath
    */
-  private Ghost(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath){
-    super(position, direction, size, speed, color, window);
-    this.ghostImage = window.loadImage(imagePath);
+  private Ghost(PVector position, PVector direction, float size, float speed, Color color, String imagePath){
+    super(position, direction, size, speed, color);
+    this.ghostImage = GameManager.getInstance().window.loadImage(imagePath);
   }
 
   /**
@@ -60,13 +61,12 @@ public class Ghost extends Enemy implements Movable, Drawable {
    * @param size
    * @param speed
    * @param color
-   * @param window
    * @param imagePath
    * @return ghostInstance
    */
-  public static Ghost getInstance(PVector position, PVector direction, float size, float speed, Color color, Window window, String imagePath) {
+  public static Ghost getInstance(PVector position, PVector direction, float size, float speed, Color color, String imagePath) {
     if (ghostInstance == null) {
-      ghostInstance = new Ghost(position, direction, size, speed, color, window, imagePath);
+      ghostInstance = new Ghost(position, direction, size, speed, color, imagePath);
     }
     return ghostInstance;
   }
@@ -108,15 +108,15 @@ public class Ghost extends Enemy implements Movable, Drawable {
     setPosition(PVector.add(getPosition(), direction));
     if (direction.x < 0){
       if (isHyper){
-        this.setImage(player.getWindow().loadImage("Data/redghostleft.png"));
+        this.setImage(GameManager.getInstance().window.loadImage("Data/redghostleft.png"));
       } else {
-        this.setImage(player.getWindow().loadImage("Data/ghostLeft.png"));
+        this.setImage(GameManager.getInstance().window.loadImage("Data/ghostLeft.png"));
       }
     } else if (direction.x > 0){
       if (isHyper){
-        this.setImage(player.getWindow().loadImage("Data/redghostright.png"));
+        this.setImage(GameManager.getInstance().window.loadImage("Data/redghostright.png"));
       } else {
-        this.setImage(player.getWindow().loadImage("Data/ghostRight.png"));
+        this.setImage(GameManager.getInstance().window.loadImage("Data/ghostRight.png"));
       }
     }
   }
@@ -133,7 +133,7 @@ public class Ghost extends Enemy implements Movable, Drawable {
    */
   @Override
   public void draw() {
-    EnemyManager.getInstance().getWindow().image(getImage(), getPosition().x - GHOST_LENGTH/2,
+  GameManager.getInstance().window.image(getImage(), getPosition().x - GHOST_LENGTH/2,
         getPosition().y - GHOST_LENGTH/2 , GHOST_LENGTH , GHOST_LENGTH);
     }
 }

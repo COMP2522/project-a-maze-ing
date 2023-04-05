@@ -1,22 +1,16 @@
 package org.bcit.com2522.project;
 
 
-import com.mongodb.client.FindIterable;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.Database.Database;
-import org.bcit.com2522.project.enemy.EnemyManager;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import org.bcit.com2522.project.labyrinth.Tiles.Tile;
-import org.bcit.com2522.project.traps.TrapManager;
-import org.bson.Document;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-
-import java.awt.*;
-import java.util.ArrayList;
 
 
 /**
@@ -30,25 +24,27 @@ public class Window extends PApplet {
   SaveButton saveButton;
   boolean isTyping = false;
 
-  ArrayList<Button> savedMazeButtons = new ArrayList<Button>();
+  PImage backgroundMainMenu;
 
 
-  private static final int FPS = 144;
 
-  /* Minim object for playing sound */
-  Minim minim;
+
+
+  public static final int FPS = 144;
+
 
 
   /* AudioPlayer object for sound file */
-  AudioPlayer sound;
+  private AudioPlayer sound;
 
-  /* Timer object that shows how long it takes player to complete the maze.*/
-  private Timer timer;
+
+
+  /* Minim object for playing sound */
+  private Minim minim;
 
   private Timer animationTimer;
 
   /*Player that is controlled by user to navigate maze.*/
-  Player player;
 
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 1000;
@@ -57,27 +53,16 @@ public class Window extends PApplet {
   public static final int WINDOW_Y = 700;
 
   /* Captures the current state of the game. */
-  enum State{
-    MENU,
-    LOAD,
-    GAMEOVER,
-    PLAY,
-    WIN,
-    PAUSE,
-    LOAD_ALL
-  }
 
   String funFact;
-
-  State state;
 
   float timeElapsed;
   float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
-  MainMenu menu = new MainMenu(this);
-  PauseMenu pauseMenu = new PauseMenu(this);
-  ArrayList<Menu> menus = new ArrayList<Menu>();
+//  MainMenu menu = new MainMenu();
+//  PauseMenu pauseMenu = new PauseMenu();
+//  ArrayList<Menu> menus = new ArrayList<Menu>();
 
   /**
    * Provides the size of the window
@@ -92,25 +77,16 @@ public class Window extends PApplet {
    */
   public void setup(){
 
-    minim = new Minim(this);
-    sound = minim.loadFile("sound/heroSong.mp3");
-
-    menus.add(menu);
-    menus.add(pauseMenu);
+    backgroundMainMenu = loadImage("Data/labyrinth.jpeg");
 
     frameRate(FPS);
+    Player.getInstance();
+    minim = new Minim(this);
+
+    sound = minim.loadFile("sound/heroSong.mp3");
 
     // initializes the objects
     //this.initializeObjects();
-    state = State.MENU;
-    menu.loadMenu();
-    EnemyManager.getInstance(this);
-    TrapManager.getInstance(this);
-    LabyrinthManager.getInstance(this);
-    Database.getInstance();
-
-
-    player = Player.getInstance(this);
 
 
   }
@@ -121,7 +97,7 @@ public class Window extends PApplet {
    * be called and updated in the draw() method
    */
   public void initializeObjects() {
-    state = State.LOAD;
+    GameManager.getInstance().setState(GameState.LOAD);
 
     LabyrinthManager.getInstance().newLabyrinth(20,20);
   }
@@ -132,72 +108,75 @@ public class Window extends PApplet {
    */
   @Override
   public void keyPressed(KeyEvent event) {
-    if (state == State.WIN && isTyping) {
-      if (event.getKey() == BACKSPACE) {
-        nameInput.removeChar();
-      } else if (event.getKey() != ENTER && event.getKey() != RETURN) {
-        nameInput.addChar(event.getKey());
+
+      Player player = Player.getInstance();
+      if (GameManager.getInstance().getState() == GameState.WIN && isTyping) {
+        if (event.getKey() == BACKSPACE) {
+          nameInput.removeChar();
+        } else if (event.getKey() != ENTER && event.getKey() != RETURN) {
+          nameInput.addChar(event.getKey());
+        }
       }
-    }
-    int keyCode = event.getKeyCode();
-    playerAnimationTime = timer.getTime();
-    switch( keyCode ) {
-      case LEFT:
+      int keyCode = event.getKeyCode();
+      playerAnimationTime = GameManager.getInstance().getTimer().getTime();
 
-        // handle left
-        //player.setDirection(new PVector(-1, 0));
-        player.getDirection().x = -1;
-        player.getDirection().normalize();
+      switch (keyCode) {
+        case LEFT:
 
-        if (Math.round(playerAnimationTime*5) % 2 == 0){
-          player.setHarryPotterImage(player.playerLeftWalk1);
-        } else {
-          player.setHarryPotterImage(player.playerLeft);
-        }
-        break;
-      case RIGHT:
+          // handle left
+          //player.setDirection(new PVector(-1, 0));
+          player.getDirection().x = -1;
+          player.getDirection().normalize();
 
-        // handle right
-//        player.setDirection(new PVector(1, 0));
-        player.getDirection().x = 1;
-        player.getDirection().normalize();
+          if (Math.round(playerAnimationTime * 5) % 2 == 0) {
+            player.setHarryPotterImage(player.playerLeftWalk1);
+          } else {
+            player.setHarryPotterImage(player.playerLeft);
+          }
+          break;
+        case RIGHT:
 
-        if (Math.round(playerAnimationTime*5) % 2 == 0){
-          player.setHarryPotterImage(player.playerRightWalk1);
-        } else {
-          player.setHarryPotterImage(player.playerRight);
-        }
-        break;
-      case UP:
+          // handle right
+  //        player.setDirection(new PVector(1, 0));
+          player.getDirection().x = 1;
+          player.getDirection().normalize();
 
-        // handle left
-//        player.setDirection(new PVector(0, -1));
-        player.getDirection().y = -1;
-        player.getDirection().normalize();
+          if (Math.round(playerAnimationTime * 5) % 2 == 0) {
+            player.setHarryPotterImage(player.playerRightWalk1);
+          } else {
+            player.setHarryPotterImage(player.playerRight);
+          }
+          break;
+        case UP:
 
-        if (Math.round(playerAnimationTime*5) % 2 == 0){
+          // handle left
+  //        player.setDirection(new PVector(0, -1));
+          player.getDirection().y = -1;
+          player.getDirection().normalize();
 
-          player.setHarryPotterImage(player.playerUp1);
-        } else {
-          player.setHarryPotterImage(player.playerUp);
-        }
-        break;
-      case DOWN:
+          if (Math.round(playerAnimationTime * 5) % 2 == 0) {
 
-        // handle down
-//        player.setDirection(new PVector(0, 1));
-        player.getDirection().y = 1;
-        player.getDirection().normalize();
+            player.setHarryPotterImage(player.playerUp1);
+          } else {
+            player.setHarryPotterImage(player.playerUp);
+          }
+          break;
+        case DOWN:
+
+          // handle down
+  //        player.setDirection(new PVector(0, 1));
+          player.getDirection().y = 1;
+          player.getDirection().normalize();
 
 
+          if (Math.round(playerAnimationTime * 5) % 2 == 0) {
+            player.setHarryPotterImage(player.playerDown1);
+          } else {
+            player.setHarryPotterImage(player.playerDown);
+          }
+          break;
+      }
 
-        if (Math.round(playerAnimationTime*5) % 2 == 0){
-          player.setHarryPotterImage(player.playerDown1);
-        } else {
-          player.setHarryPotterImage(player.playerDown);
-        }
-        break;
-    }
   }
 
   /**
@@ -206,6 +185,7 @@ public class Window extends PApplet {
    */
   @Override
   public void keyReleased(KeyEvent event) {
+    Player player = Player.getInstance();
     int keyCode = event.getKeyCode();
     switch (keyCode) {
       case LEFT:
@@ -237,33 +217,33 @@ public class Window extends PApplet {
         player.setHarryPotterImage(player.playerDown);
         break;
       case 'R':
-        if (state == State.GAMEOVER){
-          state = State.PLAY;
+        if (GameManager.getInstance().getState() == GameState.GAMEOVER){
+          GameManager.getInstance().setState(GameState.PLAY);
           player.setImmunityTimer(1);
           player.setAlive(true);
           player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-          timer.resetTime();
+          GameManager.getInstance().getTimer().resetTime();
         }
         break;
       case 'M':
-        if (state == State.WIN || state == State.GAMEOVER);
-        state = state.MENU;
-        menu.loadMenu();
+        if (GameManager.getInstance().getState() == GameState.WIN || GameManager.getInstance().getState() == GameState.GAMEOVER);
+        GameManager.getInstance().setState(GameState.MENU);
+        MenuManager.getInstance().loadMainMenu();
         break;
       case 'P':
-        if (state == State.PLAY){
-          state = state.PAUSE;
+        if (GameManager.getInstance().getState() == GameState.PLAY){
+          GameManager.getInstance().setState(GameState.PAUSE);
         }
     }
   }
 
   public void mouseClicked(MouseEvent m){
-    for (Menu menu : menus){
+    for (Menu menu : MenuManager.getInstance().getMenus()){
       menu.click(m);
     }
-    if (state == State.MENU) {
-      menu.click(m);
-    } else if (state == State.WIN) {
+    if (GameManager.getInstance().getState() == GameState.MENU) {
+      MenuManager.getInstance().getMainMenu().click(m);
+    } else if (GameManager.getInstance().getState() == GameState.WIN) {
       if (nameInput.contains(m.getX(), m.getY())) {
         isTyping = true;
       } else if (saveButton.contains(m.getX(), m.getY())) {
@@ -272,8 +252,8 @@ public class Window extends PApplet {
       } else {
         isTyping = false;
       }
-    } else if (state == State.LOAD_ALL) {
-      for (Button button : savedMazeButtons) {
+    } else if (GameManager.getInstance().getState() == GameState.LOAD_ALL) {
+      for (Button button : MenuManager.getInstance().getSavedButtons()) {
         if (button.cursorInside(m.getX(), m.getY())) {
           button.execute();
           break;
@@ -290,156 +270,16 @@ public class Window extends PApplet {
    * are drawn in order of appearance in this method.
    */
   public void draw() {
-
-    switch (state) {
-      case MENU:
-        menu.loadMenu();
-        menu.draw();
-        break;
-      case LOAD:
-        timer = null;
-        background(0);
-        textSize(50);
-        if (funFact == null) {
-          funFact = QuoteGenerator.getQuote();
-        }
-        String loading = "Loading";
-        loadingTimer++;
-        if (loadingTimer % FPS == 0){
-          elpCount++;
-        }
-        for (int i = 0; i < elpCount; i++){
-          loading += ".";
-        }
-        fill(255);
-        text(loading, width / 3, height / 2);
-        textSize(30);
-        text("Fun fact: " + funFact, width / 4, height / 2 + 50);
-        if (!(LabyrinthManager.getInstance().isGenerating()) && (state == State.LOAD)) {
-          player.setPosition(LabyrinthManager.getInstance().getStart().getPosition().add(Tile.TILE_SIZE / 2, Tile.TILE_SIZE / 2));
-          state = State.PLAY;
-          EnemyManager.getInstance().spawnGhost();
-        }
-        break;
-
-      case PLAY:
-        if (timer == null) {
-          timer = new Timer(this, new PVector(0, 0));
-        }
-        background(0);
-        //image(backgroundImage, -1000, -1000, width*3, height*3);
-        /**
-         * This section will Zoom the camera in and follow the player around
-         */
-        float zoomFactor = 2.0f; // Increase this value to zoom in more
-        // Calculate the camera position based on the player's position
-        PVector cameraPos = new PVector(
-                player.getPosition().x - width / 2,
-                player.getPosition().y - 20 - height / 2);
-        // Translate the drawing surface to the camera position
-        translate(-cameraPos.x, -cameraPos.y);
-
-        // renders all tiles in labyrinth
-        LabyrinthManager.getInstance().renderTiles();
-
-
-        sound.play();
-
-        EnemyManager.getInstance().spawn();
-        EnemyManager.getInstance().draw();
-        TrapManager.getInstance().draw();
-
-        //Updates timer time and position in the window
-        timeElapsed = timer.getTime();
-        String currTime = String.format("%.1f", timeElapsed);
-        textSize(40);
-        text("Time elapsed: " + currTime + " seconds", player.getPosition().x-width/2,player.getPosition().y- width/3);
-        if (timeElapsed >= 30){
-          EnemyManager.getInstance().makeHyperGhost(player);
-        }
-
-        EnemyManager.getInstance().collision(player);
-        TrapManager.getInstance().collision(player);
-
-        //Just updates and draws all sprites in the list
-        player.update();
-        player.draw();
-
-
-        if (player.getImmunityTimer() > 0) {
-          player.setImmunityTimer(player.getImmunityTimer() - ((float) 1 / FPS));
-        }
-
-        if (!(player.isAlive())){
-          state = State.GAMEOVER;
-        }
-        if (LabyrinthManager.getInstance().getEnd().collision(player)){
-          state = State.WIN;
-        }
-        break;
-
-      case GAMEOVER:
-        background(0);
-        fill(255);
-        textSize(50);
-        text("Game Over!", width / 3, height / 2);
-        text("Press R to restart.", width / 3, height / 2 + 50);
-        text("OR press M to return to menu", width / 3, height / 2 + 100);
-        sound.pause();
-        break;
-
-      case WIN:
-        sound.pause();
-        background(0);
-        textSize(50);
-        fill(255);
-        text("You Won!!!", width / 3, height / 2);
-        textSize(30);
-        String time = String.format("%.1f", timeElapsed);
-        text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
-        text("Press M to return to menu", width / 3, height / 2 + 100);
-        if (nameInput == null) {
-          nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
-        }
-        nameInput.draw();
-
-        if (saveButton == null) {
-          saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
-        }
-        saveButton.draw();
-        break;
-
-      case PAUSE:
-        sound.pause();
-        pauseMenu.loadMenu();
-        pauseMenu.draw();
-        break;
-
-
-
-      case LOAD_ALL:
-        background(0);
-        textSize(30);
-        text("Load All Saved Mazes", width / 4, height / 8);
-        int buttonIndex = 0;
-        FindIterable<Document> savedMazes = Database.getInstance().loadAll();
-        savedMazeButtons = new ArrayList<>();
-        for (Document maze : savedMazes) {
-          String mazeName = maze.getString("name");
-          // You can customize the button layout (e.g., the position, size, and style) here
-          float buttonX = width / 4;
-          float buttonY = height / 4 + buttonIndex * 80;
-          Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, this, menu);
-          mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
-          this.state = State.LOAD;});
-          mazeButton.draw();
-          savedMazeButtons.add(mazeButton);
-          buttonIndex++;
-        }
-        break;
-
-    }
+      GameManager.getInstance().runGame();
   }
+
+  public void loadSavedMazes() {
+    background(0);
+    textSize(30);
+    text("Load All Saved Mazes", width / 4, height / 8);
+  }
+
+  public
 
 
   ////////////// Text Box class //////////////
@@ -517,18 +357,62 @@ public class Window extends PApplet {
     }
   }
 
-
-
+  /**
+   * Updates the loading screen during loading.
+   */
+  public void load() {
+    String loading = "Loading";
+    loadingTimer++;
+    if (loadingTimer % FPS == 0){
+      elpCount++;
+    }
+    for (int i = 0; i < elpCount; i++){
+      loading += ".";
+    }
+    fill(255);
+    text(loading, width / 3, height / 2);
+    textSize(30);
+    text("Fun fact: " + funFact, width / 4, height / 2 + 50);
+  }
 
   /**
-   * Main function to run the entire game.
-   *
-   * @param passedArgs arguments from command line
+   * Loads the game over screen.
    */
-  public static void main(String[] passedArgs) {
-    String[] appletArgs = new String[]{"find the End"};
-    Window mazeRun = new Window();
-    PApplet.runSketch(appletArgs, mazeRun);
+  public void loadGameOver() {
+    background(0);
+    fill(255);
+    textSize(50);
+    text("Game Over!", width / 3, height / 2);
+    text("Press R to restart.", width / 3, height / 2 + 50);
+    text("OR press M to return to menu", width / 3, height / 2 + 100);
+  }
+
+  /**
+   * Loads win screen.
+   */
+  public void loadWin() {
+    background(0);
+    textSize(50);
+    fill(255);
+    text("You Won!!!", width / 3, height / 2);
+    textSize(30);
+    String time = String.format("%.1f", GameManager.getInstance().getTimeElapsed());
+    text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
+    text("Press M to return to menu", width / 3, height / 2 + 100);
+    if (nameInput == null) {
+      nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
+    }
+    nameInput.draw();
+
+    if (saveButton == null) {
+      saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
+    }
+    saveButton.draw();
+  }
+
+
+  public AudioPlayer getSound() {
+    return sound;
   }
 }
 

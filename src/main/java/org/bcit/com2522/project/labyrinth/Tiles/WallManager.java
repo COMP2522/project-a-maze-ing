@@ -8,6 +8,17 @@ import java.util.ArrayList;
 public class WallManager implements Collidable {
   private ArrayList<Wall> walls = new ArrayList<Wall>();
 
+  private static WallManager instance;
+
+  private  WallManager() {}
+
+  public static WallManager getInstance() {
+    if (instance == null) {
+      instance = new WallManager();
+    }
+    return instance;
+  }
+
   public void add(Wall w){
     walls.add(w);
   }

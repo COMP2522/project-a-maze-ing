@@ -26,11 +26,10 @@ public abstract class EnemySpawner {
   // randomizer for spawning in random location in position tile.
   protected static final Random posRand = new Random();
 
-  public EnemySpawner(int max, PVector pos, Window w) {
+  public EnemySpawner(int max, PVector pos) {
     maxEnemies = max;
     currEnemies = 0;
     position = pos;
-    window = w;
   }
 
 

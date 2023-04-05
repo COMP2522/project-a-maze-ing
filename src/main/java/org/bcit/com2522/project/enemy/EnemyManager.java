@@ -2,7 +2,6 @@ package org.bcit.com2522.project.enemy;
 
 import org.bcit.com2522.project.Player;
 import org.bcit.com2522.project.Sprite;
-import org.bcit.com2522.project.Window;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
 import processing.core.PVector;
 
@@ -26,46 +25,29 @@ public class EnemyManager{
   /* Iterator object to iterate over existing enemies.*/
   private Iterator iterator;
 
-
-
-  private Window window;
-
   /*Instance of the EnemyManager class since it's a singleton.*/
   private static EnemyManager instance;
 
   /**
    * The EnemyManager class constructs a series of lists that manages all the
    * enemy types and spawners to iterate through
-   * @param scene
    */
-  private EnemyManager(Window scene) {
+  private EnemyManager() {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
     iterator = enemies.iterator();
-    window = scene;
 
   }
 
   /**
    * Creates a single instance of the enemy manager class if
    * there is no instance in the first place
-   * @param w
-   * @return
-   */
-  public static EnemyManager getInstance(Window w) {
-    if (instance == null) {
-      instance = new EnemyManager(w);
-    }
-    return instance;
-  }
-
-
-  /**
-   * gets the enemy manager instance
    * @return
    */
   public static EnemyManager getInstance() {
-
+    if (instance == null) {
+      instance = new EnemyManager();
+    }
     return instance;
   }
 
@@ -140,22 +122,20 @@ public class EnemyManager{
         Ghost.GHOST_SIZE,
         2,
         new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png");
+         "Data/ghostRight.png");
     enemies.add(ghost);
   }
 
   /**
    * Makes the ghost faster and more terrifying after a time threshold
-   * @param player
    */
-  public void makeHyperGhost(Player player){
-    Ghost ghost = Ghost.getInstance(new PVector(player.getPosition().x + Ghost.GHOST_START,
-            player.getPosition().y + Ghost.GHOST_START),
+  public void makeHyperGhost(){
+    Ghost ghost = Ghost.getInstance(new PVector(Player.getInstance().getPosition().x + Ghost.GHOST_START,
+            Player.getInstance().getPosition().y + Ghost.GHOST_START),
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
-        new Color(255,255,255),
-        EnemyManager.getInstance().getWindow(), "Data/ghostRight.png");
+        new Color(255,255,255), "Data/ghostRight.png");
       ghost.becomeHyper();
   }
 
@@ -182,10 +162,6 @@ public class EnemyManager{
   public void clearEnemies() {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
-  }
-
-  public Window getWindow() {
-    return window;
   }
 
 }
