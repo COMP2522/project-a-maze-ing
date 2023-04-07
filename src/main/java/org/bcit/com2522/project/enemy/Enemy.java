@@ -2,7 +2,7 @@ package org.bcit.com2522.project.enemy;
 
 import org.bcit.com2522.project.Sprite;
 import org.bcit.com2522.project.enemy.spawners.EnemySpawner;
-import org.bcit.com2522.project.interfaces.Collidable;
+import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PVector;
 
 import java.awt.*;
@@ -13,7 +13,7 @@ import java.awt.*;
  * enemy spawners. It extends Sprite and implements
  * the Collidable interface.
  */
-public class Enemy extends Sprite implements Collidable {
+abstract public class Enemy extends Sprite implements Movable {
 
   /* EnemySpawner variable for future use in case we want to destroy enemies. */
   private EnemySpawner spawner;
@@ -53,4 +53,5 @@ public class Enemy extends Sprite implements Collidable {
   public EnemySpawner getSpawner() {
     return spawner;
   }
+
 }

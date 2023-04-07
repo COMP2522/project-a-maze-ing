@@ -5,22 +5,26 @@ import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Player;
-import org.bcit.com2522.project.interfaces.Drawable;
-import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
 
 import java.awt.*;
-public class Sporadic extends Enemy implements Movable, Drawable {
+
+/**
+ * Sporadic is an enemy type represented by a waking
+ * spider. If the player moves within a certain radius
+ * of the sporadic, the sporadic will move in random directions.
+ */
+public class Sporadic extends Enemy {
 
   /* Minim object for playing sound */
-  Minim minim;
+  public Minim minim;
 
   /* AudioPlayer object for sound file */
-  AudioPlayer sound;
+  public AudioPlayer sound;
 
   /* Image to represent sporadic enemy type. */
-  PImage sporadicImage;
+  private PImage sporadicImage;
 
   /* Hitbox size of sporadic enemy type. */
   public static final int SPORADIC_SIZE = 35;
