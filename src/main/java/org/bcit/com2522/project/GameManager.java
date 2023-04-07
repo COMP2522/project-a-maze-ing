@@ -21,8 +21,7 @@ public class GameManager {
   private Timer timer;
 
 
-
-
+  /* Time elapsed during maze game. */
   private float timeElapsed;
 
   private GameManager() {

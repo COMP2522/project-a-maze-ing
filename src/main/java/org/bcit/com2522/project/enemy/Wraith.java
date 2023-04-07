@@ -69,7 +69,7 @@ public class Wraith extends Enemy {
   }
 
   /**
-   * Moves the wraith when player is within
+   * Moves the wraith when player is within the
    * threshold of wraith's line of sight on x-axis
    * or y-axis. Sound plays and wraith will move towards
    * player if conditions are met that wraith is in a certain

@@ -19,7 +19,7 @@ abstract public class Enemy extends Sprite implements Movable {
   private EnemySpawner spawner;
 
   /**
-   * A constructor to create an enemy type that uses parameters from Sprite
+   * A constructor to create an enemy type that uses the parameters from Sprite
    * @param position
    * @param direction
    * @param size
