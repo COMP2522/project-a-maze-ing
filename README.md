@@ -12,7 +12,7 @@ Dodge ghouls, spiders and blades as you maneuver our randomly generated maze! Cr
 # Code Contributions
 
 **Nelson Peterson-Hui**
-* Enemy Mechanics Architect
+* Sprite Mechanics Architect
 * Animations artist
 * Sound designer
 * Debugger 
