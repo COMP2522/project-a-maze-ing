@@ -42,10 +42,6 @@ public class Window extends PApplet {
   /* Minim object for playing sound */
   private Minim minim;
 
-  private Timer animationTimer;
-
-  /*Player that is controlled by user to navigate maze.*/
-
   /* Length of window in pixels.*/
   public static final int WINDOW_X = 1000;
 
@@ -56,7 +52,6 @@ public class Window extends PApplet {
 
   String funFact;
 
-  float timeElapsed;
   float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
