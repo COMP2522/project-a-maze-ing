@@ -24,7 +24,7 @@ public class Player extends Sprite {
   private static Player instance;
 
   /* Player state variables. */
-  private boolean alive = true;
+  private boolean alive;
   private float immunityTimer;
 
   /* Player images for different directions and walking animations. */
