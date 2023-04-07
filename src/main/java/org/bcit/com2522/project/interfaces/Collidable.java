@@ -9,9 +9,8 @@ public interface Collidable {
 
   /**
    * Given two Collidable objects, checks if they have collided.
-   * @param a first Collidable object a
-   * @param b second Collidable object
+   * @param sprite first Collidable Sprite object that collides with another sprite
    * @return true if collision has occurred, false otherwise.
    */
-  boolean collision(Sprite s);
+  boolean collision(Sprite sprite);
 }

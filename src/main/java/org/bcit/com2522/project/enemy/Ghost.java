@@ -2,10 +2,6 @@ package org.bcit.com2522.project.enemy;
 
 import org.bcit.com2522.project.GameManager;
 import org.bcit.com2522.project.Player;
-
-import org.bcit.com2522.project.interfaces.Drawable;
-
-import org.bcit.com2522.project.interfaces.Movable;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -16,7 +12,7 @@ import java.awt.*;
  * The ghost follows the player around and emulates similar
  * properties to other enemy types.
  */
-public class Ghost extends Enemy implements Movable, Drawable {
+public class Ghost extends Enemy{
 
   /* Hitbox size of ghost enemy type.*/
   public static final int GHOST_SIZE = 30;
@@ -34,7 +30,7 @@ public class Ghost extends Enemy implements Movable, Drawable {
   private static Ghost ghostInstance = null;
 
   /*Image to represent ghost. */
-  PImage ghostImage;
+  private PImage ghostImage;
 
   /*Condition to check if ghost is in hyper mode. */
   private static boolean isHyper = false;
