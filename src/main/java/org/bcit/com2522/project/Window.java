@@ -99,7 +99,7 @@ public class Window extends PApplet {
   public void initializeObjects() {
     GameManager.getInstance().setState(GameState.LOAD);
 
-    LabyrinthManager.getInstance().newLabyrinth(20,20);
+    LabyrinthManager.getInstance().newLabyrinth(LabyrinthManager.LAB_WIDTH,LabyrinthManager.LAB_HEIGHT);
   }
 
   /**
