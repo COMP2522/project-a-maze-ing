@@ -17,4 +17,4 @@ Dodge ghouls, spiders and blades as you maneuver our randomly generated maze! Cr
 * Sound designer
 * Debugger 
 
-<img width="800" height="600" src="images/Comp 2522 a-maze-ing project UML class diagrams - Nelson.png">
+<img width="600" height="700" src="images/Comp 2522 a-maze-ing project UML class diagrams - Nelson.png">
