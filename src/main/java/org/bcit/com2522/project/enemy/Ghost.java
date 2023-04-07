@@ -102,6 +102,8 @@ public class Ghost extends Enemy{
     direction.normalize();
     direction.mult(ghostSpeed);
     setPosition(PVector.add(getPosition(), direction));
+
+    //Moves ghost towards player, changes images and sets checks for hypermode
     if (direction.x < 0){
       if (isHyper){
         this.setImage(GameManager.getInstance().window.loadImage("Data/redghostleft.png"));

@@ -77,30 +77,42 @@ public class Wraith extends Enemy {
    */
   @Override
   public void move() {
-    int threshold = 700;
-    float tolerance = 15f;
+
+    int threshold = 700;    //distance before wraith moves
+    float tolerance = 15f;  //threshold of player and wraith hitboxes on axis to trigger wraith movement
+
     Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
+
+    //Check if player is within distance
     if (distance < threshold) {
+
+      //Check if player is on same x or y-axis
       if (Math.abs(player.getPosition().x -getPosition().x) < tolerance
           || Math.abs(player.getPosition().y - getPosition().y) < tolerance) {
+
         direction.normalize();
         direction.mult(getSpeed());
         setPosition(PVector.add(getPosition(), direction));
+
+        //Condition to stop sound playing if player is in death range of wraith
         if(distance > player.PLAYER_HEIGHT*2){
           sound.play();
         } else {
           sound.pause();
         }
+
+        //Sets image directions
         if (direction.x < 0){
           this.setImage(GameManager.getInstance().window.loadImage("Data/Wraithleft.png"));
         } else if (direction.x > 0){
           this.setImage(GameManager.getInstance().window.loadImage("Data/Wraithright.png"));
         }
+
       } else if (Math.abs(player.getPosition().x -getPosition().x) > tolerance
           || Math.abs(player.getPosition().y - getPosition().y) > tolerance
-      || distance >= threshold/2){
+          || distance >= threshold/2){
         sound.pause();
       }
     }

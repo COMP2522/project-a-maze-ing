@@ -74,21 +74,29 @@ public class Sporadic extends Enemy {
    */
   @Override
   public void move() {
+
+    //Distance before sporadic reacts
     int threshold = 200;
+
     Player player = Player.getInstance();
     PVector direction = PVector.sub(player.getPosition(), getPosition());
     float distance = direction.mag();
+
     if (distance < threshold) {
 
+      //randomize movement of sporadic
       PVector randomDirection = PVector.random2D();
       randomDirection.mult(getSpeed());
       setPosition(PVector.add(getPosition(), randomDirection));
+      
+      //Sets image and sound of sporadic
       if(distance > player.PLAYER_HEIGHT*3/2){
         sound.play();
         this.setImage(GameManager.getInstance().window.loadImage("Data/sporadicAwake.png"));
       } else {
         sound.pause();
       }
+
     } else if (distance >= threshold) {
       sound.pause();
     }
