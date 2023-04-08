@@ -10,12 +10,23 @@ import java.util.Random;
 
 public class Wall extends Tile implements Collidable{
 
+  /**
+   * the image of this wall.
+   */
   PImage wallImage;
+
+  /**
+   * Arraylist containing the wall image variants for randomization.
+   */
   String[] wallImageVariants = {
       "wall1.png",
       "wall2.png"
   };
 
+  /**
+   * Constructor.
+   * @param pos
+   */
   public Wall(PVector pos) {
     super(pos);
     Random rng = new Random();
@@ -23,6 +34,10 @@ public class Wall extends Tile implements Collidable{
     wallImage = GameManager.getInstance().window.loadImage(path);
   }
 
+  /**
+   * Wall collision handling.
+   * @param s the sprite colliding with this wall.
+   */
   public void walkIntoWall(Sprite s) {
     PVector temp = s.getDirection().copy().normalize();
     float sX = s.getPosition().x;
@@ -37,6 +52,9 @@ public class Wall extends Tile implements Collidable{
     }
   }
 
+  /**
+   * Renders the wall image on the wall.s
+   */
   public void draw(){
     GameManager.getInstance().window.image(wallImage, position.x, position.y, TILE_SIZE, TILE_SIZE);
   }

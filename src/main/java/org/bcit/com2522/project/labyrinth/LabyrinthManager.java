@@ -21,12 +21,24 @@ public class LabyrinthManager {
   private ArrayList<Tile> tiles;
   private ArrayList<EmptyPathTile> pathTiles;
 
+  /**
+   * The StartTile of the current labyrinth.
+   */
   private StartTile start;
 
+  /**
+   * The end tile of the current labyrinth.
+   */
   private EndTile end;
 
+  /**
+   * Locking boolean used for thread management.
+   */
   private boolean generating = false;
 
+  /**
+   * Constructor.
+   */
   private LabyrinthManager() {}
 
   /**
@@ -153,7 +165,6 @@ public class LabyrinthManager {
    * Renders tiles into the window.
    */
   public void renderTiles() {
-    //tiles.stream().forEach(); draw each tile. Don't know how to do this yet.
     for (Tile t : tiles){
       t.draw();
     }
@@ -175,7 +186,6 @@ public class LabyrinthManager {
 
   /**
    * loads a existing labyrinth from the database into the manager.
-   * todo: this is a placeholder, need to figure out how to search for a given labyrinth
    * @param loadTarget the labyrinth bson object to load.
    */
   public void loadLabyrinth(Document loadTarget) {

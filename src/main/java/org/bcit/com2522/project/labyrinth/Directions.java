@@ -8,6 +8,10 @@ public enum Directions {
   RIGHT,
   DOWN,
   LEFT;
+
+  /**
+   * Used in labyrinth generation to randomize search order.
+   */
   public static final List<Directions> DIR_ORDER = Arrays.asList(new Directions[]{UP, RIGHT, DOWN, LEFT});
 }
 

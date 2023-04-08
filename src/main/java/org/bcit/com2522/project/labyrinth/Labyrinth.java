@@ -97,7 +97,7 @@ public class Labyrinth {
 
   /**
    * Algorithm to generate the shortest path between the start and end of the labyrinth.
-   * Note: currently only generates L shaped paths for quick testing purposes. Need to add randomizer later
+   *
    */
   private void generateCorrectPath() {
     MazeGenerationQueue queue = new MazeGenerationQueue();
@@ -330,7 +330,7 @@ public class Labyrinth {
   }
 
   /**
-   * print method for debugging maze generation, remove later.
+   * print method for debugging maze generation.
    */
   public void print() {
     System.out.print("\t");
@@ -392,7 +392,4 @@ public class Labyrinth {
    * @param y the y coordinate
    * @param value the new value to set.
    */
-  public void setTile(int x, int y, TileType value) {
-    this.tiles[y][x] = value;
-  }
 }

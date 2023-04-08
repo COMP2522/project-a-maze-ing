@@ -11,26 +11,44 @@ import processing.core.PVector;
 
 public class GameManager {
 
+  /**
+   * the Singleton instance of the gamemanager.
+   */
   private static GameManager instance;
+
+  /**
+   * the current state of the game.
+   */
   private GameState state;
 
+  /**
+   * The main window of the game.
+   */
   public Window window;
 
 
-
+  /**
+   * Timer used to track time.
+   */
   private Timer timer;
 
 
   /* Time elapsed during maze game. */
   private float timeElapsed;
 
+  /**
+   * Constructor: creates new window.
+   */
   private GameManager() {
     window = new Window();
 
 
   }
 
-  private static void initMenus() {
+  /**
+   * Initializes all managers.
+   */
+  private static void init() {
     MenuManager.getInstance();
     EnemyManager.getInstance();
     TrapManager.getInstance();
@@ -43,13 +61,13 @@ public class GameManager {
   }
 
   /**
-   * gets the gameManager instance.
+   * gets the gameManager instance. If the instance is null, creates a new one.
    * @return the gameManager.
    */
   public static GameManager getInstance() {
     if (instance == null) {
       instance = new GameManager();
-      initMenus();
+      init();
     }
     return instance;
   }
@@ -153,6 +171,11 @@ public class GameManager {
     }
   }
 
+
+  /**
+   * Runs logic and updates for all relevant entities during gameplay in the labyrinth.
+   * Called on every draw call while the game state is PLAY
+   */
   public void play() {
     Player player = Player.getInstance();
 
@@ -172,7 +195,10 @@ public class GameManager {
 
     window.getSound().play();
 
+    // spawn more enemies if a spawner has not reached its max spawn count.
     EnemyManager.getInstance().spawn();
+
+    //Draw Enemies and traps on screen
     EnemyManager.getInstance().draw();
     TrapManager.getInstance().draw();
 
@@ -186,6 +212,7 @@ public class GameManager {
       EnemyManager.getInstance().makeHyperGhost();
     }
 
+    //Check player collision
     EnemyManager.getInstance().collision(player);
     TrapManager.getInstance().collision(player);
 
@@ -214,16 +241,25 @@ public class GameManager {
     window.loadGameOver();
   }
 
+  /**
+   * Loads the win menu and manages the menu logic and interaction.
+   */
   public void loadWinMenu() {
     window.getSound().pause();
     window.loadWin();
   }
 
+  /**
+   * Loads the pause menu and manages the menu logic and interaction.
+   */
   public void loadPauseMenu() {
     window.getSound().pause();
     MenuManager.getInstance().loadPauseMenu();
   }
 
+  /**
+   * Loads the saved game menu and manages the menu logic and interaction.
+   */
   public void loadSaved() {
     window.loadSavedMazes();
     MenuManager.getInstance().loadSavedMazeButtons();
