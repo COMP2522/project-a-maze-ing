@@ -69,7 +69,6 @@ public class MenuManager {
     savedMazeButtons = new ArrayList<>();
     for (Document maze : savedMazes) {
       String mazeName = maze.getString("name");
-      // You can customize the button layout (e.g., the position, size, and style) here
       float buttonX = GameManager.getInstance().window.width / 4f;
       float buttonY = GameManager.getInstance().window.height / 4f + buttonIndex * 80;
       Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, mainMenu);
@@ -79,6 +78,14 @@ public class MenuManager {
       savedMazeButtons.add(mazeButton);
       buttonIndex++;
     }
+
+    // Add a back button
+    float backButtonX = GameManager.getInstance().window.width / 2f;
+    float backButtonY = GameManager.getInstance().window.height * 3f / 4f;
+    Button backButton = new Button("Back to Main Menu", backButtonX, backButtonY, 300, 80, Color.BLUE, mainMenu);
+    backButton.config(() -> mainMenu.returnToMainMenu());
+    backButton.draw();
+    savedMazeButtons.add(backButton);
   }
 
 

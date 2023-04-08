@@ -16,4 +16,10 @@ public class MainMenu extends Menu {
     buttons.add(loadAll);
     loadAll.config(() -> GameManager.getInstance().setState(GameState.LOAD_ALL));
   }
+
+
+  // Method to return to the main menu from the saved maze buttons screen
+  public void returnToMainMenu() {
+    GameManager.getInstance().setState(GameState.MENU);
+  }
 }
