@@ -21,8 +21,7 @@ public class GameManager {
   private Timer timer;
 
 
-
-
+  /* Time elapsed during maze game. */
   private float timeElapsed;
 
   private GameManager() {
@@ -158,7 +157,7 @@ public class GameManager {
     Player player = Player.getInstance();
 
     if (timer == null) {
-      timer = new Timer(window, new PVector(0, 0));
+      timer = new Timer(window);
     }
     window.background(0);
     PVector cameraPos = new PVector(

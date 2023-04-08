@@ -15,6 +15,9 @@ public class LabyrinthManager {
 
   private Labyrinth current;
 
+  public static final int LAB_WIDTH = 20;
+  public static final int LAB_HEIGHT = 20;
+
   private ArrayList<Tile> tiles;
   private ArrayList<EmptyPathTile> pathTiles;
 

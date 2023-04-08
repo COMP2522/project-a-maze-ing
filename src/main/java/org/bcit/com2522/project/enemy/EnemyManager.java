@@ -9,19 +9,29 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * The EnemyManager class manages all the enemy types and their spawners
+ * in lists and iterates through them. Ghost spawn methods are unique in this
+ * class since the ghost is a singleton.
+ */
 public class EnemyManager{
 
-  //List of total enemies.
+  /*List of total enemies.*/
   private ArrayList<Enemy> enemies;
-  // List of enemy spawners.
+
+  /* List of enemy spawners.*/
   private ArrayList<EnemySpawner> spawners;
+
+  /* Iterator object to iterate over existing enemies.*/
   private Iterator iterator;
 
-
-
-
+  /*Instance of the EnemyManager class since it's a singleton.*/
   private static EnemyManager instance;
 
+  /**
+   * The EnemyManager class constructs a series of lists that manages all the
+   * enemy types and spawners to iterate through
+   */
   private EnemyManager() {
     enemies = new ArrayList<>();
     spawners = new ArrayList<>();
@@ -29,13 +39,17 @@ public class EnemyManager{
 
   }
 
+  /**
+   * Creates a single instance of the enemy manager class if
+   * there is no instance in the first place
+   * @return
+   */
   public static EnemyManager getInstance() {
     if (instance == null) {
       instance = new EnemyManager();
     }
     return instance;
   }
-
 
   /**
    * adds the given enemy to the manager.
@@ -53,6 +67,10 @@ public class EnemyManager{
     spawners.add(s);
   }
 
+  /**
+   * Removes an enemy from a spawner if needed
+   * @param e
+   */
   public void remove(Enemy e){
         e.getSpawner().removeEnemy();
         enemies.remove(e);
@@ -93,19 +111,24 @@ public class EnemyManager{
   }
 
   /**
-   * spawns the ghost
+   * spawns the ghost singleton at a specific distance away from a player
    */
   public void spawnGhost(){
     Player player = Player.getInstance();
-    enemies.add(new Ghost(
+    Ghost ghost = Ghost.getInstance(
         new PVector(player.getPosition().x + Ghost.GHOST_START,
             player.getPosition().y + Ghost.GHOST_START),
         new PVector(0,1),
         Ghost.GHOST_SIZE,
         2,
-        new Color(255,255,255), "Data/ghostRight.png"));
+        new Color(255,255,255),
+         "Data/ghostRight.png");
+    enemies.add(ghost);
   }
 
+  /**
+   * Makes the ghost faster and more terrifying after a time threshold
+   */
   public void makeHyperGhost(){
     Ghost ghost = Ghost.getInstance(new PVector(Player.getInstance().getPosition().x + Ghost.GHOST_START,
             Player.getInstance().getPosition().y + Ghost.GHOST_START),
@@ -117,6 +140,10 @@ public class EnemyManager{
   }
 
 
+  /**
+   * Sets the collision between enemy and player
+   * @param s
+   */
   public void collision(Sprite s){
     Player player = Player.getInstance();
     resetIterator();
