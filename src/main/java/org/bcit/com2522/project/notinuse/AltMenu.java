@@ -1,23 +1,26 @@
-package org.bcit.com2522.project;
+package org.bcit.com2522.project.notinuse;
 
+import org.bcit.com2522.project.Button;
+import org.bcit.com2522.project.GameManager;
+import org.bcit.com2522.project.GameState;
 import processing.event.MouseEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public class AltMenu {
-  ArrayList<Button> buttons = new ArrayList<Button>();
-  Window window;
-  Button play;
-  Button loadAll;
+  ArrayList<org.bcit.com2522.project.Button> buttons = new ArrayList<org.bcit.com2522.project.Button>();
+  org.bcit.com2522.project.Window window;
+  org.bcit.com2522.project.Button play;
+  org.bcit.com2522.project.Button loadAll;
   int rgb = 0;
   Color hover = Color.YELLOW;
 
   private Rectangle loadAllButton;
 
   public AltMenu(){
-    play = new Button("Play", 100, 100, 200, 100, Color.BLUE, new Menu());
-    loadAll = new Button("Load All", 100, 250, 200, 100, Color.BLUE, new Menu());
+    play = new org.bcit.com2522.project.Button("Play", 100, 100, 200, 100, Color.BLUE, new org.bcit.com2522.project.Menu());
+    loadAll = new org.bcit.com2522.project.Button("Load All", 100, 250, 200, 100, Color.BLUE, new org.bcit.com2522.project.Menu());
     buttons.add(play);
     buttons.add(loadAll);
   }
@@ -25,7 +28,7 @@ public class AltMenu {
   public void draw(){
     window.fill(rgb);
     window.rect(0, 0, window.width, window.height);
-    for (Button b : buttons){
+    for (org.bcit.com2522.project.Button b : buttons){
       b.draw();
     }
   }

@@ -274,57 +274,6 @@ public class Window extends PApplet {
     text("Load All Saved Mazes", width / 4, height / 8);
   }
 
-  public
-
-
-  ////////////// Text Box class //////////////
-   class TextBox {
-    PApplet parent;
-    PVector position;
-    int width, height;
-    String text = "";
-
-    TextBox(PApplet parent, PVector position, int width, int height) {
-      this.parent = parent;
-      this.position = position;
-      this.width = width;
-      this.height = height;
-    }
-
-    void draw() {
-      parent.fill(255);
-      parent.rect(position.x, position.y, width, height);
-      parent.fill(0);
-      parent.text(text, position.x + 5, position.y + height - 5);
-    }
-
-    public void mouseClicked(MouseEvent m) {
-      if (saveButton.contains(m.getX(), m.getY())) {
-        if (!text.trim().isEmpty()) { // This ensures that the text isn't empty or only spaces
-          Database.getInstance().saveCurrent(text);
-          isTyping = false;
-        }
-      }
-    }
-
-    boolean contains(int x, int y) {
-      return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
-    }
-
-    void addChar(char c) {
-      text += c;
-    }
-
-    void removeChar() {
-      if (text.length() > 0) {
-        text = text.substring(0, text.length() - 1);
-      }
-    }
-
-    String getText() {
-      return text;
-    }
-  }
 
   class SaveButton {
     PApplet parent;
@@ -393,7 +342,7 @@ public class Window extends PApplet {
     textSize(30);
     String time = String.format("%.1f", GameManager.getInstance().getTimeElapsed());
     text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
-    text("Press M to return to menu", width / 3, height / 2 + 100);
+    text("If you wish to save your maze, name it below. Press M to return to menu", width / 3, height / 2 + 100);
     if (nameInput == null) {
       nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
     }
