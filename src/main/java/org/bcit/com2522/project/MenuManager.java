@@ -82,7 +82,7 @@ public class MenuManager {
     // Add a back button
     float backButtonX = GameManager.getInstance().window.width / 2f;
     float backButtonY = GameManager.getInstance().window.height * 3f / 4f;
-    Button backButton = new Button("Back to Main Menu", backButtonX, backButtonY, 300, 80, Color.BLUE, mainMenu);
+    Button backButton = new Button("Back to Main Menu", backButtonX, backButtonY, 500, 80, Color.BLUE, mainMenu);
     backButton.config(() -> mainMenu.returnToMainMenu());
     backButton.draw();
     savedMazeButtons.add(backButton);

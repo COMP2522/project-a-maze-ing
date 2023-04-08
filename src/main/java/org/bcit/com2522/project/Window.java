@@ -342,7 +342,7 @@ public class Window extends PApplet {
     textSize(30);
     String time = String.format("%.1f", GameManager.getInstance().getTimeElapsed());
     text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
-    text("Press M to return to menu", width / 3, height / 2 + 100);
+    text("If you wish to save your maze, name it below. Press M to return to menu", width / 3, height / 2 + 100);
     if (nameInput == null) {
       nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
     }

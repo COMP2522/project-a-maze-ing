@@ -12,7 +12,7 @@ public class MainMenu extends Menu {
     play = new Button("Play", 100, 100, 200, 100, Color.BLUE, this);
     play.config(() -> GameManager.getInstance().window.initializeObjects());
     buttons.add(play);
-    loadAll = new Button("Load", 100, 250, 200, 100, Color.BLUE, this);
+    loadAll = new Button("Load All Saved Mazes", 100, 250, 500, 100, Color.BLUE, this);
     buttons.add(loadAll);
     loadAll.config(() -> GameManager.getInstance().setState(GameState.LOAD_ALL));
   }
