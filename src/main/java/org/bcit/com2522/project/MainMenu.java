@@ -2,9 +2,7 @@ package org.bcit.com2522.project;
 
 import java.awt.*;
 
-/**
- * Main menu where user controls program.
- */
+
 public class MainMenu extends Menu {
 
   Button play, loadAll;

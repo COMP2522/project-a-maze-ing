@@ -25,8 +25,6 @@ public class Button {
   public void config(Executable ex) {
     function = ex;
   }
-  public Button(String mazeName, float initX, float initY, float w, float h, Color c, Window space) {
-  }
 
   public void draw(){
     if (cursorInside(GameManager.getInstance().window.mouseX, GameManager.getInstance().window.mouseY)){
@@ -43,11 +41,6 @@ public class Button {
   public boolean cursorInside(float mX, float mY){
     return (mX >= x && mX <= x + width && mY >= y && mY <= y + height);
   }
-
-  public String getLabel() {
-    return label;
-  }
-
 
   public void execute() {
     function.execute();
