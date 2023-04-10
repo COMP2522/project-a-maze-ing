@@ -16,22 +16,22 @@ public class TextBox {
     /*
     The PApplet instance associated with the TextBox.
      */
-    PApplet parent;
+    private PApplet parent;
 
     /*
     The position of the top-left corner of the TextBox.
      */
-    PVector position;
+    private PVector position;
 
     /*
     Width and height of text box.
      */
-    int width, height;
+    private int width, height;
 
     /*
     The text currently contained within the TextBox.
      */
-    String text = "";
+    private String text = "";
 
     /**
      * Creates a new TextBox with the specified position, width, and height.
@@ -51,11 +51,20 @@ public class TextBox {
     Draws the TextBox on the screen.
      */
     void draw() {
+        drawBackground();
+        drawText();
+    }
+
+    private void drawBackground() {
         parent.fill(255);
         parent.rect(position.x, position.y, width, height);
+    }
+
+    private void drawText() {
         parent.fill(0);
         parent.text(text, position.x + 5, position.y + height - 5);
     }
+
 
     /**
      * Handles a mouse click event on the TextBox.
@@ -64,16 +73,28 @@ public class TextBox {
      * @param m the MouseEvent to handle
      */
     public void mouseClicked(MouseEvent m) {
+        if (isSaveButtonClick(m)) {
+            handleSaveButtonClick();
+        }
+    }
+
+    private boolean isSaveButtonClick(MouseEvent m) {
         if (parent instanceof Window) {
             Window win = (Window) parent;
-            if (win.saveButton.contains(m.getX(), m.getY())) {
-                if (!text.trim().isEmpty()) {
-                    Database.getInstance().saveCurrent(text);
-                    win.isTyping = false;
-                }
+            return win.saveButton.contains(m.getX(), m.getY());
+        }
+        return false;
+    }
+
+    private void handleSaveButtonClick() {
+        if (!text.trim().isEmpty()) {
+            Database.getInstance().saveCurrent(text);
+            if (parent instanceof Window) {
+                ((Window) parent).isTyping = false;
             }
         }
     }
+
 
     /**
      * Checks if the specified coordinates are within the bounds of the TextBox.
@@ -84,6 +105,7 @@ public class TextBox {
     boolean contains(int x, int y) {
         return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
     }
+
 
     /**
      * Adds the specified character to the text in the TextBox.
