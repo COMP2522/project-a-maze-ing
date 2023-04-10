@@ -7,10 +7,14 @@ import java.awt.*;
  */
 public class PauseMenu extends Menu{
 
+  /* Pause menu buttons */
   Button resume, save, exit;
   float buttonWidth;
   float buttonHeight = 100;
 
+  /**
+   * Constructs a pause menu.
+   */
   public PauseMenu() {
     buttonWidth = GameManager.getInstance().window.WINDOW_X / 2;
     resume = new Button("Resume", GameManager.getInstance().window.width / 4, buttonHeight, buttonWidth, buttonHeight,
