@@ -28,7 +28,7 @@ arrow keys on your keyboard and dodge all the obstacles (Wraiths, Blades, Holes,
 * Helped with returning documents in the "labyrinths" collection of the MongoDB database.
 * Created the traps (with Nelson), Trap and Trap Manager
 * Helped with Menu, Menu Manager and Button implementation
-* Developed initial Loading menu
+* Developed initial Loading menu, Refractoring
 
 
 
