@@ -7,7 +7,12 @@ import java.awt.*;
  */
 public class MainMenu extends Menu {
 
+  /* Main menu Buttons */
   Button play, loadAll;
+
+  /**
+   * Constructs a MainMenu.
+   */
   public MainMenu() {
     play = new Button("Play", 100, 100, 200, 100, Color.BLUE, this);
     play.config(() -> GameManager.getInstance().window.initializeObjects());
@@ -18,7 +23,9 @@ public class MainMenu extends Menu {
   }
 
 
-  // Method to return to the main menu from the saved maze buttons screen
+  /**
+   *   Return to the main menu from the saved maze buttons screen
+   */
   public void returnToMainMenu() {
     GameManager.getInstance().setState(GameState.MENU);
   }

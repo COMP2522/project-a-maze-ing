@@ -5,6 +5,9 @@ import processing.event.MouseEvent;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * An interactive menu.
+ */
 public class Menu {
   ArrayList<Button> buttons = new ArrayList<Button>();
   int rgb = 0;
@@ -22,8 +25,10 @@ public class Menu {
     clickable = false;
   }
 
+  /**
+   * Renders the menu and its child Buttons.
+   */
   public void draw(){
-
     GameManager.getInstance().window.image(
         GameManager.getInstance().window.backgroundMainMenu, 0, 0,
         GameManager.getInstance().window.width,
@@ -35,6 +40,10 @@ public class Menu {
     }
   }
 
+  /**
+   * Checks whether any button in the menu has been clicked.
+   * @param m mouse click event
+   */
   public void click(MouseEvent m) {
     if (clickable) {
       for (Button b : buttons) {
