@@ -24,11 +24,14 @@ arrow keys on your keyboard and dodge all the obstacles (Wraiths, Blades, Holes,
 * Implemented Wall
 * Generally helped wherever needed by adding features, debugging, rafactoring etc.
 
+
 **Laurie Solkoski**
 * Helped with returning documents in the "labyrinths" collection of the MongoDB database.
 * Created the traps (with Nelson), Trap and Trap Manager
 * Helped with Menu, Menu Manager and Button implementation
-* Developed initial Loading menu, Refractoring
+* Developed initial Loading menu
+* Refractored
+
 
 **Matthew Siggs**
 * Created Labyrinth generation and randomization algorithm
@@ -42,7 +45,7 @@ arrow keys on your keyboard and dodge all the obstacles (Wraiths, Blades, Holes,
 * Created Game State, Directions and Tile type enumerations and implementation
 * Refactored 
 * Debugged
-* 
+
 
 
 <img width="600" height="700" src="images/Comp 2522 a-maze-ing project UML class diagrams - Nelson.png">
