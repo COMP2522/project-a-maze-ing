@@ -8,6 +8,15 @@ import processing.core.PVector;
 
 import java.awt.*;
 
+/**
+ * Blade.
+ * Represents a spinning blade trap in the game.
+ * It extends the Trap class and implements the Drawable interface.
+ * @author Laurie Solkoski
+ * @author Nelson Peterson-Hui
+ * @version 1.0
+ *
+ */
 public class Blade extends Trap implements Drawable {
 
     public static final String BLADE_PATH = "Data/blade.png";
@@ -23,6 +32,20 @@ public class Blade extends Trap implements Drawable {
 
     PImage bladeImage;
 
+    /**
+     * Constructs a Blade object with the given parameters.
+     *
+     * @param position The starting position of the blade
+     * @param direction The direction of the blade's movement
+     * @param size The size of the blade
+     * @param speed The speed of the blade
+     * @param color The color of the blade
+     * @param oscillationSpeed The speed of the blade's oscillation
+     * @param verticalSpeed The speed of the blade's vertical movement
+     * @param startPosition The starting position of the blade's vertical movement
+     * @param endPosition The ending position of the blade's vertical movement
+     * @param imagePath The path to the image file for the blade
+     */
     public Blade(PVector position, PVector direction, float size,
                  float speed, Color color,
                  float oscillationSpeed, float verticalSpeed,
@@ -37,7 +60,9 @@ public class Blade extends Trap implements Drawable {
         this.bladeImage = GameManager.getInstance().window.loadImage(imagePath);
     }
 
-
+    /**
+     * Moves the blade in a vertical direction.
+     */
     public void move() {
 
         PVector direction = endPosition.copy().sub(startPosition);
