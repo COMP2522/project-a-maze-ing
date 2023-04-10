@@ -2,7 +2,12 @@ package org.bcit.com2522.project;
 
 import java.util.Random;
 
+/**
+ * Generates a random quote when called on.
+ */
 public class QuoteGenerator {
+
+  /* Quotes that can be returned. */
   private static String[] quotes = {
       "This game was pretty hard to make",
       "Paul is very cool!",
@@ -20,8 +25,13 @@ public class QuoteGenerator {
       "(a+b)^2 = a^2 + b^2"
   };
 
+  /* Random number generator. */
   private static Random rng = new Random();
 
+  /**
+   * Returns a random quote.
+   * @return a random quote String.
+   */
   public static String getQuote(){
     return quotes[rng.nextInt(quotes.length)];
   }
