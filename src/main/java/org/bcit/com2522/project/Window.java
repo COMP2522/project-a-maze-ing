@@ -433,7 +433,7 @@ public class Window extends PApplet {
    */
   private void drawSaveInstructions() {
     textSize(30);
-    text("If you wish to save your maze, name it below. Press M to return to menu", width / 3, height / 2 + 100);
+    text("Save your maze below. Press M to return to menu.", width / 3, height / 2 + 100);
   }
 
   /*
