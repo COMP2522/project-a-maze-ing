@@ -15,7 +15,12 @@ import processing.event.MouseEvent;
 
 /**
  * The window class runs the display that initializes and displays all
- * other classes represented in the front-end of the maze game
+ * other classes represented in the front-end of the maze game.
+ * @author Nelson Peterson-Hui
+ * @author Matthew Siggs
+ * @author Laurie Solkoski
+ * @author Alex Sichitiu
+ * @version 1.0
  */
 public class Window extends PApplet {
 
@@ -26,13 +31,7 @@ public class Window extends PApplet {
 
   PImage backgroundMainMenu;
 
-
-
-
-
   public static final int FPS = 144;
-
-
 
   /* AudioPlayer object for sound file */
   private AudioPlayer sound;
@@ -55,9 +54,6 @@ public class Window extends PApplet {
   float playerAnimationTime;
   float elpCount = 0;
   int loadingTimer = 0;
-//  MainMenu menu = new MainMenu();
-//  PauseMenu pauseMenu = new PauseMenu();
-//  ArrayList<Menu> menus = new ArrayList<Menu>();
 
   /**
    * Provides the size of the window
@@ -79,11 +75,6 @@ public class Window extends PApplet {
     minim = new Minim(this);
 
     sound = minim.loadFile("sound/heroSong.mp3");
-
-    // initializes the objects
-    //this.initializeObjects();
-
-
   }
 
 
@@ -232,6 +223,12 @@ public class Window extends PApplet {
     }
   }
 
+
+  /**
+   * Handles mouse click events in different game states.
+   * Detects if a click occurred on a menu or button, and triggers the appropriate action.
+   * @param m MouseEvent containing the details of the mouse click event.
+   */
   public void mouseClicked(MouseEvent m){
     for (Menu menu : MenuManager.getInstance().getMenus()){
       menu.click(m);
@@ -268,6 +265,9 @@ public class Window extends PApplet {
       GameManager.getInstance().runGame();
   }
 
+  /*
+   * Displays the "Load All Saved Mazes" text on the screen.
+   */
   public void loadSavedMazes() {
     background(0);
     textSize(30);
@@ -275,12 +275,23 @@ public class Window extends PApplet {
   }
 
 
+  /*
+   * SaveButton class represents a clickable button for saving a maze.
+   */
   class SaveButton {
     PApplet parent;
     PVector position;
     int width, height;
     String label;
 
+    /**
+     * Constructs a SaveButton with the specified parameters.
+     * @param parent The PApplet instance where this button is drawn.
+     * @param position The position of the button on the screen.
+     * @param width The width of the button.
+     * @param height The height of the button.
+     * @param label The text displayed on the button.
+     */
     SaveButton(PApplet parent, PVector position, int width, int height, String label) {
       this.parent = parent;
       this.position = position;
@@ -289,6 +300,9 @@ public class Window extends PApplet {
       this.label = label;
     }
 
+    /*
+     * Draws the button on the screen.
+     */
     void draw() {
       parent.fill(0, 255, 0);
       parent.rect(position.x, position.y, width, height);
@@ -296,6 +310,13 @@ public class Window extends PApplet {
       parent.text(label, position.x + 5, position.y + height - 5);
     }
 
+
+    /**
+     * Checks if the given coordinates are within the bounds of the button.
+     * @param x The x-coordinate of the point to be checked.
+     * @param y The y-coordinate of the point to be checked.
+     * @return true if the point is within the button bounds, false otherwise.
+     */
     boolean contains(int x, int y) {
       return x >= position.x && x <= position.x + width && y >= position.y && y <= position.y + height;
     }
@@ -355,6 +376,10 @@ public class Window extends PApplet {
   }
 
 
+  /**
+   * Returns the AudioPlayer object for the sound file.
+   * @return AudioPlayer object for the sound file
+   */
   public AudioPlayer getSound() {
     return sound;
   }
