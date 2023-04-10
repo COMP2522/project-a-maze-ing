@@ -32,6 +32,10 @@ arrow keys on your keyboard and dodge all the obstacles (Wraiths, Blades, Holes,
 * Developed initial Loading menu
 * Refractored
 
+**Yegor Assanovich**
+*Made test classes for all possible classes*
+*Added additional methods to all tested classes*
+
 
 **Matthew Siggs**
 * Created Labyrinth generation and randomization algorithm
