@@ -29,7 +29,6 @@ arrow keys on your keyboard and dodge all the obstacles (Wraiths, Blades, Holes,
 * Created the traps (with Nelson), Trap and Trap Manager
 * Helped with Menu, Menu Manager and Button implementation
 * Developed initial Loading menu
-* Javadocs
 
 
 
