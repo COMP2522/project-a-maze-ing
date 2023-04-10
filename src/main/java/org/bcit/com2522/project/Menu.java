@@ -33,8 +33,6 @@ public class Menu {
         GameManager.getInstance().window.backgroundMainMenu, 0, 0,
         GameManager.getInstance().window.width,
         GameManager.getInstance().window.height);
-//    GameManager.getInstance().window.fill(rgb);
-//    GameManager.getInstance().window.rect(0, 0, GameManager.getInstance().window.width, GameManager.getInstance().window.height);
     for (Button b : buttons){
       b.draw();
     }

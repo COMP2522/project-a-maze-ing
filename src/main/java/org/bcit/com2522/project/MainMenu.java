@@ -33,6 +33,7 @@ public class MainMenu extends Menu {
    *   Return to the main menu from the saved maze buttons screen
    */
   public void returnToMainMenu() {
+
     GameManager.getInstance().setState(GameState.MENU);
   }
 }

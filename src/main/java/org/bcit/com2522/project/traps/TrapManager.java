@@ -56,6 +56,7 @@ public class TrapManager {
      * @param t the Trap to add to the collection
      */
     public void addTrap(Trap t) {
+
         traps.add(t);
     }
 
@@ -63,6 +64,7 @@ public class TrapManager {
     Resets the iterator used to iterate over the Traps in the collection.
      */
     public void resetIterator() {
+
         iterator = traps.iterator();
     }
 
@@ -70,26 +72,30 @@ public class TrapManager {
     Draws all Traps in the collection using the draw() method of each Trap.
      */
     public void draw() {
-        resetIterator();
-        while (iterator.hasNext()) {
-            Trap t = iterator.next();
+        for (Trap t : traps) {
             t.draw();
         }
     }
 
+    /**
+     * Checks if the given player collides with the specified trap.
+     * @param trap   the trap to check for collision
+     * @param player the player to check for collision
+     * @return true if the player collides with the trap, false otherwise
+     */
+    private boolean collision(Trap trap, Player player) {
+        return trap.collision(player);
+    }
 
     /**
      * Checks for collisions between the given Sprite and all Traps in the collection.
      * If a collision is detected, the Player's alive state is set to false.
      * @param s the Sprite to check for collisions with
      */
-    public void collision(Sprite s){
+    public void collision(Sprite s) {
         Player player = Player.getInstance();
-        resetIterator();
-
-        while (iterator.hasNext()) {
-            Trap trap = iterator.next();
-            if (trap.collision(player)) {
+        for (Trap trap : traps) {
+            if (collision(trap, player)) {
                 player.setAlive(false);
             }
         }
