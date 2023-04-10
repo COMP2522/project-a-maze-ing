@@ -14,7 +14,7 @@ import java.util.Iterator;
  * in lists and iterates through them. Ghost spawn methods are unique in this
  * class since the ghost is a singleton.
  */
-public class EnemyManager{
+public class EnemyManager {
 
   /*List of total enemies.*/
   private ArrayList<Enemy> enemies;
@@ -146,10 +146,7 @@ public class EnemyManager{
    */
   public void collision(Sprite s){
     Player player = Player.getInstance();
-    resetIterator();
-
-    while (iterator.hasNext()){
-      Enemy e = (Enemy) iterator.next();
+    for (Enemy e : enemies) {
       if (e.collision(player)) {
         player.setAlive(false);
       }
