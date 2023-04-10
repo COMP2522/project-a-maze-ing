@@ -41,8 +41,6 @@ public class GameManager {
    */
   private GameManager() {
     window = new Window();
-
-
   }
 
   /**
@@ -54,7 +52,6 @@ public class GameManager {
     TrapManager.getInstance();
     LabyrinthManager.getInstance();
     Database.getInstance();
-
 
     GameManager.getInstance().setState(GameState.MENU);
 
