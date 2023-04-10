@@ -226,35 +226,69 @@ public class Window extends PApplet {
 
   /**
    * Handles mouse click events in different game states.
-   * Detects if a click occurred on a menu or button, and triggers the appropriate action.
-   * @param m MouseEvent containing the details of the mouse click event.
+   * Handles mouse click events based on the current game state.
+   * Calls the appropriate handler method based on the game state.
+   *
+   * @param m the MouseEvent containing the details of the mouse click event
    */
   public void mouseClicked(MouseEvent m){
     for (Menu menu : MenuManager.getInstance().getMenus()){
       menu.click(m);
     }
-    if (GameManager.getInstance().getState() == GameState.MENU) {
-      MenuManager.getInstance().getMainMenu().click(m);
-    } else if (GameManager.getInstance().getState() == GameState.WIN) {
-      if (nameInput.contains(m.getX(), m.getY())) {
-        isTyping = true;
-      } else if (saveButton.contains(m.getX(), m.getY())) {
-        Database.getInstance().saveCurrent(nameInput.getText());
-        isTyping = false;
-      } else {
-        isTyping = false;
-      }
-    } else if (GameManager.getInstance().getState() == GameState.LOAD_ALL) {
-      for (Button button : MenuManager.getInstance().getSavedButtons()) {
-        if (button.cursorInside(m.getX(), m.getY())) {
-          button.execute();
-          break;
-        }
-      }
+
+    GameState currentState = GameManager.getInstance().getState();
+    if (currentState == GameState.MENU) {
+      handleMainMenuClick(m);
+    } else if (currentState == GameState.WIN) {
+      handleWinStateClick(m);
+    } else if (currentState == GameState.LOAD_ALL) {
+      handleLoadAllStateClick(m);
     } else {
       isTyping = false;
     }
   }
+
+  /**
+   * Handles mouse click events in the main menu state.
+   * Trigger actions associated with the main menu.
+   * @param m the MouseEvent containing the details of the mouse click event
+   */
+  private void handleMainMenuClick(MouseEvent m) {
+    MenuManager.getInstance().getMainMenu().click(m);
+  }
+
+  /**
+   * Handles mouse click events in the win state.
+   * Trigger actions such as enabling typing for name input, saving the game,
+   * or disabling typing based on the clicked UI element.
+   * @param m the MouseEvent containing the details of the mouse click event
+   */
+  private void handleWinStateClick(MouseEvent m) {
+    if (nameInput.contains(m.getX(), m.getY())) {
+      isTyping = true;
+    } else if (saveButton.contains(m.getX(), m.getY())) {
+      Database.getInstance().saveCurrent(nameInput.getText());
+      isTyping = false;
+    } else {
+      isTyping = false;
+    }
+  }
+
+  /**
+   * Handles mouse click events in the load all state.
+   * Triggers the execution of the clicked saved game button.
+   *
+   * @param m the MouseEvent containing the details of the mouse click event
+   */
+  private void handleLoadAllStateClick(MouseEvent m) {
+    for (Button button : MenuManager.getInstance().getSavedButtons()) {
+      if (button.cursorInside(m.getX(), m.getY())) {
+        button.execute();
+        break;
+      }
+    }
+  }
+
 
 
   /**
@@ -356,25 +390,73 @@ public class Window extends PApplet {
    * Loads win screen.
    */
   public void loadWin() {
+    drawBackground();
+    drawWinMessage();
+    drawTimeElapsed();
+    drawSaveInstructions();
+    drawNameInput();
+    drawSaveButton();
+  }
+
+  /*
+   * Draws the background of the screen in black color.
+   */
+  private void drawBackground() {
     background(0);
+  }
+
+  /*
+   * Draws the win message in white color with a font size of 50.
+   * The position of the message is set using the width and height variables of the Processing sketch.
+   */
+  private void drawWinMessage() {
     textSize(50);
     fill(255);
     text("You Won!!!", width / 3, height / 2);
+  }
+
+  /*
+   * Draws the elapsed time on the screen in white color with a font size of 30.
+   * The elapsed time is obtained from the GameManager instance and formatted
+   * as a string with one decimal place. The position of the time display is set using
+   * the width and height variables of the Processing sketch.
+   */
+  private void drawTimeElapsed() {
     textSize(30);
     String time = String.format("%.1f", GameManager.getInstance().getTimeElapsed());
     text("Your time was " + time + " seconds!", width / 4, height / 2 + 50);
+  }
+
+  /*
+   * Draws the save instructions on the screen in white color with a font size of 30.
+   * The position of the instructions is set using the width and height variables of the Processing sketch.
+   */
+  private void drawSaveInstructions() {
+    textSize(30);
     text("If you wish to save your maze, name it below. Press M to return to menu", width / 3, height / 2 + 100);
+  }
+
+  /*
+   * Draws a text box for the user to enter a name to save the maze.
+   * The position of the text box is set using the width and height variables of the Processing sketch.
+   */
+  private void drawNameInput() {
     if (nameInput == null) {
       nameInput = new TextBox(this, new PVector(width / 3, height / 2 + 150), 200, 30);
     }
     nameInput.draw();
+  }
 
+  /*
+   * Draws a button labeled "Save Maze" that the user can click to save the maze.
+   * The position of the button is set using the width and height variables of the Processing sketch.
+   */
+  private void drawSaveButton() {
     if (saveButton == null) {
       saveButton = new SaveButton(this, new PVector(width / 3 + 210, height / 2 + 150), 150, 50, "Save Maze");
     }
     saveButton.draw();
   }
-
 
   /**
    * Returns the AudioPlayer object for the sound file.
