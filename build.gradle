@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'org.bcit.com2522.project'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://repo.clojars.org'
+        name 'Clojars'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'library', include: ['*.jar'])
+    implementation 'ddf.minim:ddf.minim:2.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    implementation 'org.mongodb:mongodb-driver-sync:4.9.0'
+}
+
+test {
+    useJUnitPlatform()
+}
