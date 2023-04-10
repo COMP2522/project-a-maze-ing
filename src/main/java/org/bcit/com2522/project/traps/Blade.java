@@ -19,17 +19,49 @@ import java.awt.*;
  */
 public class Blade extends Trap implements Drawable {
 
+    /**
+     * The path to the image file for the blade.
+     */
     public static final String BLADE_PATH = "Data/blade.png";
+
+    /**
+     * The size of the blade image.
+     */
     public static final int BLADE_SIZE = 50;
+
+    /**
+     * The oscillation speed of the blade.
+     */
     private float oscillationSpeed;
+
+    /**
+     * The oscillation angle of the blade.
+     */
     private float oscillationAngle;
+
+    /**
+     * The vertical speed of the blade.
+     */
     private float verticalSpeed;
+
+    /**
+     * The movement direction of the blade.
+     */
     private float movementDirection;
 
-
+    /**
+     * The starting position of the blade.
+     */
     private PVector startPosition;
+
+    /**
+     * The ending position of the blade.
+     */
     private PVector endPosition;
 
+    /**
+     * The image of the blade.
+     */
     PImage bladeImage;
 
     /**
@@ -78,6 +110,11 @@ public class Blade extends Trap implements Drawable {
         }
     }
 
+    /**
+     * Draws the spinning blade at its current position, using the PApplet's image() and translate() methods.
+     * The blade's rotation is animated using an oscillation angle and speed.
+     * The position of the blade is updated using the move() method.
+     */
     @Override
     public void draw() {
 
