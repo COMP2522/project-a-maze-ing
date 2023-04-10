@@ -13,13 +13,11 @@ import java.awt.*;
  */
 public class MainMenu extends Menu {
 
-  /*
-  Names of the buttons.
-   */
+  /* Main menu Buttons */
   Button play, loadAll;
 
   /**
-   * Constructs a new MainMenu with "Play" and "Load All Saved Mazes" buttons.
+   * Constructs a MainMenu.
    */
   public MainMenu() {
     play = new Button("Play", 100, 100, 200, 100, Color.BLUE, this);
@@ -30,8 +28,9 @@ public class MainMenu extends Menu {
     loadAll.config(() -> GameManager.getInstance().setState(GameState.LOAD_ALL));
   }
 
-  /*
-  Returns to the main menu from the saved maze buttons screen.
+
+  /**
+   *   Return to the main menu from the saved maze buttons screen
    */
   public void returnToMainMenu() {
     GameManager.getInstance().setState(GameState.MENU);

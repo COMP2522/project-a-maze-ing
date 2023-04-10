@@ -17,4 +17,13 @@ Dodge ghouls, spiders and blades as you maneuver our randomly generated maze! Cr
 * Sound designer
 * Debugger 
 
+**Alex Sichitiu**
+* Implemented menus and buttons
+* Developed initial game state management in Window
+* Implemented Wall
+* Generally helped wherever needed by adding features, debugging, rafactoring etc.
+
 <img width="600" height="700" src="images/Comp 2522 a-maze-ing project UML class diagrams - Nelson.png">
+
+# Overall UML
+<img width="600" height="700" src="images/UML.png">
