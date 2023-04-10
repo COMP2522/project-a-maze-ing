@@ -12,6 +12,8 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
+import javax.swing.*;
+
 
 /**
  * The window class runs the display that initializes and displays all
@@ -268,11 +270,13 @@ public class Window extends PApplet {
       isTyping = true;
     } else if (saveButton.contains(m.getX(), m.getY())) {
       Database.getInstance().saveCurrent(nameInput.getText());
+      JOptionPane.showMessageDialog(null, "Maze has been saved! You can now exit.", "Maze Saved", JOptionPane.INFORMATION_MESSAGE);
       isTyping = false;
     } else {
       isTyping = false;
     }
   }
+
 
   /**
    * Handles mouse click events in the load all state.
