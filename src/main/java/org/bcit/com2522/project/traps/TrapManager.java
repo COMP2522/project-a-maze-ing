@@ -6,15 +6,44 @@ import org.bcit.com2522.project.Sprite;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * The TrapManager class manages the collection of Traps in the game.
+ * It is a singleton class and contains methods for adding, removing,
+ * and drawing Traps, as well as checking for collisions.
+ * The TrapManager uses an ArrayList to store Traps and an Iterator to iterate over them.
+ * @author Laurie Solkoksi
+ * @author Mattew Siggs
+ * @author Nelson Peterson-Hui
+ * @version 1.0
+ */
 public class TrapManager {
+
+    /*
+    The singleton instance of the TrapManager.
+    */
     private static TrapManager instance;
+
+    /*
+    The collection of Traps managed by the TrapManager.
+     */
     private ArrayList<Trap> traps;
+
+    /*
+    The iterator used to iterate over the Traps in the collection.
+     */
     private Iterator<Trap> iterator;
 
+    /*
+    Constructs a new TrapManager with an empty collection of Traps.
+     */
     private TrapManager() {
         traps = new ArrayList<>();
     }
 
+    /**
+     *Returns the singleton instance of the TrapManager.
+     * @return the singleton instance of the TrapManager.
+     */
     public static TrapManager getInstance() {
         if (instance == null) {
             instance = new TrapManager();
@@ -22,19 +51,24 @@ public class TrapManager {
         return instance;
     }
 
-
+    /**
+     * Adds the given Trap to the collection of Traps managed by the TrapManager.
+     * @param t the Trap to add to the collection
+     */
     public void addTrap(Trap t) {
         traps.add(t);
     }
 
-    public void removeTrap(Trap t) {
-        traps.remove(t);
-    }
-
+    /*
+    Resets the iterator used to iterate over the Traps in the collection.
+     */
     public void resetIterator() {
         iterator = traps.iterator();
     }
 
+    /*
+    Draws all Traps in the collection using the draw() method of each Trap.
+     */
     public void draw() {
         resetIterator();
         while (iterator.hasNext()) {
@@ -44,6 +78,11 @@ public class TrapManager {
     }
 
 
+    /**
+     * Checks for collisions between the given Sprite and all Traps in the collection.
+     * If a collision is detected, the Player's alive state is set to false.
+     * @param s the Sprite to check for collisions with
+     */
     public void collision(Sprite s){
         Player player = Player.getInstance();
         resetIterator();
