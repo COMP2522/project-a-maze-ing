@@ -30,7 +30,8 @@ arrow keys on your keyboard and dodge all the obstacles (Wraiths, Blades, Holes,
 * Helped with Menu, Menu Manager and Button implementation
 * Developed initial Loading menu
 * Javadocs
-* 
+
+
 
 <img width="600" height="700" src="images/Comp 2522 a-maze-ing project UML class diagrams - Nelson.png">
 
