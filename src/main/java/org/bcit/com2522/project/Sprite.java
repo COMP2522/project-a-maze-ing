@@ -4,13 +4,14 @@ import org.bcit.com2522.project.interfaces.Collidable;
 import org.bcit.com2522.project.interfaces.Drawable;
 import org.bcit.com2522.project.labyrinth.LabyrinthManager;
 import processing.core.PVector;
-
 import java.awt.*;
 
 /**
-
  An abstract sprite class for game objects such as enemies and player
  that are drawable and can be collided with.
+ @author Nelson Peterson-Hui
+ @author Alex Sichitiu
+ @author Laurie Solkoksi
  */
 public abstract class Sprite implements Drawable, Collidable{
 
