@@ -5,12 +5,16 @@ import processing.core.PVector;
 
 import java.awt.*;
 
-
 /**
  * Defines a player character controlled by the user
  * and animates player movement with various images.
  * Can collide with other sprites and is implemented
  * as a singleton.
+ * @author Nelson Peterson-Hui
+ * @author Alex Sichitiu
+ * @author Laurie Solkoski
+ * @author Matthew Siggs
+ * @version 1.0
  */
 public class Player extends Sprite {
 
