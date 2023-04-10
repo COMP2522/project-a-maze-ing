@@ -3,7 +3,13 @@ package org.bcit.com2522.project;
 import java.awt.*;
 
 /**
- * Main menu where user controls program.
+ * The MainMenu class represents the main menu of the game.
+ * It extends the Menu class and includes buttons for playing the game and loading all saved mazes.
+ * The MainMenu class uses Button objects to create and manage its buttons.
+ * @author Laurie Solkoski
+ * @author Alex Sichitiu
+ * @author Matthew Siggs
+ * @version 1.0
  */
 public class MainMenu extends Menu {
 
