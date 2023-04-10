@@ -71,6 +71,7 @@ public class MenuManager {
    * @return the list of saved maze buttons.
    */
   public ArrayList<Button> getSavedButtons() {
+
     return savedMazeButtons;
   }
 
@@ -79,6 +80,7 @@ public class MenuManager {
    * @return the list of menus managed by the MenuManager
    */
   public ArrayList<Menu> getMenus() {
+
     return menus;
   }
 
@@ -87,6 +89,7 @@ public class MenuManager {
    * @return the main menu
    */
   public MainMenu getMainMenu() {
+
     return mainMenu;
   }
 
@@ -101,6 +104,16 @@ public class MenuManager {
     pauseMenu.draw();
   }
 
+  /*
+   * Common button creation logic has been extracted and placed here.
+   */
+  private Button createButton(String text, float x, float y, int width, int height, Color color, Menu parentMenu) {
+    Button button = new Button(text, x, y, width, height, color, parentMenu);
+    button.draw();
+    return button;
+  }
+
+
   /**
    * Loads saved maze buttons and draws them to the screen.
    * The saved maze buttons are loaded from the database using the Database class.
@@ -113,22 +126,20 @@ public class MenuManager {
       String mazeName = maze.getString("name");
       float buttonX = GameManager.getInstance().window.width / 4f;
       float buttonY = GameManager.getInstance().window.height / 4f + buttonIndex * 80;
-      Button mazeButton = new Button(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, mainMenu);
-      mazeButton.config(() -> {Database.getInstance().loadLabyrinth(mazeName);
-        GameManager.getInstance().setState(GameState.LOAD);});
-      mazeButton.draw();
+      Button mazeButton = createButton(mazeName, buttonX, buttonY, 300, 80, Color.BLUE, mainMenu);
+      mazeButton.config(() -> {
+        Database.getInstance().loadLabyrinth(mazeName);
+        GameManager.getInstance().setState(GameState.LOAD);
+      });
       savedMazeButtons.add(mazeButton);
       buttonIndex++;
     }
 
-    // Add a back button
+    // Back button
     float backButtonX = GameManager.getInstance().window.width / 2f;
     float backButtonY = GameManager.getInstance().window.height * 3f / 4f;
-    Button backButton = new Button("Back to Main Menu", backButtonX, backButtonY, 500, 80, Color.BLUE, mainMenu);
+    Button backButton = createButton("Back to Main Menu", backButtonX, backButtonY, 500, 80, Color.BLUE, mainMenu);
     backButton.config(() -> mainMenu.returnToMainMenu());
-    backButton.draw();
     savedMazeButtons.add(backButton);
   }
-
-
 }
