@@ -43,6 +43,28 @@ public class Player extends Sprite {
   public PImage playerDown1;
 
   /**
+   * Loads Harry Potter images for the game.
+   * Uses file paths to load images for different player movements
+   * (up, down, left, right) and for each direction during walking animation.
+   * Assigns loaded images to respective instance variables.
+   */
+  private void loadImages() {
+    final String[] imagePaths = {
+            "Data/HPfront.png", "Data/HPleft.png", "Data/HPright.png", "Data/HPup.png",
+            "Data/HPleft1.png", "Data/Hpright1.png", "Data/HPfront1.png", "Data/HPup1.png"
+    };
+
+    this.harryPotterImage = this.playerDown = GameManager.getInstance().window.loadImage(imagePaths[0]);
+    this.playerLeft = GameManager.getInstance().window.loadImage(imagePaths[1]);
+    this.playerRight = GameManager.getInstance().window.loadImage(imagePaths[2]);
+    this.playerUp = GameManager.getInstance().window.loadImage(imagePaths[3]);
+    this.playerLeftWalk1 = GameManager.getInstance().window.loadImage(imagePaths[4]);
+    this.playerRightWalk1 = GameManager.getInstance().window.loadImage(imagePaths[5]);
+    this.playerDown1 = GameManager.getInstance().window.loadImage(imagePaths[6]);
+    this.playerUp1 = GameManager.getInstance().window.loadImage(imagePaths[7]);
+  }
+
+  /**
    * Constructs a new Player object with the given position, direction, size, speed and color.
    *
    * @param position  the position of the player
@@ -54,20 +76,12 @@ public class Player extends Sprite {
   private Player(PVector position, PVector direction, float size, float speed, Color color) {
     super(position, direction, size, speed, color);
 
-    // Load player images
-    this.harryPotterImage = GameManager.getInstance().window.loadImage("Data/HPfront.png");
-    this.playerDown = GameManager.getInstance().window.loadImage("Data/HPfront.png");
-    this.playerLeft = GameManager.getInstance().window.loadImage("Data/HPleft.png");
-    this.playerRight = GameManager.getInstance().window.loadImage("Data/HPright.png");
-    this.playerUp = GameManager.getInstance().window.loadImage("Data/HPup.png");
-    this.playerLeftWalk1 = GameManager.getInstance().window.loadImage("Data/HPleft1.png");
-    this.playerRightWalk1 = GameManager.getInstance().window.loadImage("Data/Hpright1.png");
-    this.playerDown1 = GameManager.getInstance().window.loadImage("Data/HPfront1.png");
-    this.playerUp1 = GameManager.getInstance().window.loadImage("Data/HPup1.png");
+    loadImages();
 
     alive = true;
     immunityTimer = 0;
   }
+
 
   /**
    * Returns the singleton instance of Player.
